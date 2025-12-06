@@ -1,0 +1,20 @@
+site:
+  title: "Prompt Rule Selector"
+  description: "Select and combine AI coding rules and prompts"
+  baseUrl: "https://jjgroenendijk.nl/prompts"
+
+github:
+  owner: "jjgroenendijk"
+  repo: "prompts"
+  defaultBranch: "main"
+
+ui:
+  previewCharLimit: 400
+  searchPlaceholder: "Search rules..."
+  copyButtonText: "Copy Selected Rules"
+  addButtonText: "Add New Rule"
+  configButtonText: "Settings"
+
+rules:
+  separator: "\n\n---\n\n"
+  includeTitle: true
