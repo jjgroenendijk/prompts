@@ -1,0 +1,2002 @@
+1:"$Sreact.fragment"
+2:I[29629,["/prompts/_next/static/chunks/b4ddc1a8749ef82e.js"],"default"]
+3:I[39756,["/prompts/_next/static/chunks/42879de7b8087bc9.js"],"default"]
+4:I[37457,["/prompts/_next/static/chunks/42879de7b8087bc9.js"],"default"]
+5:I[27521,["/prompts/_next/static/chunks/b4ddc1a8749ef82e.js","/prompts/_next/static/chunks/5ccbe578a5df9eac.js"],"default"]
+f:I[68027,[],"default"]
+:HL["/prompts/_next/static/chunks/1d5639018d1afc60.css","style"]
+:HL["/prompts/_next/static/media/797e433ab948586e-s.p.dbea232f.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/prompts/_next/static/media/caa3a2e1cccd8315-s.p.853070df.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+6:T1644,# Input Validation Best Practices
+
+Input validation is the first line of defense against security vulnerabilities. Always validate, sanitize, and verify user input before processing.
+
+## Core Principles
+
+1. **Never trust user input** - Assume all external data is malicious
+2. **Validate on the server** - Client-side validation is for UX only
+3. **Use allowlists over denylists** - Define what is acceptable
+4. **Fail securely** - Reject invalid input by default
+
+## Common Validation Patterns
+
+### Email Validation
+
+```javascript
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  if (!email || typeof email !== 'string') {
+    throw new Error('Email is required and must be a string');
+  }
+  
+  if (email.length > 254) {
+    throw new Error('Email exceeds maximum length');
+  }
+  
+  if (!emailRegex.test(email)) {
+    throw new Error('Invalid email format');
+  }
+  
+  return email.toLowerCase().trim();
+}
+```
+
+### Numeric Input Validation
+
+```python
+def validate_age(age):
+    """Validate age input with range checking."""
+    try:
+        age_int = int(age)
+    except (ValueError, TypeError):
+        raise ValueError("Age must be a valid integer")
+    
+    if age_int < 0 or age_int > 150:
+        raise ValueError("Age must be between 0 and 150")
+    
+    return age_int
+```
+
+### String Sanitization
+
+```java
+public class InputValidator {
+    private static final Pattern ALPHANUMERIC = Pattern.compile("^[a-zA-Z0-9_-]+$");
+    
+    public static String sanitizeUsername(String username) {
+        if (username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty");
+        }
+        
+        String trimmed = username.trim();
+        
+        if (trimmed.length() < 3 || trimmed.length() > 20) {
+            throw new IllegalArgumentException("Username must be 3-20 characters");
+        }
+        
+        if (!ALPHANUMERIC.matcher(trimmed).matches()) {
+            throw new IllegalArgumentException("Username contains invalid characters");
+        }
+        
+        return trimmed;
+    }
+}
+```
+
+## SQL Injection Prevention
+
+**ALWAYS use parameterized queries:**
+
+```sql
+-- DANGEROUS - vulnerable to SQL injection
+SELECT * FROM users WHERE username = '" + userInput + "'
+
+-- SAFE - parameterized query
+SELECT * FROM users WHERE username = ?
+```
+
+```python
+# DANGEROUS
+cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
+
+# SAFE
+cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+```
+
+## XSS Prevention
+
+Escape output based on context:
+
+```javascript
+// HTML context
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// JavaScript context
+function escapeJs(unsafe) {
+  return JSON.stringify(unsafe).slice(1, -1);
+}
+
+// URL context
+function escapeUrl(unsafe) {
+  return encodeURIComponent(unsafe);
+}
+```
+
+## File Upload Validation
+
+```python
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf'}
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+
+def validate_file_upload(file):
+    # Check file exists
+    if not file or not file.filename:
+        raise ValueError("No file provided")
+    
+    # Check extension
+    ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else ''
+    if ext not in ALLOWED_EXTENSIONS:
+        raise ValueError(f"File type .{ext} not allowed")
+    
+    # Check file size
+    file.seek(0, 2)  # Seek to end
+    size = file.tell()
+    file.seek(0)  # Reset
+    
+    if size > MAX_FILE_SIZE:
+        raise ValueError("File exceeds maximum size")
+    
+    # Verify MIME type matches extension
+    import magic
+    mime = magic.from_buffer(file.read(1024), mime=True)
+    file.seek(0)
+    
+    allowed_mimes = {
+        'png': 'image/png',
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'gif': 'image/gif',
+        'pdf': 'application/pdf'
+    }
+    
+    if mime != allowed_mimes.get(ext):
+        raise ValueError("File content doesn't match extension")
+    
+    return True
+```
+
+## API Rate Limiting
+
+Implement rate limiting to prevent abuse:
+
+```javascript
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use('/api/', limiter);
+```
+
+## Validation Checklist
+
+- [ ] All user inputs are validated
+- [ ] Validation happens server-side
+- [ ] Length limits are enforced
+- [ ] Type checking is performed
+- [ ] Range checks for numeric values
+- [ ] Format validation (regex patterns)
+- [ ] Encoding/escaping for output
+- [ ] File uploads are restricted and verified
+- [ ] Rate limiting is implemented
+- [ ] Error messages don't leak sensitive info
+
+## Common Mistakes to Avoid
+
+1. **Trusting client-side validation alone**
+2. **Using denylists instead of allowlists**
+3. **Insufficient length checking**
+4. **Revealing system details in error messages**
+5. **Not validating data from trusted sources**
+6. **Concatenating user input into queries**
+7. **Forgetting to validate file uploads**
+8. **Not implementing rate limiting**
+
+## Testing Your Validation
+
+Test with malicious inputs:
+
+- SQL injection: `' OR '1'='1`
+- XSS: `<script>alert('XSS')</script>`
+- Path traversal: `../../etc/passwd`
+- Command injection: `; rm -rf /`
+- Null bytes: `file.txt\0.jpg`
+- Extremely long strings
+- Special characters: `!@#$%^&*()`
+- Unicode characters: `\u0000`, `\uFEFF`
+
+Remember: Input validation is not optional—it's a fundamental security requirement!
+7:T1c28,# Authentication Best Practices
+
+Secure authentication is critical for protecting user accounts and sensitive data.
+
+## Password Security
+
+### Password Hashing
+
+**NEVER store passwords in plain text.** Always use modern hashing algorithms:
+
+```python
+import bcrypt
+
+# Hashing a password
+def hash_password(password):
+    salt = bcrypt.gensalt(rounds=12)
+    return bcrypt.hashpw(password.encode('utf-8'), salt)
+
+# Verifying a password
+def verify_password(password, hashed):
+    return bcrypt.checkpw(password.encode('utf-8'), hashed)
+```
+
+```javascript
+const bcrypt = require('bcrypt');
+
+async function hashPassword(password) {
+  const saltRounds = 12;
+  return await bcrypt.hash(password, saltRounds);
+}
+
+async function verifyPassword(password, hash) {
+  return await bcrypt.compare(password, hash);
+}
+```
+
+### Password Requirements
+
+Enforce strong password policies:
+
+```python
+import re
+
+def validate_password_strength(password):
+    """Validate password meets security requirements."""
+    errors = []
+    
+    if len(password) < 12:
+        errors.append("Password must be at least 12 characters")
+    
+    if len(password) > 128:
+        errors.append("Password must not exceed 128 characters")
+    
+    if not re.search(r'[a-z]', password):
+        errors.append("Password must contain lowercase letters")
+    
+    if not re.search(r'[A-Z]', password):
+        errors.append("Password must contain uppercase letters")
+    
+    if not re.search(r'\d', password):
+        errors.append("Password must contain numbers")
+    
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        errors.append("Password must contain special characters")
+    
+    # Check against common passwords
+    with open('common_passwords.txt') as f:
+        if password.lower() in [line.strip().lower() for line in f]:
+            errors.append("Password is too common")
+    
+    return errors
+```
+
+## Session Management
+
+### Secure Session Configuration
+
+```javascript
+const session = require('express-session');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET, // Strong, random secret
+  name: 'sessionId', // Don't use default name
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: true, // HTTPS only
+    httpOnly: true, // Prevent XSS access
+    sameSite: 'strict', // CSRF protection
+    maxAge: 3600000 // 1 hour
+  }
+}));
+```
+
+### Session Timeout
+
+Implement automatic session expiration:
+
+```python
+from datetime import datetime, timedelta
+
+class SessionManager:
+    def __init__(self):
+        self.sessions = {}
+        self.timeout = timedelta(minutes=30)
+    
+    def create_session(self, user_id):
+        session_id = secrets.token_urlsafe(32)
+        self.sessions[session_id] = {
+            'user_id': user_id,
+            'created_at': datetime.now(),
+            'last_activity': datetime.now()
+        }
+        return session_id
+    
+    def validate_session(self, session_id):
+        if session_id not in self.sessions:
+            return None
+        
+        session = self.sessions[session_id]
+        if datetime.now() - session['last_activity'] > self.timeout:
+            del self.sessions[session_id]
+            return None
+        
+        session['last_activity'] = datetime.now()
+        return session['user_id']
+```
+
+## Multi-Factor Authentication (MFA)
+
+### TOTP Implementation
+
+```python
+import pyotp
+import qrcode
+
+def setup_mfa(user_email):
+    """Generate MFA secret and QR code."""
+    secret = pyotp.random_base32()
+    
+    # Generate provisioning URI
+    totp = pyotp.TOTP(secret)
+    uri = totp.provisioning_uri(
+        name=user_email,
+        issuer_name='YourApp'
+    )
+    
+    # Generate QR code
+    qr = qrcode.make(uri)
+    
+    return secret, qr
+
+def verify_mfa_code(secret, code):
+    """Verify TOTP code."""
+    totp = pyotp.TOTP(secret)
+    return totp.verify(code, valid_window=1)
+```
+
+## JWT Token Security
+
+```javascript
+const jwt = require('jsonwebtoken');
+
+function generateToken(userId) {
+  return jwt.sign(
+    { userId: userId },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '1h',
+      algorithm: 'HS256',
+      issuer: 'your-app',
+      audience: 'your-app-users'
+    }
+  );
+}
+
+function verifyToken(token) {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET, {
+      algorithms: ['HS256'],
+      issuer: 'your-app',
+      audience: 'your-app-users'
+    });
+  } catch (error) {
+    return null;
+  }
+}
+```
+
+## OAuth 2.0 Implementation
+
+```python
+from authlib.integrations.flask_client import OAuth
+
+oauth = OAuth(app)
+
+oauth.register(
+    name='google',
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'}
+)
+
+@app.route('/login/google')
+def google_login():
+    redirect_uri = url_for('google_callback', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+
+@app.route('/callback/google')
+def google_callback():
+    token = oauth.google.authorize_access_token()
+    user_info = oauth.google.parse_id_token(token)
+    # Create or update user session
+    return redirect('/dashboard')
+```
+
+## Brute Force Protection
+
+```python
+from datetime import datetime, timedelta
+from collections import defaultdict
+
+class LoginAttemptTracker:
+    def __init__(self):
+        self.attempts = defaultdict(list)
+        self.max_attempts = 5
+        self.lockout_duration = timedelta(minutes=15)
+    
+    def is_locked(self, identifier):
+        """Check if account/IP is locked."""
+        if identifier not in self.attempts:
+            return False
+        
+        # Clean old attempts
+        cutoff = datetime.now() - self.lockout_duration
+        self.attempts[identifier] = [
+            attempt for attempt in self.attempts[identifier]
+            if attempt > cutoff
+        ]
+        
+        return len(self.attempts[identifier]) >= self.max_attempts
+    
+    def record_attempt(self, identifier, success):
+        """Record login attempt."""
+        if success:
+            # Clear attempts on success
+            self.attempts[identifier] = []
+        else:
+            self.attempts[identifier].append(datetime.now())
+```
+
+## Security Checklist
+
+- [ ] Passwords are hashed with bcrypt/argon2
+- [ ] Strong password requirements enforced
+- [ ] MFA is available
+- [ ] Sessions expire after inactivity
+- [ ] HTTPS is enforced
+- [ ] Cookies are secure and httpOnly
+- [ ] CSRF protection is enabled
+- [ ] Brute force protection implemented
+- [ ] Account lockout after failed attempts
+- [ ] Password reset tokens expire
+- [ ] Secure password reset flow
+- [ ] No sensitive data in URLs
+
+## Common Vulnerabilities
+
+1. **Weak passwords** - Enforce complexity requirements
+2. **Session fixation** - Regenerate session ID after login
+3. **Missing MFA** - Offer two-factor authentication
+4. **Insecure password reset** - Use secure tokens, verify identity
+5. **No account lockout** - Implement brute force protection
+6. **Plaintext passwords** - Always hash passwords
+7. **Predictable tokens** - Use cryptographically secure random generators
+
+Remember: Authentication is the gateway to your application—get it right!
+8:T2338,# Debugging Strategies
+
+Effective debugging is a critical skill. Use systematic approaches to identify and fix issues quickly.
+
+## The Debugging Mindset
+
+1. **Stay calm** - Frustration clouds judgment
+2. **Be systematic** - Follow a methodical process
+3. **Question assumptions** - The bug is often where you least expect
+4. **Reproduce first** - Understand how to trigger the issue
+5. **Isolate the problem** - Narrow down the scope
+
+## Initial Steps
+
+### 1. Reproduce the Bug
+
+- [ ] Can you consistently trigger the bug?
+- [ ] What are the exact steps to reproduce?
+- [ ] Does it happen in all environments?
+- [ ] What's the expected vs. actual behavior?
+
+### 2. Gather Information
+
+```python
+# Add detailed logging
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+def process_order(order):
+    logger.debug(f"Processing order: {order.id}")
+    logger.debug(f"Order data: {order.to_dict()}")
+    
+    try:
+        result = validate_order(order)
+        logger.debug(f"Validation result: {result}")
+    except Exception as e:
+        logger.error(f"Validation failed: {e}", exc_info=True)
+        raise
+```
+
+### 3. Read Error Messages Carefully
+
+```
+Traceback (most recent call last):
+  File "main.py", line 42, in process_data
+    result = transform(data['values'])
+KeyError: 'values'
+```
+
+What this tells you:
+- Error type: `KeyError`
+- Missing key: `'values'`
+- Location: `main.py` line 42
+- Function: `process_data`
+
+## Debugging Techniques
+
+### Print/Log Debugging
+
+```javascript
+function calculateDiscount(price, percentage) {
+  console.log('calculateDiscount called:', { price, percentage });
+  
+  const discount = price * (percentage / 100);
+  console.log('Calculated discount:', discount);
+  
+  const finalPrice = price - discount;
+  console.log('Final price:', finalPrice);
+  
+  return finalPrice;
+}
+```
+
+### Binary Search / Divide and Conquer
+
+Comment out half the code to isolate the problem:
+
+```python
+def complex_function(data):
+    # Part 1
+    step1 = transform_data(data)
+    step2 = validate_data(step1)
+    step3 = enrich_data(step2)
+    
+    # Part 2 - Comment this out first
+    # step4 = process_data(step3)
+    # step5 = finalize_data(step4)
+    # return step5
+    
+    return step3  # Return early to test Part 1
+```
+
+### Rubber Duck Debugging
+
+Explain your code line-by-line to someone (or something):
+
+1. What does this line do?
+2. What values do I expect here?
+3. What assumptions am I making?
+4. Could this fail?
+
+### Add Assertions
+
+```typescript
+function getUserById(id: string): User {
+  console.assert(typeof id === 'string', 'id must be a string');
+  console.assert(id.length > 0, 'id cannot be empty');
+  
+  const user = database.users.find(u => u.id === id);
+  
+  console.assert(user !== undefined, `User ${id} not found`);
+  
+  return user;
+}
+```
+
+## Debugger Usage
+
+### JavaScript/Node.js
+
+```javascript
+function processData(items) {
+  debugger; // Execution will pause here
+  
+  for (let item of items) {
+    if (item.price > 100) {
+      debugger; // Conditional breakpoint location
+      applyDiscount(item);
+    }
+  }
+}
+
+// Run with: node inspect script.js
+// Or use Chrome DevTools
+```
+
+### Python (pdb)
+
+```python
+import pdb
+
+def calculate_total(items):
+    total = 0
+    for item in items:
+        pdb.set_trace()  # Debugger starts here
+        total += item['price'] * item['quantity']
+    return total
+
+# Commands:
+# n - next line
+# s - step into
+# c - continue
+# p variable - print variable
+# l - list code
+# q - quit
+```
+
+### Browser DevTools
+
+```javascript
+// Conditional breakpoint
+function processUser(user) {
+  // Right-click breakpoint, add condition: user.age < 18
+  if (user.isActive) {
+    sendNotification(user);
+  }
+}
+
+// Log points (no code changes needed)
+// Right-click line number > Add logpoint
+// Enter: 'User:', user, 'Status:', user.status
+```
+
+## Common Bug Patterns
+
+### Off-by-One Errors
+
+```python
+# Bug: Misses last element
+for i in range(len(items) - 1):
+    process(items[i])
+
+# Fix: Include all elements
+for i in range(len(items)):
+    process(items[i])
+
+# Better: Use iteration
+for item in items:
+    process(item)
+```
+
+### Null/Undefined Issues
+
+```javascript
+// Bug: Potential null reference
+function getUsername(user) {
+  return user.profile.name; // Crashes if profile is null
+}
+
+// Fix: Defensive checks
+function getUsername(user) {
+  if (!user || !user.profile) {
+    return 'Unknown';
+  }
+  return user.profile.name;
+}
+
+// Modern: Optional chaining
+function getUsername(user) {
+  return user?.profile?.name ?? 'Unknown';
+}
+```
+
+### Type Mismatches
+
+```python
+# Bug: String concatenation instead of addition
+def calculate_total(a, b):
+    return a + b
+
+result = calculate_total('10', '20')  # Returns '1020' not 30
+
+# Fix: Type validation
+def calculate_total(a, b):
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        raise TypeError('Arguments must be numeric')
+    return a + b
+```
+
+### Race Conditions
+
+```javascript
+// Bug: Race condition
+let counter = 0;
+
+async function increment() {
+  const current = counter;
+  await delay(100);
+  counter = current + 1;
+}
+
+// Fix: Atomic operations or locking
+let counter = 0;
+const lock = new AsyncLock();
+
+async function increment() {
+  await lock.acquire('counter', async () => {
+    counter += 1;
+  });
+}
+```
+
+### Memory Leaks
+
+```javascript
+// Bug: Event listener leak
+function setupComponent() {
+  const button = document.getElementById('myButton');
+  button.addEventListener('click', handleClick);
+  // Component gets recreated but listeners accumulate
+}
+
+// Fix: Clean up listeners
+function setupComponent() {
+  const button = document.getElementById('myButton');
+  button.removeEventListener('click', handleClick);
+  button.addEventListener('click', handleClick);
+}
+
+function cleanup() {
+  const button = document.getElementById('myButton');
+  button.removeEventListener('click', handleClick);
+}
+```
+
+## Advanced Techniques
+
+### Time-Travel Debugging
+
+Use tools like:
+- Redux DevTools (JavaScript)
+- rr (C/C++)
+- Replay.io (JavaScript)
+
+### Performance Debugging
+
+```javascript
+// Measure execution time
+console.time('processData');
+processData(largeDataset);
+console.timeEnd('processData');
+
+// Profile specific sections
+performance.mark('start-processing');
+processData(data);
+performance.mark('end-processing');
+performance.measure('processing', 'start-processing', 'end-processing');
+
+// Get measurements
+const measures = performance.getEntriesByType('measure');
+console.log(measures[0].duration);
+```
+
+### Network Debugging
+
+```python
+# Debug HTTP requests
+import requests
+import logging
+
+# Enable debug logging
+logging.basicConfig(level=logging.DEBUG)
+
+response = requests.get('https://api.example.com/data')
+print(f"Status: {response.status_code}")
+print(f"Headers: {response.headers}")
+print(f"Body: {response.text}")
+```
+
+### Database Query Debugging
+
+```python
+# SQLAlchemy query debugging
+import logging
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
+# Django query debugging
+from django.db import connection
+print(connection.queries)
+
+# Count queries
+from django.db import reset_queries
+reset_queries()
+# ... run code ...
+print(f"Queries executed: {len(connection.queries)}")
+```
+
+## Debugging Checklist
+
+### When Stuck
+
+- [ ] Take a break - fresh eyes help
+- [ ] Read error message completely
+- [ ] Check recent changes (git diff)
+- [ ] Verify assumptions with print/log statements
+- [ ] Search error message online
+- [ ] Check documentation
+- [ ] Review similar working code
+- [ ] Ask for help (rubber duck first!)
+
+### Questions to Ask
+
+1. **What changed?** - Was it working before?
+2. **What's different?** - Different environment, data, user?
+3. **What am I assuming?** - Are my assumptions correct?
+4. **Can I simplify?** - Minimal reproduction case?
+5. **What does the data look like?** - Inspect actual values
+
+## Tools and Resources
+
+### JavaScript/TypeScript
+- Chrome DevTools
+- VS Code Debugger
+- Node.js inspect
+- React DevTools
+- Redux DevTools
+
+### Python
+- pdb (built-in debugger)
+- ipdb (enhanced pdb)
+- VS Code Debugger
+- PyCharm Debugger
+- Python Tutor (visualizer)
+
+### General
+- Git bisect (find breaking commit)
+- Wireshark (network analysis)
+- Postman (API testing)
+- Browser network tab
+- System monitors (htop, Activity Monitor)
+
+## Documentation
+
+When you fix a bug:
+
+```python
+def calculate_discount(price, quantity):
+    """
+    Calculate discount based on quantity.
+    
+    Bug fix: Previously returned negative discount for quantity=0.
+    Now returns 0 discount for quantity <= 1.
+    
+    See issue #123 for details.
+    """
+    if quantity <= 1:
+        return 0
+    return price * 0.1 * (quantity - 1)
+```
+
+## Prevention
+
+After fixing:
+
+1. **Add a test** - Prevent regression
+2. **Document the fix** - Help future developers
+3. **Look for similar bugs** - Same pattern elsewhere?
+4. **Refactor if needed** - Make it harder to break
+5. **Share learnings** - Help the team
+
+Remember: Every bug is an opportunity to learn and improve your code!
+9:T1add,# Code Review Checklist
+
+A comprehensive checklist for conducting thorough and effective code reviews.
+
+## General
+
+- [ ] Code serves a clear purpose and solves the intended problem
+- [ ] Changes align with project requirements and specifications
+- [ ] No unnecessary or unused code
+- [ ] No commented-out code blocks
+- [ ] No debug statements or console logs left in production code
+
+## Code Quality
+
+- [ ] Code is readable and easy to understand
+- [ ] Functions are small and focused (single responsibility)
+- [ ] Code follows DRY principle (Don't Repeat Yourself)
+- [ ] Complex logic is broken down into smaller functions
+- [ ] Magic numbers replaced with named constants
+- [ ] No overly clever or obscure code
+
+## Naming
+
+- [ ] Variables have clear, descriptive names
+- [ ] Functions have verb-based names that describe actions
+- [ ] Classes use noun-based names
+- [ ] Boolean variables use is/has/can/should prefixes
+- [ ] Names follow project conventions (camelCase, snake_case, etc.)
+- [ ] No single-letter variables except loop counters
+
+## Error Handling
+
+- [ ] All error cases are handled appropriately
+- [ ] Errors include helpful messages
+- [ ] Resources are cleaned up in finally blocks
+- [ ] No empty catch blocks
+- [ ] Errors are logged with sufficient context
+- [ ] User-facing error messages are clear and actionable
+
+## Security
+
+- [ ] No hardcoded credentials or secrets
+- [ ] User input is validated and sanitized
+- [ ] SQL queries use parameterized statements
+- [ ] Authentication and authorization are properly implemented
+- [ ] Sensitive data is encrypted
+- [ ] HTTPS is used for all external requests
+- [ ] CSRF protection is in place
+- [ ] Rate limiting is implemented where needed
+
+## Performance
+
+- [ ] No unnecessary database queries
+- [ ] Queries are optimized and use proper indexes
+- [ ] No N+1 query problems
+- [ ] Large datasets are paginated
+- [ ] Expensive operations are cached when appropriate
+- [ ] No infinite loops or recursion without base case
+- [ ] Appropriate data structures are used
+
+## Testing
+
+- [ ] New code has adequate test coverage
+- [ ] Tests are clear and well-named
+- [ ] Edge cases are tested
+- [ ] Tests are independent and can run in any order
+- [ ] Mocks and stubs are used appropriately
+- [ ] All tests pass
+- [ ] Integration tests cover critical paths
+
+## Documentation
+
+- [ ] Public APIs have clear documentation
+- [ ] Complex algorithms are explained
+- [ ] Non-obvious decisions are justified with comments
+- [ ] README is updated if needed
+- [ ] API documentation is updated
+- [ ] Breaking changes are clearly documented
+
+## Database
+
+- [ ] Migrations are reversible
+- [ ] Indexes are added for frequently queried columns
+- [ ] Foreign key constraints are properly defined
+- [ ] No N+1 queries
+- [ ] Transactions are used for multi-step operations
+- [ ] Database connections are properly closed
+
+## API Design
+
+- [ ] RESTful conventions are followed
+- [ ] Endpoints use appropriate HTTP methods
+- [ ] Status codes are correct and meaningful
+- [ ] Request/response schemas are validated
+- [ ] API versioning is considered
+- [ ] Pagination is implemented for lists
+- [ ] Rate limiting is in place
+
+## Dependencies
+
+- [ ] No unnecessary dependencies added
+- [ ] Dependencies are at stable versions
+- [ ] License compatibility is verified
+- [ ] Dependencies are actively maintained
+- [ ] Security vulnerabilities are checked
+
+## Git Practices
+
+- [ ] Commit messages are clear and descriptive
+- [ ] Commits are atomic and focused
+- [ ] No large files committed
+- [ ] No sensitive data in commit history
+- [ ] Branch naming follows conventions
+
+## Code Style
+
+- [ ] Code follows project style guide
+- [ ] Indentation is consistent
+- [ ] Line length is within limits
+- [ ] Linter passes without warnings
+- [ ] Formatting is consistent
+
+## Specific Language Checks
+
+### JavaScript/TypeScript
+
+- [ ] === used instead of ==
+- [ ] Promises are properly handled
+- [ ] async/await used correctly
+- [ ] TypeScript types are properly defined
+- [ ] No 'any' types unless justified
+- [ ] Null/undefined checks are in place
+
+### Python
+
+- [ ] Follows PEP 8 style guide
+- [ ] Type hints are used
+- [ ] Context managers used for resources
+- [ ] List comprehensions used appropriately
+- [ ] F-strings used for formatting
+
+### Java
+
+- [ ] Proper exception handling
+- [ ] Resources closed in finally or try-with-resources
+- [ ] Proper use of access modifiers
+- [ ] Immutability used where appropriate
+- [ ] Generics used correctly
+
+## Review Process
+
+### Before Reviewing
+
+1. Understand the context and requirements
+2. Check the ticket/issue description
+3. Review the overall approach before details
+
+### During Review
+
+1. Start with architecture and design
+2. Check for security issues
+3. Look for performance problems
+4. Verify error handling
+5. Check test coverage
+6. Review code style last
+
+### Providing Feedback
+
+- [ ] Comments are constructive and specific
+- [ ] Suggestions include reasoning
+- [ ] Praise good solutions
+- [ ] Distinguish between required and optional changes
+- [ ] Ask questions instead of making demands
+- [ ] Provide code examples for complex suggestions
+
+## Common Issues to Watch For
+
+### Logic Errors
+
+```javascript
+// Bad: Off-by-one error
+for (let i = 0; i <= array.length; i++) {
+  console.log(array[i]); // Will error on last iteration
+}
+
+// Good
+for (let i = 0; i < array.length; i++) {
+  console.log(array[i]);
+}
+```
+
+### Resource Leaks
+
+```python
+# Bad: File not closed on error
+file = open('data.txt', 'r')
+data = process(file.read())
+file.close()
+
+# Good: Context manager ensures cleanup
+with open('data.txt', 'r') as file:
+    data = process(file.read())
+```
+
+### Race Conditions
+
+```javascript
+// Bad: Race condition
+if (!cache.has(key)) {
+  cache.set(key, await fetchData(key));
+}
+
+// Good: Atomic operation
+if (!cache.has(key)) {
+  const data = await fetchData(key);
+  if (!cache.has(key)) {  // Double-check
+    cache.set(key, data);
+  }
+}
+```
+
+### SQL Injection
+
+```python
+# Bad: SQL injection vulnerability
+query = f"SELECT * FROM users WHERE username = '{username}'"
+
+# Good: Parameterized query
+query = "SELECT * FROM users WHERE username = ?"
+cursor.execute(query, (username,))
+```
+
+## Review Etiquette
+
+### Do
+
+- Be respectful and professional
+- Focus on the code, not the person
+- Explain why something should change
+- Ask questions to understand intent
+- Acknowledge good work
+- Be timely with reviews
+
+### Don't
+
+- Be condescending or dismissive
+- Make personal attacks
+- Nitpick trivial style issues
+- Block on personal preferences
+- Rewrite entire implementations in comments
+- Let reviews sit for days
+
+## Final Checklist
+
+Before approving:
+
+- [ ] All comments addressed or discussed
+- [ ] Tests pass in CI/CD
+- [ ] No merge conflicts
+- [ ] Documentation updated
+- [ ] Ready for production deployment
+
+Remember: Code reviews are about collaboration and learning, not gatekeeping!
+a:T1749,# Naming Conventions
+
+Clear, consistent naming is essential for maintainable code. Follow these conventions for better readability.
+
+## General Principles
+
+1. **Be descriptive** - Names should reveal intent
+2. **Be consistent** - Follow language conventions
+3. **Avoid abbreviations** - Unless universally understood
+4. **Use pronounceable names** - Code is read more than written
+5. **Avoid mental mapping** - Don't make readers translate names
+
+## Variables
+
+### Use meaningful names
+
+```javascript
+// Bad
+let d; // elapsed time in days
+let x = getUserData();
+
+// Good
+let elapsedTimeInDays;
+let userData = getUserData();
+```
+
+### Boolean variables
+
+Prefix with `is`, `has`, `can`, `should`:
+
+```python
+# Good
+is_active = True
+has_permission = check_permission()
+can_edit = user.role == 'admin'
+should_notify = user.preferences.notifications
+```
+
+### Collections
+
+Use plural names:
+
+```java
+// Bad
+List<User> userList;
+Set<String> nameSet;
+
+// Good
+List<User> users;
+Set<String> names;
+Map<String, Integer> scoresByPlayer;
+```
+
+## Functions and Methods
+
+### Use verb phrases
+
+```typescript
+// Bad
+function data() { }
+function user(id) { }
+
+// Good
+function fetchData() { }
+function getUserById(id: string) { }
+function calculateTotal(items: Item[]) { }
+function isValidEmail(email: string): boolean { }
+```
+
+### Consistent naming patterns
+
+```python
+# Getters/Setters
+def get_username(self):
+    return self._username
+
+def set_username(self, value):
+    self._username = value
+
+# Boolean queries
+def is_authenticated(self):
+    return self._authenticated
+
+def has_permission(self, permission):
+    return permission in self._permissions
+
+# Actions
+def create_user(data):
+    pass
+
+def update_profile(user_id, data):
+    pass
+
+def delete_comment(comment_id):
+    pass
+```
+
+## Classes
+
+### Use nouns or noun phrases
+
+```java
+// Bad
+class HandleData { }
+class DoStuff { }
+
+// Good
+class User { }
+class ShoppingCart { }
+class PaymentProcessor { }
+class EmailValidator { }
+```
+
+### Avoid generic names
+
+```typescript
+// Bad
+class Manager { }
+class Helper { }
+class Utility { }
+
+// Good
+class UserSessionManager { }
+class StringHelper { }
+class DateUtility { }
+```
+
+## Constants
+
+### Use UPPER_SNAKE_CASE
+
+```python
+MAX_RETRY_ATTEMPTS = 3
+DEFAULT_TIMEOUT_SECONDS = 30
+API_BASE_URL = "https://api.example.com"
+ALLOWED_FILE_EXTENSIONS = ['.jpg', '.png', '.gif']
+```
+
+```javascript
+const MAX_LOGIN_ATTEMPTS = 5;
+const SESSION_TIMEOUT_MS = 3600000;
+const ERROR_MESSAGES = {
+  NOT_FOUND: 'Resource not found',
+  UNAUTHORIZED: 'Unauthorized access'
+};
+```
+
+## Interfaces and Types
+
+```typescript
+// Interfaces: Use "I" prefix or descriptive noun
+interface IUser {
+  id: string;
+  name: string;
+}
+
+interface Serializable {
+  serialize(): string;
+}
+
+// Types: Use descriptive names
+type UserId = string;
+type Callback = (error: Error | null, data: any) => void;
+type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+```
+
+## File Naming
+
+```
+components/
+  UserProfile.tsx          # PascalCase for components
+  user-settings.tsx        # kebab-case alternative
+  
+utils/
+  string-helpers.js        # kebab-case for utilities
+  dateFormatter.js         # camelCase alternative
+  
+constants/
+  API_ENDPOINTS.js         # UPPER_SNAKE_CASE
+  
+tests/
+  user.test.js             # Match source file + .test
+  integration.spec.js      # Or .spec suffix
+```
+
+## Language-Specific Conventions
+
+### Python (PEP 8)
+
+```python
+# Variables and functions: snake_case
+user_name = "Alice"
+def calculate_total_price(items):
+    pass
+
+# Classes: PascalCase
+class UserProfile:
+    pass
+
+# Constants: UPPER_SNAKE_CASE
+MAX_CONNECTIONS = 100
+
+# Private members: leading underscore
+class Account:
+    def __init__(self):
+        self._balance = 0  # Protected
+        self.__secret = "hidden"  # Private
+```
+
+### JavaScript/TypeScript
+
+```typescript
+// Variables and functions: camelCase
+const userName = "Bob";
+function calculateTotalPrice(items: Item[]): number {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+
+// Classes and interfaces: PascalCase
+class UserProfile { }
+interface UserData { }
+
+// Constants: UPPER_SNAKE_CASE or camelCase
+const MAX_CONNECTIONS = 100;
+const defaultTimeout = 5000;
+```
+
+### Java
+
+```java
+// Variables and methods: camelCase
+String userName = "Charlie";
+public int calculateTotalPrice(List<Item> items) { }
+
+// Classes and interfaces: PascalCase
+public class UserProfile { }
+public interface Serializable { }
+
+// Constants: UPPER_SNAKE_CASE
+public static final int MAX_CONNECTIONS = 100;
+
+// Packages: lowercase
+package com.example.project;
+```
+
+## Naming Anti-Patterns
+
+### Avoid
+
+```javascript
+// Single letter names (except loop counters)
+let a = getUserData();
+
+// Meaningless names
+let data, info, thing, stuff;
+
+// Hungarian notation in modern languages
+let strName, intAge, bIsActive;
+
+// Encoded type information
+let userMap, nameString, countInteger;
+
+// Overly abbreviated
+let usrNm, calcTtl, procData;
+
+// Mental mapping required
+let temp, foo, bar, baz;
+```
+
+## Good Examples
+
+```python
+# Clear, self-documenting code
+def send_welcome_email_to_new_users(users):
+    for user in users:
+        if user.is_new and not user.welcome_email_sent:
+            email_service.send(
+                recipient=user.email,
+                template='welcome',
+                context={'name': user.full_name}
+            )
+            user.mark_welcome_email_sent()
+```
+
+```typescript
+class OrderProcessor {
+  private readonly maxRetries = 3;
+  private readonly retryDelayMs = 1000;
+  
+  async processOrder(order: Order): Promise<ProcessedOrder> {
+    const validatedOrder = this.validateOrder(order);
+    const paymentResult = await this.processPayment(validatedOrder);
+    
+    if (paymentResult.isSuccessful) {
+      return this.createProcessedOrder(validatedOrder, paymentResult);
+    }
+    
+    throw new PaymentFailedError(paymentResult.errorMessage);
+  }
+}
+```
+
+Remember: Good names make code self-documenting and reduce the need for comments!
+b:T34ce,# Error Handling Patterns
+
+Robust error handling is crucial for building reliable applications. Handle errors gracefully and provide meaningful feedback.
+
+## Core Principles
+
+1. **Fail fast** - Detect errors early
+2. **Be specific** - Use specific exception types
+3. **Don't swallow errors** - Always handle or propagate
+4. **Clean up resources** - Use try-finally or context managers
+5. **Log appropriately** - Record errors for debugging
+
+## Try-Catch Best Practices
+
+### JavaScript/TypeScript
+
+```typescript
+// Good: Specific error handling
+async function fetchUserData(userId: string): Promise<User> {
+  try {
+    const response = await fetch(`/api/users/${userId}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      // Network error
+      logger.error('Network error fetching user', { userId, error });
+      throw new NetworkError('Unable to reach server');
+    } else if (error instanceof SyntaxError) {
+      // JSON parsing error
+      logger.error('Invalid response format', { userId, error });
+      throw new DataFormatError('Server returned invalid data');
+    } else {
+      // Re-throw unknown errors
+      logger.error('Unexpected error', { userId, error });
+      throw error;
+    }
+  }
+}
+```
+
+### Python
+
+```python
+# Good: Multiple exception types
+def read_config_file(filepath):
+    try:
+        with open(filepath, 'r') as f:
+            config = json.load(f)
+        return config
+    except FileNotFoundError:
+        logger.error(f"Config file not found: {filepath}")
+        return get_default_config()
+    except json.JSONDecodeError as e:
+        logger.error(f"Invalid JSON in config: {e}")
+        raise ConfigurationError(f"Malformed config file: {filepath}")
+    except PermissionError:
+        logger.error(f"Permission denied reading: {filepath}")
+        raise ConfigurationError(f"Cannot read config file: {filepath}")
+    except Exception as e:
+        logger.error(f"Unexpected error reading config: {e}")
+        raise
+```
+
+## Custom Exception Classes
+
+### Python
+
+```python
+class ApplicationError(Exception):
+    """Base exception for application errors."""
+    def __init__(self, message, code=None, details=None):
+        super().__init__(message)
+        self.code = code
+        self.details = details or {}
+
+class ValidationError(ApplicationError):
+    """Raised when input validation fails."""
+    def __init__(self, message, field=None):
+        super().__init__(message, code='VALIDATION_ERROR')
+        self.field = field
+
+class ResourceNotFoundError(ApplicationError):
+    """Raised when a requested resource doesn't exist."""
+    def __init__(self, resource_type, resource_id):
+        message = f"{resource_type} with id {resource_id} not found"
+        super().__init__(message, code='NOT_FOUND')
+        self.resource_type = resource_type
+        self.resource_id = resource_id
+
+class AuthenticationError(ApplicationError):
+    """Raised when authentication fails."""
+    def __init__(self, message="Authentication failed"):
+        super().__init__(message, code='AUTH_ERROR')
+
+# Usage
+def get_user(user_id):
+    user = db.query(User).get(user_id)
+    if not user:
+        raise ResourceNotFoundError('User', user_id)
+    return user
+```
+
+### TypeScript
+
+```typescript
+class ApplicationError extends Error {
+  constructor(
+    message: string,
+    public code: string,
+    public statusCode: number = 500,
+    public details?: Record<string, any>
+  ) {
+    super(message);
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+class ValidationError extends ApplicationError {
+  constructor(message: string, public field?: string) {
+    super(message, 'VALIDATION_ERROR', 400, { field });
+  }
+}
+
+class ResourceNotFoundError extends ApplicationError {
+  constructor(resourceType: string, resourceId: string) {
+    super(
+      `${resourceType} with id ${resourceId} not found`,
+      'NOT_FOUND',
+      404,
+      { resourceType, resourceId }
+    );
+  }
+}
+
+class UnauthorizedError extends ApplicationError {
+  constructor(message = 'Unauthorized') {
+    super(message, 'UNAUTHORIZED', 401);
+  }
+}
+
+// Usage
+function getUser(userId: string): User {
+  const user = database.users.find(u => u.id === userId);
+  if (!user) {
+    throw new ResourceNotFoundError('User', userId);
+  }
+  return user;
+}
+```
+
+## Error Handling in Async Code
+
+### Promises
+
+```javascript
+// Good: Proper promise error handling
+function processUserData(userId) {
+  return fetchUser(userId)
+    .then(user => validateUser(user))
+    .then(validUser => enrichUserData(validUser))
+    .then(enrichedUser => saveUser(enrichedUser))
+    .catch(ValidationError, error => {
+      logger.warn('Validation failed', { userId, error });
+      return getDefaultUser(userId);
+    })
+    .catch(NetworkError, error => {
+      logger.error('Network error', { userId, error });
+      throw new ServiceUnavailableError('User service unavailable');
+    })
+    .catch(error => {
+      logger.error('Unexpected error processing user', { userId, error });
+      throw error;
+    });
+}
+```
+
+### Async/Await
+
+```typescript
+// Good: Clean async/await error handling
+async function createOrder(orderData: OrderData): Promise<Order> {
+  let transaction;
+  
+  try {
+    transaction = await db.beginTransaction();
+    
+    // Validate order
+    const validation = validateOrderData(orderData);
+    if (!validation.isValid) {
+      throw new ValidationError(validation.errors);
+    }
+    
+    // Check inventory
+    const inventoryCheck = await checkInventory(orderData.items);
+    if (!inventoryCheck.available) {
+      throw new InsufficientInventoryError(inventoryCheck.missing);
+    }
+    
+    // Create order
+    const order = await db.orders.create(orderData, { transaction });
+    
+    // Process payment
+    const payment = await processPayment(order.total, orderData.paymentMethod);
+    if (!payment.success) {
+      throw new PaymentFailedError(payment.reason);
+    }
+    
+    // Update inventory
+    await updateInventory(orderData.items, { transaction });
+    
+    await transaction.commit();
+    
+    logger.info('Order created successfully', { orderId: order.id });
+    return order;
+    
+  } catch (error) {
+    if (transaction) {
+      await transaction.rollback();
+    }
+    
+    if (error instanceof ValidationError) {
+      logger.warn('Order validation failed', { error });
+      throw error;
+    } else if (error instanceof PaymentFailedError) {
+      logger.error('Payment processing failed', { error });
+      throw error;
+    } else {
+      logger.error('Unexpected error creating order', { error });
+      throw new OrderCreationError('Failed to create order', error);
+    }
+  }
+}
+```
+
+## Resource Cleanup
+
+### Python Context Managers
+
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def database_connection(connection_string):
+    """Ensure database connection is properly closed."""
+    conn = None
+    try:
+        conn = create_connection(connection_string)
+        yield conn
+    except DatabaseError as e:
+        logger.error(f"Database error: {e}")
+        if conn:
+            conn.rollback()
+        raise
+    finally:
+        if conn:
+            conn.close()
+            logger.debug("Database connection closed")
+
+# Usage
+with database_connection(DB_URL) as conn:
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users")
+    results = cursor.fetchall()
+```
+
+### Try-Finally
+
+```java
+public void processFile(String filepath) throws IOException {
+    BufferedReader reader = null;
+    try {
+        reader = new BufferedReader(new FileReader(filepath));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            processLine(line);
+        }
+    } catch (FileNotFoundException e) {
+        logger.error("File not found: " + filepath, e);
+        throw new ProcessingException("Cannot process file", e);
+    } catch (IOException e) {
+        logger.error("Error reading file: " + filepath, e);
+        throw new ProcessingException("Error processing file", e);
+    } finally {
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                logger.warn("Error closing reader", e);
+            }
+        }
+    }
+}
+
+// Better: Try-with-resources (Java 7+)
+public void processFile(String filepath) throws ProcessingException {
+    try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            processLine(line);
+        }
+    } catch (FileNotFoundException e) {
+        logger.error("File not found: " + filepath, e);
+        throw new ProcessingException("Cannot process file", e);
+    } catch (IOException e) {
+        logger.error("Error reading file: " + filepath, e);
+        throw new ProcessingException("Error processing file", e);
+    }
+}
+```
+
+## Error Responses in APIs
+
+```typescript
+// Express.js error handler middleware
+interface ErrorResponse {
+  error: {
+    code: string;
+    message: string;
+    details?: any;
+  };
+  requestId?: string;
+}
+
+function errorHandler(
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void {
+  const requestId = req.headers['x-request-id'] as string;
+  
+  logger.error('API error', {
+    error: err,
+    requestId,
+    method: req.method,
+    path: req.path,
+    ip: req.ip
+  });
+  
+  if (err instanceof ValidationError) {
+    const response: ErrorResponse = {
+      error: {
+        code: err.code,
+        message: err.message,
+        details: err.details
+      },
+      requestId
+    };
+    return res.status(400).json(response);
+  }
+  
+  if (err instanceof UnauthorizedError) {
+    const response: ErrorResponse = {
+      error: {
+        code: 'UNAUTHORIZED',
+        message: 'Authentication required'
+      },
+      requestId
+    };
+    return res.status(401).json(response);
+  }
+  
+  if (err instanceof ResourceNotFoundError) {
+    const response: ErrorResponse = {
+      error: {
+        code: 'NOT_FOUND',
+        message: err.message
+      },
+      requestId
+    };
+    return res.status(404).json(response);
+  }
+  
+  // Default: Don't leak internal errors
+  const response: ErrorResponse = {
+    error: {
+      code: 'INTERNAL_ERROR',
+      message: 'An unexpected error occurred'
+    },
+    requestId
+  };
+  res.status(500).json(response);
+}
+
+app.use(errorHandler);
+```
+
+## Retry Logic
+
+```python
+import time
+from functools import wraps
+
+def retry(max_attempts=3, delay=1, backoff=2, exceptions=(Exception,)):
+    """Retry decorator with exponential backoff."""
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            attempt = 0
+            current_delay = delay
+            
+            while attempt < max_attempts:
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    attempt += 1
+                    if attempt >= max_attempts:
+                        logger.error(f"Failed after {max_attempts} attempts: {e}")
+                        raise
+                    
+                    logger.warning(
+                        f"Attempt {attempt} failed, retrying in {current_delay}s: {e}"
+                    )
+                    time.sleep(current_delay)
+                    current_delay *= backoff
+            
+        return wrapper
+    return decorator
+
+# Usage
+@retry(max_attempts=5, delay=1, backoff=2, exceptions=(NetworkError, TimeoutError))
+def fetch_external_data(url):
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
+    return response.json()
+```
+
+## Defensive Programming
+
+```python
+def calculate_average(numbers):
+    """Calculate average with defensive checks."""
+    # Input validation
+    if numbers is None:
+        raise ValueError("numbers cannot be None")
+    
+    if not isinstance(numbers, (list, tuple)):
+        raise TypeError(f"Expected list or tuple, got {type(numbers)}")
+    
+    if len(numbers) == 0:
+        raise ValueError("Cannot calculate average of empty list")
+    
+    # Check all elements are numeric
+    if not all(isinstance(n, (int, float)) for n in numbers):
+        raise TypeError("All elements must be numeric")
+    
+    # Perform calculation
+    total = sum(numbers)
+    count = len(numbers)
+    
+    return total / count
+```
+
+## Logging Best Practices
+
+```typescript
+// Structured logging with context
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' })
+  ]
+});
+
+function processPayment(orderId: string, amount: number) {
+  const context = { orderId, amount };
+  
+  try {
+    logger.info('Processing payment', context);
+    
+    const result = paymentGateway.charge(amount);
+    
+    logger.info('Payment processed successfully', {
+      ...context,
+      transactionId: result.transactionId
+    });
+    
+    return result;
+  } catch (error) {
+    logger.error('Payment processing failed', {
+      ...context,
+      error: error.message,
+      stack: error.stack
+    });
+    
+    throw new PaymentError('Payment processing failed', error);
+  }
+}
+```
+
+Remember: Good error handling makes your application resilient and maintainable!
+0:{"P":null,"b":"TPhATwRfMDxq9-9GUzk2V","c":["",""],"q":"","i":false,"f":[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/prompts/_next/static/chunks/1d5639018d1afc60.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/prompts/_next/static/chunks/b4ddc1a8749ef82e.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"className":"geist_2ae47f08-module__h69qWW__variable geist_mono_eb58308d-module__w_p2Lq__variable","children":["$","$L2",null,{"children":["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]}]]}],{"children":[["$","$1","c",{"children":[["$","$L5",null,{"initialSnippets":[{"id":"snippets/security/input-validation.md","title":"Input Validation","category":"security","content":"$6","filePath":"snippets/security/input-validation.md","editUrl":"https://github.com/jjgroenendijk/prompts/edit/main/snippets/security/input-validation.md"},{"id":"snippets/security/authentication.md","title":"Authentication","category":"security","content":"$7","filePath":"snippets/security/authentication.md","editUrl":"https://github.com/jjgroenendijk/prompts/edit/main/snippets/security/authentication.md"},{"id":"snippets/prompts/debugging.md","title":"Debugging","category":"prompts","content":"$8","filePath":"snippets/prompts/debugging.md","editUrl":"https://github.com/jjgroenendijk/prompts/edit/main/snippets/prompts/debugging.md"},{"id":"snippets/prompts/code-review.md","title":"Code Review","category":"prompts","content":"$9","filePath":"snippets/prompts/code-review.md","editUrl":"https://github.com/jjgroenendijk/prompts/edit/main/snippets/prompts/code-review.md"},{"id":"snippets/coding-style/naming-conventions.md","title":"Naming Conventions","category":"coding-style","content":"$a","filePath":"snippets/coding-style/naming-conventions.md","editUrl":"https://github.com/jjgroenendijk/prompts/edit/main/snippets/coding-style/naming-conventions.md"},{"id":"snippets/coding-style/error-handling.md","title":"Error Handling","category":"coding-style","content":"$b","filePath":"snippets/coding-style/error-handling.md","editUrl":"https://github.com/jjgroenendijk/prompts/edit/main/snippets/coding-style/error-handling.md"}],"config":{"site":{"title":"Prompt Rule Selector","description":"Select and combine AI coding rules and prompts","baseUrl":"https://jjgroenendijk.nl/prompts","basePath":"/prompts"},"github":{"owner":"jjgroenendijk","repo":"prompts","defaultBranch":"main"},"ui":{"previewCharLimit":400,"searchPlaceholder":"Search rules...","copyButtonText":"Copy Selected Rules","addButtonText":"Add New Rule","configButtonText":"Settings"},"rules":{"separator":"\n\n---\n\n","includeTitle":true}},"urls":{"create":"https://github.com/jjgroenendijk/prompts/new/main?filename=snippets/new-rule.md","config":"https://github.com/jjgroenendijk/prompts/edit/main/config.yml"}}],["$Lc"],"$Ld"]}],{},null,false,false]},null,false,false],"$Le",false]],"m":"$undefined","G":["$f",[]],"S":true}
+10:I[97367,["/prompts/_next/static/chunks/42879de7b8087bc9.js"],"OutletBoundary"]
+11:"$Sreact.suspense"
+13:I[97367,["/prompts/_next/static/chunks/42879de7b8087bc9.js"],"ViewportBoundary"]
+15:I[97367,["/prompts/_next/static/chunks/42879de7b8087bc9.js"],"MetadataBoundary"]
+c:["$","script","script-0",{"src":"/prompts/_next/static/chunks/5ccbe578a5df9eac.js","async":true,"nonce":"$undefined"}]
+d:["$","$L10",null,{"children":["$","$11",null,{"name":"Next.MetadataOutlet","children":"$@12"}]}]
+e:["$","$1","h",{"children":[null,["$","$L13",null,{"children":"$@14"}],["$","div",null,{"hidden":true,"children":["$","$L15",null,{"children":["$","$11",null,{"name":"Next.Metadata","children":"$@16"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+14:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+17:I[27201,["/prompts/_next/static/chunks/42879de7b8087bc9.js"],"IconMark"]
+16:[["$","title","0",{"children":"Create Next App"}],["$","meta","1",{"name":"description","content":"Generated by create next app"}],["$","link","2",{"rel":"icon","href":"/prompts/favicon.ico?favicon.0b3bf435.ico","sizes":"256x256","type":"image/x-icon"}],["$","$L17","3",{}]]
+12:null
