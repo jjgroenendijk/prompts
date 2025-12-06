@@ -29,45 +29,67 @@ export default function OutputWindow({
   };
 
   return (
-    <div className="flex flex-col h-full border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800 shrink-0">
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          <span className="font-semibold">{selectedSnippets.length}</span> rules selected
-        </div>
-        <div className="flex gap-2">
-          {selectedSnippets.length > 0 && (
-            <button
-              onClick={onClear}
-              className="px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            >
-              Clear All
-            </button>
-          )}
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900 relative group">
+      {/* Action Bar - Floating on top right */}
+      <div className="absolute top-4 right-4 z-10 flex gap-2 transition-opacity opacity-100">
+        {selectedSnippets.length > 0 && (
           <button
-            onClick={handleCopy}
-            disabled={!output}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm ${copied 
-              ? 'bg-green-600 hover:bg-green-700 text-white' 
-              : 'bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'
-            }`}
+            onClick={onClear}
+            className="px-3 py-1.5 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur text-xs font-medium text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 hover:border-red-200 transition-all shadow-sm"
           >
-            {copied ? 'Copied!' : 'Copy Rules'}
+            Clear
           </button>
+        )}
+        <button
+          onClick={handleCopy}
+          disabled={!output}
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg backdrop-blur transition-all transform active:scale-95 ${copied 
+            ? 'bg-green-500/90 text-white ring-2 ring-green-400/50' 
+            : 'bg-primary/90 hover:bg-primary text-white hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
+          }`}
+        >
+          {copied ? (
+             <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+              Copied
+             </>
+          ) : (
+             <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+              Copy Rules
+             </>
+          )}
+        </button>
+      </div>
+
+      {/* Header / Meta */}
+      <div className="h-14 border-b border-gray-100 dark:border-gray-800 flex items-center px-6 bg-white dark:bg-gray-900">
+        <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${output ? 'bg-green-500 animate-pulse' : 'bg-gray-300 dark:bg-gray-700'}`} />
+            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {selectedSnippets.length} Active Rules
+            </span>
         </div>
       </div>
-      <div className="flex-1 p-0 overflow-hidden relative">
+
+      {/* Editor Area */}
+      <div className="flex-1 relative bg-gray-50 dark:bg-[#0d1117]">
         {output ? (
           <textarea 
             readOnly
             value={output}
-            className="w-full h-full resize-none p-4 font-mono text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900 focus:outline-none"
+            className="w-full h-full resize-none p-6 font-mono text-sm leading-relaxed text-gray-800 dark:text-gray-300 bg-transparent focus:outline-none"
             spellCheck={false}
           />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 p-4 text-center">
-            <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            <p className="text-lg font-medium">No rules selected</p>
-            <p className="text-sm mt-2 opacity-70">Select prompts from the list to combine them here.</p>
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-24 h-24 mb-6 rounded-2xl bg-gray-100 dark:bg-gray-800/50 flex items-center justify-center transform rotate-12 transition-transform hover:rotate-0 duration-500">
+              <svg className="w-10 h-10 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Ready to Compose</h3>
+            <p className="text-gray-500 dark:text-gray-400 max-w-xs mx-auto">
+              Select snippets from the sidebar to build your context window.
+            </p>
           </div>
         )}
       </div>

@@ -3,12 +3,11 @@ import { useState } from 'react';
 import SnippetItem from './SnippetItem';
 
 export default function CategoryFilter({ 
-  categories, // Object: { [categoryName]: snippets[] }
-  selectedSnippetIds, // Array of IDs
+  categories, 
+  selectedSnippetIds, 
   onToggleSnippet,
   onSelectCategory
 }) {
-  // Initialize all categories as expanded by default
   const [expanded, setExpanded] = useState(
     Object.keys(categories).reduce((acc, cat) => ({...acc, [cat]: true}), {})
   );
@@ -17,74 +16,83 @@ export default function CategoryFilter({
     setExpanded(prev => ({...prev, [cat]: !prev[cat]}));
   };
 
-  // Sort categories alphabetically
   const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCompare(b[0]));
 
   return (
-    <div className="space-y-4 p-4 pb-20">
+    <div className="space-y-6 p-6 pb-24">
       {sortedCategories.map(([category, snippets]) => {
         if (snippets.length === 0) return null;
         
-        // Check selection state
         const allSelected = snippets.length > 0 && snippets.every(s => selectedSnippetIds.includes(s.id));
         const someSelected = snippets.some(s => selectedSnippetIds.includes(s.id));
+        const isExpanded = expanded[category];
         
         return (
-          <div key={category} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm">
-            <div className="bg-gray-100 dark:bg-gray-800 p-3 flex items-center justify-between select-none sticky top-0 z-0">
+          <div key={category} className="animate-fade-in">
+            <div className="flex items-center justify-between mb-3 group">
               <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  ref={input => {
-                    if (input) {
-                      input.indeterminate = someSelected && !allSelected;
-                    }
-                  }}
-                  onChange={() => onSelectCategory(category, !allSelected)}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 dark:bg-gray-700 cursor-pointer"
-                />
+                <div 
+                  className={`w-5 h-5 rounded-md border flex items-center justify-center cursor-pointer transition-colors ${
+                    allSelected 
+                      ? 'bg-primary border-primary text-white'
+                      : someSelected
+                        ? 'bg-primary border-primary text-white'
+                        : 'bg-transparent border-gray-300 dark:border-gray-600 hover:border-primary'
+                  }`}
+                  onClick={() => onSelectCategory(category, !allSelected)}
+                >
+                   {allSelected && (
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                   )}
+                   {someSelected && !allSelected && (
+                     <div className="w-2.5 h-0.5 bg-white rounded-full" />
+                   )}
+                </div>
+                
                 <button 
                   onClick={() => toggleExpand(category)}
-                  className="flex items-center gap-2 text-sm font-bold text-gray-800 dark:text-gray-100 capitalize focus:outline-none hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  className="flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider hover:text-primary dark:hover:text-primary transition-colors"
                 >
                   {category}
-                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-0.5 bg-white dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600">
+                  <span className="ml-1 px-2 py-0.5 text-[10px] font-bold bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-full group-hover:bg-primary/10 group-hover:text-primary transition-colors">
                     {snippets.length}
                   </span>
                 </button>
               </div>
+              
               <button 
                 onClick={() => toggleExpand(category)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className={`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 transition-all duration-200 ${isExpanded ? 'rotate-0' : '-rotate-90'}`}
               >
-                {expanded[category] ? (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                )}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
             </div>
             
-            {expanded[category] && (
-              <div className="p-2 bg-white dark:bg-gray-900 space-y-2">
-                {snippets.map(snippet => (
-                  <SnippetItem
-                    key={snippet.id}
-                    snippet={snippet}
-                    isSelected={selectedSnippetIds.includes(snippet.id)}
-                    onToggle={onToggleSnippet}
-                  />
-                ))}
+            <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+              <div className="overflow-hidden">
+                <div className="pl-2 space-y-1">
+                  {snippets.map(snippet => (
+                    <SnippetItem
+                      key={snippet.id}
+                      snippet={snippet}
+                      isSelected={selectedSnippetIds.includes(snippet.id)}
+                      onToggle={onToggleSnippet}
+                    />
+                  ))}
+                </div>
               </div>
-            )}
+            </div>
           </div>
         );
       })}
       
       {sortedCategories.length === 0 && (
-        <div className="text-center py-10 text-gray-500 dark:text-gray-400">
-          No snippets found.
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400">
+             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">No matching snippets</h3>
+          <p className="text-sm text-gray-500 mt-1">Try adjusting your search terms</p>
         </div>
       )}
     </div>

@@ -1,1 +1,44 @@
 @import "tailwindcss";
+
+:root {
+  --background: #f8fafc; /* Slate 50 */
+  --foreground: #0f172a; /* Slate 900 */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --border: #e2e8f0; /* Slate 200 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a; /* Slate 900 */
+    --foreground: #f8fafc; /* Slate 50 */
+    --card: #1e293b; /* Slate 800 */
+    --card-foreground: #f8fafc;
+    --border: #334155; /* Slate 700 */
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  @apply antialiased;
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-600;
+}
