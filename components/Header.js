@@ -2,12 +2,8 @@
 
 import { useTheme } from './ThemeProvider';
 
-export default function Header({ title, settingsUrl, addUrl, currentOutput }) {
+export default function Header({ title, settingsUrl, addUrl }) {
   const { theme, toggleTheme } = useTheme();
-
-  const finalAddUrl = currentOutput 
-    ? `${addUrl}&value=${encodeURIComponent(currentOutput)}`
-    : addUrl;
 
   return (
     <header className="flex items-center justify-between px-6 py-4 border-b border-border/40 bg-background/80 backdrop-blur-lg sticky top-0 z-20 transition-all duration-200">
@@ -41,7 +37,7 @@ export default function Header({ title, settingsUrl, addUrl, currentOutput }) {
           )}
         </button>
         <a
-          href={finalAddUrl}
+          href={addUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="p-2 text-muted-foreground hover:text-foreground hover:bg-secondary/10 rounded-full transition-all duration-200 hover:scale-105 active:scale-95"

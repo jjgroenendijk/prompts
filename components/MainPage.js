@@ -61,18 +61,6 @@ export default function MainPage({ initialSnippets, config, urls }) {
     .map(id => initialSnippets.find(s => s.id === id))
     .filter(Boolean);
 
-  // Generate output text
-  const separator = config.rules?.separator ?? "\n\n---\n\n";
-  const includeTitle = config.rules?.includeTitle ?? true;
-
-  const output = selectedSnippets.map(s => {
-    let text = s.content.trim();
-    if (includeTitle) {
-      text = `## ${s.title}\n\n${text}`;
-    }
-    return text;
-  }).join(separator);
-
   return (
     <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 overflow-hidden font-sans selection:bg-primary/20 selection:text-primary">
       {/* Header - Full width */}
@@ -80,7 +68,6 @@ export default function MainPage({ initialSnippets, config, urls }) {
         title={config.site.title} 
         settingsUrl={urls.config}
         addUrl={urls.create}
-        currentOutput={output}
       />
       
       {/* Main Content - 2 Columns on Desktop */}
@@ -109,7 +96,8 @@ export default function MainPage({ initialSnippets, config, urls }) {
           
           <OutputWindow 
             selectedSnippets={selectedSnippets}
-            output={output}
+            separator={config.rules.separator}
+            includeTitle={config.rules.includeTitle}
             onClear={clearAll}
           />
         </div>

@@ -4,10 +4,20 @@ import { copyToClipboard } from '../lib/utils';
 
 export default function OutputWindow({
   selectedSnippets,
-  output,
+  separator = "\n\n---\n\n",
+  includeTitle = true,
   onClear
 }) {
   const [copied, setCopied] = useState(false);
+
+  // Generate output
+  const output = selectedSnippets.map(s => {
+    let text = s.content.trim();
+    if (includeTitle) {
+      text = `## ${s.title}\n\n${text}`;
+    }
+    return text;
+  }).join(separator);
 
   const handleCopy = async () => {
     if (!output) return;

@@ -9,17 +9,6 @@
   --border: #D8DEE9;     /* nord4 */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Nord Theme - Dark (Polar Night) */
-    --background: #2E3440; /* nord0 */
-    --foreground: #ECEFF4; /* nord6 */
-    --card: #3B4252;       /* nord1 */
-    --card-foreground: #ECEFF4; /* nord6 */
-    --border: #434C5E;     /* nord2 */
-  }
-}
-
 /* Manual Dark Mode Override (when class="dark" is present on html) */
 :is(.dark) {
   --background: #2E3440; /* nord0 */
