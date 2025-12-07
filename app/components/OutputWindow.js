@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { copyToClipboard } from '../lib/utils';
+import { copyToClipboard, cn } from '../lib/utils';
+import { Check, Copy, ClipboardList } from 'lucide-react';
 
 export default function OutputWindow({
   selectedSnippets,
@@ -43,19 +44,21 @@ export default function OutputWindow({
         <button
           onClick={handleCopy}
           disabled={!output}
-          className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg backdrop-blur transition-all transform active:scale-95 ${copied
-            ? 'bg-green-500/90 text-white ring-2 ring-green-400/50'
-            : 'bg-primary/90 hover:bg-primary text-white hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
-          }`}
+          className={cn(
+            "flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg backdrop-blur transition-all transform active:scale-95",
+            copied
+              ? "bg-green-500/90 text-white ring-2 ring-green-400/50"
+              : "bg-primary/90 hover:bg-primary text-white hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+          )}
         >
           {copied ? (
              <>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+              <Check className="w-4 h-4" />
               Copied
              </>
           ) : (
              <>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+              <Copy className="w-4 h-4" />
               Copy Rules
              </>
           )}
@@ -65,7 +68,10 @@ export default function OutputWindow({
       {/* Header / Meta */}
       <div className="h-14 border-b border-theme-subtle flex items-center px-6 bg-theme-card">
         <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${output ? 'bg-green-500 animate-pulse' : 'bg-theme-surface-elevated'}`} />
+            <div className={cn(
+              "w-2 h-2 rounded-full",
+              output ? "bg-green-500 animate-pulse" : "bg-theme-surface-elevated"
+            )} />
             <span className="text-xs font-medium text-theme-muted uppercase tracking-wider">
                 {selectedSnippets.length} Active Rules
             </span>
@@ -84,7 +90,7 @@ export default function OutputWindow({
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
             <div className="w-24 h-24 mb-6 rounded-2xl bg-theme-surface-elevated flex items-center justify-center transform rotate-12 transition-transform hover:rotate-0 duration-500">
-              <svg className="w-10 h-10 text-theme-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+              <ClipboardList className="w-10 h-10 text-theme-muted" strokeWidth={1.5} />
             </div>
             <h3 className="text-xl font-semibold text-theme-foreground mb-2">Ready to Compose</h3>
             <p className="text-theme-muted max-w-xs mx-auto">

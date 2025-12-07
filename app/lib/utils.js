@@ -2,13 +2,26 @@
  * Utility Functions for Prompt Management System
  */
 
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import copy from 'copy-to-clipboard';
+
+/**
+ * Combine class names with clsx and merge Tailwind classes
+ * @param {...any} inputs - Class names to combine
+ * @returns {string} - Merged class names
+ */
+export function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
 /**
  * Truncate text at word boundaries
  * @param {string} text - The text to truncate
  * @param {number} limit - The character limit
  * @returns {string} - Truncated text with "..." if needed, or original if under limit
  */
-function truncateText(text, limit) {
+export function truncateText(text, limit) {
   // Handle edge cases
   if (!text || text === null || text === undefined) {
     return '';
@@ -47,7 +60,7 @@ function truncateText(text, limit) {
  * @param {number} delay - The delay in milliseconds
  * @returns {Function} - Debounced function
  */
-function debounce(func, delay) {
+export function debounce(func, delay) {
   // Handle edge cases
   if (typeof func !== 'function') {
     throw new TypeError('First argument must be a function');
@@ -73,59 +86,27 @@ function debounce(func, delay) {
 }
 
 /**
- * Copy text to clipboard using modern Clipboard API
+ * Copy text to clipboard using copy-to-clipboard library
  * @param {string} text - The text to copy
  * @returns {Promise<boolean>} - Promise resolving to true on success, false on failure
  */
-async function copyToClipboard(text) {
+export async function copyToClipboard(text) {
   // Handle edge cases
   if (text === null || text === undefined) {
     text = '';
   }
-  
+
   // Convert to string
   text = String(text);
-  
+
   try {
-    // Check if Clipboard API is available
-    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } else {
-      // Fallback for older browsers or non-HTTPS contexts
-      return fallbackCopyToClipboard(text);
-    }
+    const result = copy(text, {
+      debug: false,
+      message: 'Press #{key} to copy',
+    });
+    return result;
   } catch (error) {
     console.error('Failed to copy to clipboard:', error);
-    // Try fallback method
-    return fallbackCopyToClipboard(text);
-  }
-}
-
-/**
- * Fallback method for copying to clipboard
- * @param {string} text - The text to copy
- * @returns {boolean} - Success status
- */
-function fallbackCopyToClipboard(text) {
-  try {
-    // Create a temporary textarea element
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    
-    // Select and copy
-    textarea.select();
-    textarea.setSelectionRange(0, 99999); // For mobile devices
-    
-    const successful = document.execCommand('copy');
-    document.body.removeChild(textarea);
-    
-    return successful;
-  } catch (error) {
-    console.error('Fallback copy failed:', error);
     return false;
   }
 }
@@ -135,7 +116,7 @@ function fallbackCopyToClipboard(text) {
  * @param {string} filename - The filename to format
  * @returns {string} - Formatted title
  */
-function formatTitle(filename) {
+export function formatTitle(filename) {
   // Handle edge cases
   if (!filename || filename === null || filename === undefined) {
     return '';
@@ -189,14 +170,4 @@ function formatTitle(filename) {
   });
   
   return formattedWords.filter(w => w).join(' ');
-}
-
-// Export functions for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    truncateText,
-    debounce,
-    copyToClipboard,
-    formatTitle
-  };
 }
