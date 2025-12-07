@@ -61,25 +61,38 @@ export default function MainPage({ initialSnippets, config, urls }) {
     .map(id => initialSnippets.find(s => s.id === id))
     .filter(Boolean);
 
+  // Generate output text
+  const separator = config.rules?.separator ?? "\n\n---\n\n";
+  const includeTitle = config.rules?.includeTitle ?? true;
+
+  const output = selectedSnippets.map(s => {
+    let text = s.content.trim();
+    if (includeTitle) {
+      text = `## ${s.title}\n\n${text}`;
+    }
+    return text;
+  }).join(separator);
+
   return (
-    <div className="flex flex-col h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
+    <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 overflow-hidden font-sans selection:bg-primary/20 selection:text-primary">
       {/* Header - Full width */}
       <Header 
         title={config.site.title} 
         settingsUrl={urls.config}
         addUrl={urls.create}
+        currentOutput={output}
       />
       
       {/* Main Content - 2 Columns on Desktop */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative max-w-[1920px] mx-auto w-full">
         
         {/* Left Column: Sidebar / Browser */}
-        <div className="w-full md:w-2/5 lg:w-1/3 flex flex-col border-r border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 z-0 h-full">
+        <div className="w-full md:w-2/5 lg:w-1/3 xl:w-1/4 flex flex-col border-r border-gray-200/50 dark:border-gray-800/50 bg-white/50 dark:bg-gray-900/30 backdrop-blur-sm z-0 h-full">
           <SearchBar 
             onSearch={setSearchQuery} 
             placeholder={config.ui.searchPlaceholder}
           />
-          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-gray-600">
             <CategoryFilter 
               categories={snippetsByCategory}
               selectedSnippetIds={selectedSnippetIds}
@@ -90,11 +103,13 @@ export default function MainPage({ initialSnippets, config, urls }) {
         </div>
         
         {/* Right Column: Output */}
-        <div className="w-full md:w-3/5 lg:w-2/3 h-[40vh] md:h-auto border-t md:border-t-0 border-gray-200 dark:border-gray-700 shadow-2xl md:shadow-none z-10 bg-white dark:bg-gray-900">
+        <div className="w-full md:w-3/5 lg:w-2/3 xl:w-3/4 h-[40vh] md:h-auto relative z-10">
+          {/* Decorative gradient blob */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-50" />
+          
           <OutputWindow 
             selectedSnippets={selectedSnippets}
-            separator={config.rules.separator}
-            includeTitle={config.rules.includeTitle}
+            output={output}
             onClear={clearAll}
           />
         </div>

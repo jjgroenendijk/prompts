@@ -1,21 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc; /* Slate 50 */
-  --foreground: #0f172a; /* Slate 900 */
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --border: #e2e8f0; /* Slate 200 */
+  /* Nord Theme - Light (Snow Storm) */
+  --background: #ECEFF4; /* nord6 */
+  --foreground: #2E3440; /* nord0 */
+  --card: #E5E9F0;       /* nord5 */
+  --card-foreground: #2E3440; /* nord0 */
+  --border: #D8DEE9;     /* nord4 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f172a; /* Slate 900 */
-    --foreground: #f8fafc; /* Slate 50 */
-    --card: #1e293b; /* Slate 800 */
-    --card-foreground: #f8fafc;
-    --border: #334155; /* Slate 700 */
+    /* Nord Theme - Dark (Polar Night) */
+    --background: #2E3440; /* nord0 */
+    --foreground: #ECEFF4; /* nord6 */
+    --card: #3B4252;       /* nord1 */
+    --card-foreground: #ECEFF4; /* nord6 */
+    --border: #434C5E;     /* nord2 */
   }
+}
+
+/* Manual Dark Mode Override (when class="dark" is present on html) */
+:is(.dark) {
+  --background: #2E3440; /* nord0 */
+  --foreground: #ECEFF4; /* nord6 */
+  --card: #3B4252;       /* nord1 */
+  --card-foreground: #ECEFF4; /* nord6 */
+  --border: #434C5E;     /* nord2 */
 }
 
 body {

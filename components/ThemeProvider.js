@@ -1,29 +1,52 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+
+const ThemeContext = createContext({
+  theme: 'system',
+  toggleTheme: () => {},
+});
+
+export const useTheme = () => useContext(ThemeContext);
 
 export default function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('system');
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    // Function to update theme based on system preference
-    const updateTheme = () => {
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    };
-
-    // Initial check
-    updateTheme();
-
-    // Listen for system theme changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => updateTheme();
-    
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    setMounted(true);
+    const savedTheme = localStorage.getItem('theme') || 'system';
+    setTheme(savedTheme);
+    applyTheme(savedTheme);
   }, []);
 
-  return <>{children}</>;
+  const applyTheme = (newTheme) => {
+    const root = document.documentElement;
+    const isDark =
+      newTheme === 'dark' ||
+      (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    if (isDark) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  };
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    applyTheme(newTheme);
+  };
+
+  if (!mounted) {
+    return <>{children}</>;
+  }
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 }

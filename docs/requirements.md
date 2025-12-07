@@ -336,3 +336,18 @@ Use try-catch blocks appropriately:
 - Handle copy errors gracefully
 - Support modern Clipboard API
 - Fallback for older browsers
+
+### 8. Project Setup Documentation
+**Priority**: MEDIUM
+
+**Requirements**:
+The main `README.md` must clearly explain how other users can use this project as a template to set up their own personal prompts website.
+
+**Required Documentation Sections**:
+1.  **Forking the Repository**: Steps to fork the repo to their own GitHub account.
+2.  **Configuration**: Instructions on how to update `config.yml` (specifically changing `baseUrl`, `github.owner`, and `github.repo` to match their fork).
+3.  **Enabling GitHub Pages**:
+    *   Navigate to Repository Settings > Pages.
+    *   Source: GitHub Actions.
+    *   Verification that the deployment workflow exists (`.github/workflows/deploy.yml`).
+4.  **Adding Content**: Brief guide on how to add their own snippets.
