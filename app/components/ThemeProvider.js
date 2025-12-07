@@ -13,13 +13,6 @@ export default function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('system');
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem('theme') || 'system';
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, []);
-
   const applyTheme = (newTheme) => {
     const root = document.documentElement;
     const isDark =
@@ -32,6 +25,14 @@ export default function ThemeProvider({ children }) {
       root.classList.remove('dark');
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+    const savedTheme = localStorage.getItem('theme') || 'system';
+    setTheme(savedTheme);
+    applyTheme(savedTheme);
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';

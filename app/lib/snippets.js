@@ -7,8 +7,8 @@ const { formatTitle } = require('./utils');
 function getAllSnippets() {
   // Use glob to find all markdown files in snippets directory
   // We look for files inside subdirectories of snippets/
-  // Pattern: snippets/**/*.md
-  const pattern = 'snippets/**/*.md';
+  // Pattern: ../snippets/**/*.md
+  const pattern = '../snippets/**/*.md';
   
   try {
     const files = globSync(pattern, { cwd: process.cwd() });

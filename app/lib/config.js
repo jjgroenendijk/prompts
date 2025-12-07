@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const CONFIG_PATH = path.join(process.cwd(), 'config.yml');
+const CONFIG_PATH = path.join(process.cwd(), '../config.yml');
 
 function validateConfig(config) {
   const required = [
