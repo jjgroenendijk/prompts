@@ -41,6 +41,9 @@ github:
 3. Under **Build and deployment** > **Source**, select **GitHub Actions** from the dropdown menu.
 4. The project includes a `.github/workflows/deploy.yml` file that will automatically build and deploy your site whenever you push changes to the `main` branch.
 
+Once deployed, your site will be available by default at:
+`https://<your-username>.github.io/<repo-name>/`
+
 ### 4. Add Your Own Snippets
 
 1. Navigate to the `snippets/` directory.
