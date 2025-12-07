@@ -45,20 +45,20 @@ export default function OutputWindow({
           onClick={handleCopy}
           disabled={!output}
           className={cn(
-            "flex items-center justify-center whitespace-nowrap gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg backdrop-blur transition-all transform active:scale-95",
+            "flex items-center justify-center whitespace-nowrap gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow-sm active:scale-95 backdrop-blur border",
             copied
-              ? "bg-green-500/90 text-primary-foreground ring-2 ring-green-400/50"
-              : "bg-primary/90 hover:bg-primary text-primary-foreground hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+              ? "bg-green-500/90 text-primary-foreground border-green-500/50 ring-2 ring-green-400/50"
+              : "bg-theme-surface text-theme-foreground border-theme hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-theme-surface disabled:hover:text-theme-foreground disabled:hover:border-theme"
           )}
         >
           {copied ? (
              <>
-              <Check className="w-4 h-4" />
+              <Check className="w-3.5 h-3.5" />
               Copied
              </>
           ) : (
              <>
-              <Copy className="w-4 h-4" />
+              <Copy className="w-3.5 h-3.5" />
               Copy Rules
              </>
           )}
