@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
 
 permissions:
   contents: read
@@ -11,11 +14,14 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      NEXT_TELEMETRY_DISABLED: 1
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -26,8 +32,16 @@ jobs:
           cache: 'npm'
           cache-dependency-path: app/package-lock.json
 
+      - name: Restore Next.js cache
+        uses: actions/cache@v4
+        with:
+          path: app/.next/cache
+          key: next-cache-${{ hashFiles('app/package-lock.json', 'app/next.config.mjs') }}
+          restore-keys: |
+            next-cache-
+
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit --no-fund
         working-directory: app
 
       - name: Build Next.js static site
