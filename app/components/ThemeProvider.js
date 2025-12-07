@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext({
   theme: 'system',
+  resolvedTheme: 'light',
   toggleTheme: () => {},
 });
 
@@ -11,6 +12,7 @@ export const useTheme = () => useContext(ThemeContext);
 
 export default function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('system');
+  const [resolvedTheme, setResolvedTheme] = useState('light');
   const [mounted, setMounted] = useState(false);
 
   const applyTheme = (newTheme) => {
@@ -21,8 +23,10 @@ export default function ThemeProvider({ children }) {
 
     if (isDark) {
       root.classList.add('dark');
+      setResolvedTheme('dark');
     } else {
       root.classList.remove('dark');
+      setResolvedTheme('light');
     }
   };
 
@@ -35,7 +39,14 @@ export default function ThemeProvider({ children }) {
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    let newTheme;
+    if (theme === 'system') {
+      const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      newTheme = isSystemDark ? 'light' : 'dark';
+    } else {
+      newTheme = theme === 'dark' ? 'light' : 'dark';
+    }
+    
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     applyTheme(newTheme);
@@ -46,7 +57,7 @@ export default function ThemeProvider({ children }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, resolvedTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

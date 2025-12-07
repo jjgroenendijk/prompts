@@ -174,10 +174,10 @@ All snippets must be processed during `next build`:
 **Priority**: MEDIUM
 
 **Requirements**:
-- Detect user's OS/browser theme preference via `prefers-color-scheme`
-- Apply dark or light theme automatically on page load
-- Listen for theme changes and update dynamically
-- Use Tailwind's `dark:` class variants for styling
+- Detect user's OS/browser theme preference via `prefers-color-scheme`.
+- Apply dark or light theme automatically on page load by default.
+- Listen for theme changes and update dynamically (unless overridden by manual toggle).
+- Use Tailwind's `dark:` class variants for styling.
 
 **Color Scheme**:
 - **Light Mode**:
@@ -192,13 +192,14 @@ All snippets must be processed during `next build`:
   - Borders: Dark Gray (#374151)
   - Accent: Light Blue (#60A5FA)
 
-#### 4.2 Manual Theme Toggle (Optional)
-**Priority**: LOW
+#### 4.2 Manual Theme Toggle
+**Priority**: HIGH
 
-Future enhancement: Allow user to manually override system preference
-- Toggle button in header
-- Persist preference in localStorage
-- Override system preference
+**Requirements**:
+- Toggle button in header to switch between Light and Dark modes.
+- Toggling overrides the system preference.
+- Persist user preference in `localStorage`.
+- The toggle button must correctly reflect the active theme (e.g., show "Sun" icon when Dark mode is active), even if that state was reached via system preference.
 
 ### 5. GitHub Integration
 

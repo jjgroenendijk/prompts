@@ -1,5 +1,9 @@
 # Prompt Rule Selector
 
+[![Deploy to GitHub Pages](https://github.com/jjgroenendijk/prompts/actions/workflows/deploy.yml/badge.svg)](https://github.com/jjgroenendijk/prompts/actions/workflows/deploy.yml)
+
+**Live Website:** [https://jjgroenendijk.nl/prompts/](https://jjgroenendijk.nl/prompts/)
+
 A static site to select and combine AI coding rules and prompts. This project is designed to be forked and used as your own personal library of prompt rules, hosted for free on GitHub Pages.
 
 ## Features
@@ -10,7 +14,6 @@ A static site to select and combine AI coding rules and prompts. This project is
 - **Clipboard**: One-click copy of selected rules.
 - **GitHub Integration**: Edit existing rules or add new ones directly on GitHub.
 - **Dark Mode**: Automatic theme detection.
-- **Offline Capable**: Static export, works without a backend.
 
 ## How to Use This Template
 
