@@ -1,78 +1,109 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+const DEFAULT_THEME = 'system';
 
 const ThemeContext = createContext({
-  theme: 'system',
+  theme: DEFAULT_THEME,
   resolvedTheme: 'light',
   toggleTheme: () => {},
 });
 
+const readStoredTheme = () => {
+  if (typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem('theme');
+  } catch (error) {
+    return null;
+  }
+};
+
+const writeStoredTheme = (value) => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem('theme', value);
+  } catch (error) {}
+};
+
+const getSystemTheme = () => {
+  if (typeof window === 'undefined') return 'light';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
+const applyThemeToDocument = (theme) => {
+  if (typeof document === 'undefined') {
+    return theme === 'system' ? 'light' : theme;
+  }
+
+  const resolved = theme === 'system' ? getSystemTheme() : theme;
+  const root = document.documentElement;
+
+  root.classList.toggle('dark', resolved === 'dark');
+  root.dataset.theme = resolved;
+  root.style.colorScheme = resolved;
+
+  return resolved;
+};
+
 export const useTheme = () => useContext(ThemeContext);
 
 export default function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('system');
-  const [resolvedTheme, setResolvedTheme] = useState('light');
+  const [theme, setTheme] = useState(DEFAULT_THEME);
+  const [resolvedTheme, setResolvedTheme] = useState(() => applyThemeToDocument(DEFAULT_THEME));
 
-  const applyTheme = useCallback((newTheme) => {
-    const root = document.documentElement;
-    const isDark =
-      newTheme === 'dark' ||
-      (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-    if (isDark) {
-      root.classList.add('dark');
-      setResolvedTheme('dark');
-    } else {
-      root.classList.remove('dark');
-      setResolvedTheme('light');
-    }
+  useEffect(() => {
+    const storedTheme = readStoredTheme() || DEFAULT_THEME;
+    setTheme(storedTheme);
+    setResolvedTheme(applyThemeToDocument(storedTheme));
   }, []);
 
-  // Initialize theme from localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'system';
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, [applyTheme]);
-
-  // Listen for system theme changes when theme is set to 'system'
-  useEffect(() => {
-    if (theme !== 'system') return;
+    if (theme !== 'system') return undefined;
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => applyTheme('system');
+    const handleChange = () => setResolvedTheme(applyThemeToDocument('system'));
 
-    // Modern browsers
     if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
-    } else {
-      // Fallback for older browsers
-      mediaQuery.addListener(handleChange);
-      return () => mediaQuery.removeListener(handleChange);
     }
-  }, [theme, applyTheme]);
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, [theme]);
+
+  useEffect(() => {
+    setResolvedTheme(applyThemeToDocument(theme));
+  }, [theme]);
 
   const toggleTheme = useCallback(() => {
-    let newTheme;
-    if (theme === 'system') {
-      const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      newTheme = isSystemDark ? 'light' : 'dark';
-    } else {
-      newTheme = theme === 'dark' ? 'light' : 'dark';
-    }
+    const systemTheme = getSystemTheme();
+    const nextTheme =
+      theme === 'system'
+        ? systemTheme === 'dark'
+          ? 'light'
+          : 'dark'
+        : theme === 'dark'
+          ? 'light'
+          : 'dark';
 
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    applyTheme(newTheme);
-  }, [theme, applyTheme]);
+    setTheme(nextTheme);
+    writeStoredTheme(nextTheme);
+    setResolvedTheme(applyThemeToDocument(nextTheme));
+  }, [theme]);
 
-  // Prevent flash of incorrect theme - render children even before mount
-  // but keep provider wrapping them always
-  return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
+  const value = useMemo(
+    () => ({ theme, resolvedTheme, toggleTheme }),
+    [theme, resolvedTheme, toggleTheme],
   );
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
