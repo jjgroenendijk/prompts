@@ -2,26 +2,35 @@
 
 :root {
   /* Nord Theme - Light (Snow Storm) */
-  --background: #ECEFF4; /* nord6 */
-  --foreground: #2E3440; /* nord0 */
-  --card: #E5E9F0;       /* nord5 */
-  --card-foreground: #2E3440; /* nord0 */
-  --border: #D8DEE9;     /* nord4 */
+  --background: #ECEFF4;        /* nord6 */
+  --foreground: #2E3440;        /* nord0 */
+  --surface: #E5E9F0;           /* nord5 */
+  --surface-elevated: #D8DEE9;  /* nord4 */
+  --foreground-muted: #4C566A;  /* nord3 */
+  --card: #E5E9F0;              /* nord5 */
+  --card-foreground: #2E3440;   /* nord0 */
+  --border: #D8DEE9;            /* nord4 */
+  --border-subtle: #E5E9F0;     /* nord5 */
 }
 
 /* Manual Dark Mode Override (when class="dark" is present on html) */
 :is(.dark) {
-  --background: #2E3440; /* nord0 */
-  --foreground: #ECEFF4; /* nord6 */
-  --card: #3B4252;       /* nord1 */
-  --card-foreground: #ECEFF4; /* nord6 */
-  --border: #434C5E;     /* nord2 */
+  --background: #2E3440;        /* nord0 */
+  --foreground: #ECEFF4;        /* nord6 */
+  --surface: #3B4252;           /* nord1 */
+  --surface-elevated: #434C5E;  /* nord2 */
+  --foreground-muted: #D8DEE9;  /* nord4 */
+  --card: #3B4252;              /* nord1 */
+  --card-foreground: #ECEFF4;   /* nord6 */
+  --border: #434C5E;            /* nord2 */
+  --border-subtle: #3B4252;     /* nord1 */
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
   @apply antialiased;
 }
 
@@ -36,9 +45,45 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+  background-color: var(--border);
+  @apply rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-gray-600;
+  background-color: var(--border-subtle);
+}
+
+/* Custom utility classes that use CSS variables */
+@layer utilities {
+  .bg-theme-background {
+    background-color: var(--background);
+  }
+
+  .bg-theme-surface {
+    background-color: var(--surface);
+  }
+
+  .bg-theme-surface-elevated {
+    background-color: var(--surface-elevated);
+  }
+
+  .bg-theme-card {
+    background-color: var(--card);
+  }
+
+  .text-theme-foreground {
+    color: var(--foreground);
+  }
+
+  .text-theme-muted {
+    color: var(--foreground-muted);
+  }
+
+  .border-theme {
+    border-color: var(--border);
+  }
+
+  .border-theme-subtle {
+    border-color: var(--border-subtle);
+  }
 }

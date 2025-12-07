@@ -23,7 +23,7 @@ export default function SearchBar({ onSearch, placeholder = "Search..." }) {
         </div>
         <input
           type="text"
-          className="block w-full pl-12 pr-12 py-3 border-0 rounded-2xl leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 shadow-md hover:shadow-lg focus:shadow-xl focus:ring-2 focus:ring-primary/50 focus:outline-none sm:text-base transition-all duration-300"
+          className="block w-full pl-12 pr-12 py-3 border-0 rounded-2xl leading-5 bg-theme-card text-theme-foreground placeholder-gray-400 shadow-md hover:shadow-lg focus:shadow-xl focus:ring-2 focus:ring-primary/50 focus:outline-none sm:text-base transition-all duration-300"
           placeholder={placeholder}
           value={query}
           onFocus={() => setIsFocused(true)}
