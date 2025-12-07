@@ -48,6 +48,22 @@ github:
 3. Add markdown files (`.md`) inside these folders. The filename will become the rule title (e.g., `clean-code.md` -> "Clean Code").
 4. Commit and push your changes. The site will automatically rebuild and update.
 
+### 5. Custom Domain (Optional)
+
+If you want to use your own domain (e.g., `www.example.com`) or a subdomain (e.g., `prompts.example.com`):
+
+1.  **Configure DNS**: Go to your domain provider's DNS settings.
+    *   **Root Domain** (e.g., `example.com`): Add `A` records pointing to GitHub's IPs (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`).
+    *   **Subdomain** (e.g., `prompts.example.com`): Add a `CNAME` record pointing to `<your-username>.github.io`.
+2.  **GitHub Settings**:
+    *   Go to your repository **Settings** > **Pages**.
+    *   Under **Custom domain**, enter your domain and click **Save**.
+    *   Check "Enforce HTTPS".
+3.  **Update Config**:
+    *   Open `config.yml`.
+    *   Update `baseUrl`. If using a custom domain at the root (like `prompts.example.com` or `example.com`), set it to the full URL `https://prompts.example.com`.
+    *   *Note:* The build process parses this URL to set the correct base path for your site assets.
+
 ## Adding Snippets Details
 
 Snippets are plain Markdown files located in the `snippets/` directory.
