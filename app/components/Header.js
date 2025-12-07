@@ -4,7 +4,12 @@ import { useTheme } from 'next-themes';
 import { Sun, Moon, Plus, Settings } from 'lucide-react';
 
 export default function Header({ title, settingsUrl, addUrl }) {
-  const { theme, resolvedTheme, toggleTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const handleToggleTheme = () => {
+    const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+  };
 
   return (
     <header className="flex items-center justify-between px-6 py-4 border-b border-border/40 bg-background/80 backdrop-blur-lg sticky top-0 z-20 transition-all duration-200">
@@ -13,7 +18,7 @@ export default function Header({ title, settingsUrl, addUrl }) {
       </h1>
       <div className="flex gap-3 shrink-0 items-center">
         <button
-          onClick={toggleTheme}
+          onClick={handleToggleTheme}
           className="p-2 text-muted-foreground hover:text-foreground hover:bg-secondary/10 rounded-full transition-all duration-200 hover:scale-105 active:scale-95"
           title="Toggle Theme"
         >
