@@ -17,7 +17,7 @@ export default function SnippetItem({ snippet, isSelected, onToggle }) {
           <div className={cn(
             "w-5 h-5 rounded-md border flex items-center justify-center transition-colors",
             isSelected
-              ? "bg-primary border-primary text-white"
+              ? "bg-primary border-primary text-primary-foreground"
               : "bg-transparent border-theme group-hover:border-primary/50"
           )}>
             {isSelected && (

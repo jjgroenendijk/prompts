@@ -22,12 +22,12 @@ export default function SearchBar({ onSearch, placeholder = "Search..." }) {
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <Search className={cn(
             "h-5 w-5 transition-colors duration-200",
-            isFocused ? "text-primary" : "text-gray-400"
+            isFocused ? "text-primary" : "text-muted-foreground"
           )} />
         </div>
         <input
           type="text"
-          className="block w-full pl-12 pr-12 py-3 border-0 rounded-2xl leading-5 bg-theme-card text-theme-foreground placeholder-gray-400 shadow-md hover:shadow-lg focus:shadow-xl focus:ring-2 focus:ring-primary/50 focus:outline-none sm:text-base transition-all duration-300"
+          className="block w-full pl-12 pr-12 py-3 border-0 rounded-2xl leading-5 bg-theme-card text-theme-foreground placeholder:text-muted-foreground shadow-md hover:shadow-lg focus:shadow-xl focus:ring-2 focus:ring-primary/50 focus:outline-none sm:text-base transition-all duration-300"
           placeholder={placeholder}
           value={query}
           onFocus={() => setIsFocused(true)}
@@ -36,7 +36,7 @@ export default function SearchBar({ onSearch, placeholder = "Search..." }) {
         />
         {query && (
           <button
-            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-primary cursor-pointer transition-colors duration-200"
+            className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-primary cursor-pointer transition-colors duration-200"
             onClick={() => setQuery('')}
           >
             <X className="h-5 w-5" />

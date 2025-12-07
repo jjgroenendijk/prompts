@@ -37,7 +37,7 @@ export default function CategoryFilter({
                   className={cn(
                     "w-5 h-5 rounded-md border flex items-center justify-center cursor-pointer transition-colors",
                     allSelected || someSelected
-                      ? "bg-primary border-primary text-white"
+                      ? "bg-primary border-primary text-primary-foreground"
                       : "bg-transparent border-theme hover:border-primary"
                   )}
                   onClick={() => onSelectCategory(category, !allSelected)}
@@ -46,7 +46,7 @@ export default function CategoryFilter({
                     <Check className="w-3.5 h-3.5" strokeWidth={3} />
                    )}
                    {someSelected && !allSelected && (
-                     <div className="w-2.5 h-0.5 bg-white rounded-full" />
+                     <div className="w-2.5 h-0.5 bg-primary-foreground rounded-full" />
                    )}
                 </div>
 
@@ -64,7 +64,7 @@ export default function CategoryFilter({
               <button
                 onClick={() => toggleExpand(category)}
                 className={cn(
-                  "p-1 rounded-full hover:bg-theme-surface-elevated text-gray-400 transition-all duration-200",
+                  "p-1 rounded-full hover:bg-theme-surface-elevated text-muted-foreground transition-all duration-200",
                   isExpanded ? "rotate-0" : "-rotate-90"
                 )}
               >
@@ -95,11 +95,11 @@ export default function CategoryFilter({
       
       {sortedCategories.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-16 h-16 mb-4 rounded-full bg-theme-surface-elevated flex items-center justify-center text-gray-400">
+          <div className="w-16 h-16 mb-4 rounded-full bg-theme-surface-elevated flex items-center justify-center text-muted-foreground">
              <Search className="w-8 h-8" strokeWidth={1.5} />
           </div>
           <h3 className="text-lg font-medium text-theme-foreground">No matching snippets</h3>
-          <p className="text-sm text-gray-500 mt-1">Try adjusting your search terms</p>
+          <p className="text-sm text-muted-foreground mt-1">Try adjusting your search terms</p>
         </div>
       )}
     </div>

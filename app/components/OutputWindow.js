@@ -47,8 +47,8 @@ export default function OutputWindow({
           className={cn(
             "flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg backdrop-blur transition-all transform active:scale-95",
             copied
-              ? "bg-green-500/90 text-white ring-2 ring-green-400/50"
-              : "bg-primary/90 hover:bg-primary text-white hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+              ? "bg-green-500/90 text-primary-foreground ring-2 ring-green-400/50"
+              : "bg-primary/90 hover:bg-primary text-primary-foreground hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
           )}
         >
           {copied ? (

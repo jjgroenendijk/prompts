@@ -19,6 +19,10 @@ export default {
           DEFAULT: "var(--secondary)",
           foreground: "var(--secondary-foreground)",
         },
+        muted: {
+          DEFAULT: "var(--surface-elevated)",
+          foreground: "var(--foreground-muted)",
+        },
         card: {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
