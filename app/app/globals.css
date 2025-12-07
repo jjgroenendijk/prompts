@@ -11,6 +11,7 @@
   --card-foreground: #0E0D0B;
   --border: #DAD3C6;
   --border-subtle: #E8E6E1;
+  --output-surface: #F0F4F8;
   --primary: #2E7CE6;
   --primary-foreground: #0E0D0B;
   --secondary: #D26A32;
@@ -29,6 +30,7 @@
   --card-foreground: #EDE7DC;
   --border: #1F2430;
   --border-subtle: #2A303C;
+  --output-surface: #0D1219;
   --primary: #5A9CFF;
   --primary-foreground: #0D1016;
   --secondary: #F08C4A;
@@ -78,6 +80,10 @@ body {
 
   .bg-theme-card {
     background-color: var(--card);
+  }
+
+  .bg-theme-output {
+    background-color: var(--output-surface);
   }
 
   .text-theme-foreground {

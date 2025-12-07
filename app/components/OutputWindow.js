@@ -30,13 +30,13 @@ export default function OutputWindow({
   };
 
   return (
-    <div className="flex flex-col h-full bg-theme-card relative group">
+    <div className="flex flex-col h-full bg-theme-output relative group">
       {/* Action Bar - Floating on top right */}
       <div className="absolute top-4 right-4 z-10 flex gap-2 transition-opacity opacity-100">
         {selectedSnippets.length > 0 && (
           <button
             onClick={onClear}
-            className="px-3 py-1.5 rounded-lg bg-theme-surface backdrop-blur text-xs font-medium text-theme-foreground border border-theme hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all shadow-sm"
+            className="px-3 py-1.5 rounded-lg bg-theme-surface backdrop-blur text-xs font-medium text-theme-foreground border border-theme hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all shadow-sm active:scale-95"
           >
             Clear
           </button>
@@ -45,7 +45,7 @@ export default function OutputWindow({
           onClick={handleCopy}
           disabled={!output}
           className={cn(
-            "flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg backdrop-blur transition-all transform active:scale-95",
+            "flex items-center justify-center w-32 gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg backdrop-blur transition-all transform active:scale-95",
             copied
               ? "bg-green-500/90 text-primary-foreground ring-2 ring-green-400/50"
               : "bg-primary/90 hover:bg-primary text-primary-foreground hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"

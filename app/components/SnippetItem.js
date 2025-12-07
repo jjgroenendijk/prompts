@@ -6,7 +6,7 @@ export default function SnippetItem({ snippet, isSelected, onToggle }) {
           <div
             onClick={() => onToggle(snippet.id)}
             className={cn(
-              "group relative p-4 rounded-xl mb-3 cursor-pointer transition-all duration-200 border",
+              "group relative p-4 rounded-xl mb-3 cursor-pointer transition-all duration-200 border active:scale-[0.98]",
               isSelected
                 ? "border-primary/50 bg-primary/10 shadow-sm ring-1 ring-primary/20" // Increased opacity for highlight
                 : "border-transparent bg-theme-card hover:bg-theme-surface-elevated shadow-sm hover:shadow-md hover:-translate-y-0.5"

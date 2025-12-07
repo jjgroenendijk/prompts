@@ -36,7 +36,7 @@ export default function SearchBar({ onSearch, placeholder = "Search..." }) {
         />
         {query && (
           <button
-            className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-primary cursor-pointer transition-colors duration-200"
+            className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-primary cursor-pointer transition-all duration-200 active:scale-90"
             onClick={() => setQuery('')}
           >
             <X className="h-5 w-5" />

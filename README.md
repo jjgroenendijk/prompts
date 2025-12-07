@@ -1,4 +1,4 @@
-# Prompt Rule Selector
+# Prompt Builder
 
 [![Deploy to GitHub Pages](https://github.com/jjgroenendijk/prompts/actions/workflows/deploy.yml/badge.svg)](https://github.com/jjgroenendijk/prompts/actions/workflows/deploy.yml)
 
