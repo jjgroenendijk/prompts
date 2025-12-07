@@ -1,29 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  /* Nord Theme - Light (Snow Storm) */
-  --background: #ECEFF4;        /* nord6 */
-  --foreground: #2E3440;        /* nord0 */
-  --surface: #E5E9F0;           /* nord5 */
-  --surface-elevated: #D8DEE9;  /* nord4 */
-  --foreground-muted: #4C566A;  /* nord3 */
-  --card: #E5E9F0;              /* nord5 */
-  --card-foreground: #2E3440;   /* nord0 */
-  --border: #D8DEE9;            /* nord4 */
-  --border-subtle: #E5E9F0;     /* nord5 */
+  /* Typewriter Theme - Light */
+  --background: #F7F5F0;
+  --foreground: #0E0D0B;
+  --surface: #F7F5F0;
+  --surface-elevated: #E8E6E1;
+  --foreground-muted: #575653;
+  --card: #FFFFFF;
+  --card-foreground: #0E0D0B;
+  --border: #DAD3C6;
+  --border-subtle: #E8E6E1;
+  --primary: #2E7CE6;
+  --primary-foreground: #FFFFFF;
+  --secondary: #D26A32;
+  --secondary-foreground: #FFFFFF;
 }
 
 /* Manual Dark Mode Override (when class="dark" is present on html) */
 :is(.dark) {
-  --background: #2E3440;        /* nord0 */
-  --foreground: #ECEFF4;        /* nord6 */
-  --surface: #3B4252;           /* nord1 */
-  --surface-elevated: #434C5E;  /* nord2 */
-  --foreground-muted: #D8DEE9;  /* nord4 */
-  --card: #3B4252;              /* nord1 */
-  --card-foreground: #ECEFF4;   /* nord6 */
-  --border: #434C5E;            /* nord2 */
-  --border-subtle: #3B4252;     /* nord1 */
+  /* Typewriter Theme - Dark */
+  --background: #0D1016;
+  --foreground: #EDE7DC;
+  --surface: #0D1016;
+  --surface-elevated: #161B22;
+  --foreground-muted: #8B949E;
+  --card: #161B22;
+  --card-foreground: #EDE7DC;
+  --border: #1F2430;
+  --border-subtle: #2A303C;
+  --primary: #5A9CFF;
+  --primary-foreground: #0D1016;
+  --secondary: #F08C4A;
+  --secondary-foreground: #0D1016;
 }
 
 body {

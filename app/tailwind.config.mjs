@@ -11,42 +11,23 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
-          DEFAULT: "#88C0D0", // nord8 (Frost)
-          foreground: "#2E3440", // nord0
-          hover: "#81A1C1", // nord9
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+          hover: "var(--primary)", // Should probably be handled with opacity or brightness in CSS, but using base for now
         },
         secondary: {
-          DEFAULT: "#B48EAD", // nord15 (Aurora Purple)
-          foreground: "#ECEFF4",
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
         },
         card: {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
         },
         border: "var(--border)",
-        // Nord Palette
-        nord: {
-          0: "#2E3440",
-          1: "#3B4252",
-          2: "#434C5E",
-          3: "#4C566A",
-          4: "#D8DEE9",
-          5: "#E5E9F0",
-          6: "#ECEFF4",
-          7: "#8FBCBB",
-          8: "#88C0D0",
-          9: "#81A1C1",
-          10: "#5E81AC",
-          11: "#BF616A",
-          12: "#D08770",
-          13: "#EBCB8B",
-          14: "#A3BE8C",
-          15: "#B48EAD",
-        }
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)'],
-        mono: ['var(--font-geist-mono)'],
+        sans: ['var(--font-serif)', 'ui-serif', 'Georgia', 'Cambria', "Times New Roman", 'Times', 'serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'],
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',

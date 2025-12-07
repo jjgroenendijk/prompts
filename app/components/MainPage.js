@@ -68,6 +68,7 @@ export default function MainPage({ initialSnippets, config, urls }) {
         title={config.site.title}
         settingsUrl={urls.config}
         addUrl={urls.create}
+        repoUrl={`https://github.com/${config.github.owner}/${config.github.repo}`}
       />
 
       {/* Main Content - 2 Columns on Desktop */}

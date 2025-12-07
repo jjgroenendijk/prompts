@@ -1,9 +1,9 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { Sun, Moon, Plus, Settings } from 'lucide-react';
+import { Sun, Moon, Plus, Settings, Github } from 'lucide-react';
 
-export default function Header({ title, settingsUrl, addUrl }) {
+export default function Header({ title, settingsUrl, addUrl, repoUrl }) {
   const { resolvedTheme, setTheme } = useTheme();
 
   const handleToggleTheme = () => {
@@ -13,10 +13,21 @@ export default function Header({ title, settingsUrl, addUrl }) {
 
   return (
     <header className="flex items-center justify-between px-6 py-4 border-b border-border/40 bg-background/80 backdrop-blur-lg sticky top-0 z-20 transition-all duration-200">
-      <h1 className="text-2xl font-extrabold text-foreground tracking-tight truncate">
+      <h1 className="text-2xl font-extrabold text-foreground tracking-tight truncate font-serif">
         {title}
       </h1>
       <div className="flex gap-3 shrink-0 items-center">
+        {repoUrl && (
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 text-muted-foreground hover:text-foreground hover:bg-secondary/10 rounded-full transition-all duration-200 hover:scale-105 active:scale-95"
+            title="View Source on GitHub"
+          >
+            <Github className="w-6 h-6" />
+          </a>
+        )}
         <button
           onClick={handleToggleTheme}
           className="p-2 text-muted-foreground hover:text-foreground hover:bg-secondary/10 rounded-full transition-all duration-200 hover:scale-105 active:scale-95"
