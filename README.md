@@ -50,19 +50,9 @@ github:
 
 ### 5. Custom Domain (Optional)
 
-If you want to use your own domain (e.g., `www.example.com`) or a subdomain (e.g., `prompts.example.com`):
+For detailed instructions on how to set up a custom domain (e.g., `www.example.com`) or a subdomain (e.g., `prompts.example.com`), please refer to the official [GitHub Pages documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages).
 
-1.  **Configure DNS**: Go to your domain provider's DNS settings.
-    *   **Root Domain** (e.g., `example.com`): Add `A` records pointing to GitHub's IPs (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`).
-    *   **Subdomain** (e.g., `prompts.example.com`): Add a `CNAME` record pointing to `<your-username>.github.io`.
-2.  **GitHub Settings**:
-    *   Go to your repository **Settings** > **Pages**.
-    *   Under **Custom domain**, enter your domain and click **Save**.
-    *   Check "Enforce HTTPS".
-3.  **Update Config**:
-    *   Open `config.yml`.
-    *   Update `baseUrl`. If using a custom domain at the root (like `prompts.example.com` or `example.com`), set it to the full URL `https://prompts.example.com`.
-    *   *Note:* The build process parses this URL to set the correct base path for your site assets.
+**Important:** After setting up your domain, remember to open `config.yml` and update the `baseUrl` to match your new URL (e.g., `https://prompts.example.com`). This ensures the site assets load correctly.
 
 ## Adding Snippets Details
 
