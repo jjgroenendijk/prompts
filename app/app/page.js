@@ -1,18 +1,25 @@
 import { getAllSnippets } from '@/lib/snippets';
-import config from '@/lib/config';
-import { getCreateUrl, getConfigUrl } from '@/lib/github';
+import { getCachedConfig } from '@/lib/config';
+import { getCreateUrl, getConfigUrl, ensureConfig } from '@/lib/github';
 import MainPage from '@/components/MainPage';
 
-export default function Page() {
-  const snippets = getAllSnippets();
-  
+export default async function Page() {
+  // Load config first
+  const config = await getCachedConfig();
+
+  // Ensure github module has config
+  await ensureConfig();
+
+  // Get all snippets
+  const snippets = await getAllSnippets(config);
+
   return (
-    <MainPage 
-      initialSnippets={snippets} 
+    <MainPage
+      initialSnippets={snippets}
       config={config}
       urls={{
-        create: getCreateUrl(),
-        config: getConfigUrl()
+        create: getCreateUrl(null, config),
+        config: getConfigUrl(config)
       }}
     />
   );

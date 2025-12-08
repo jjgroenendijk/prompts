@@ -1,4 +1,7 @@
-import config from './lib/config.js';
+import { getConfig } from './lib/config.js';
+
+// Use top-level await to load config asynchronously
+const config = await getConfig();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

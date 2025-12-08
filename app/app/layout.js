@@ -1,7 +1,7 @@
 import { Merriweather, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
-import config from "@/lib/config";
+import { getCachedConfig } from "@/lib/config";
 
 const serif = Merriweather({
   variable: "--font-serif",
@@ -14,13 +14,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: config.site.title,
-  description: config.site.description,
-  icons: {
-    icon: '/icon.svg',
-  },
-};
+// Generate metadata dynamically
+export async function generateMetadata() {
+  const config = await getCachedConfig();
+  return {
+    title: config.site.title,
+    description: config.site.description,
+    icons: {
+      icon: '/icon.svg',
+    },
+  };
+}
 
 export default function RootLayout({ children }) {
   return (
