@@ -4,7 +4,6 @@
 
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import copy from 'copy-to-clipboard';
 
 /**
  * Combine class names with clsx and merge Tailwind classes
@@ -55,38 +54,7 @@ export function truncateText(text, limit) {
 }
 
 /**
- * Debounce function to limit how often a function is called
- * @param {Function} func - The function to debounce
- * @param {number} delay - The delay in milliseconds
- * @returns {Function} - Debounced function
- */
-export function debounce(func, delay) {
-  // Handle edge cases
-  if (typeof func !== 'function') {
-    throw new TypeError('First argument must be a function');
-  }
-  
-  if (!delay || delay <= 0) {
-    delay = 300; // Default delay
-  }
-  
-  let timeoutId;
-  
-  return function debounced(...args) {
-    // Clear existing timeout
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    
-    // Set new timeout
-    timeoutId = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
-  };
-}
-
-/**
- * Copy text to clipboard using copy-to-clipboard library
+ * Copy text to clipboard using modern Clipboard API with fallback
  * @param {string} text - The text to copy
  * @returns {Promise<boolean>} - Promise resolving to true on success, false on failure
  */
@@ -100,11 +68,29 @@ export async function copyToClipboard(text) {
   text = String(text);
 
   try {
-    const result = copy(text, {
-      debug: false,
-      message: 'Press #{key} to copy',
-    });
-    return result;
+    // Modern Clipboard API (preferred)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+
+    // Fallback for older browsers
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      const result = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      return result;
+    } catch (fallbackError) {
+      document.body.removeChild(textarea);
+      throw fallbackError;
+    }
   } catch (error) {
     console.error('Failed to copy to clipboard:', error);
     return false;
