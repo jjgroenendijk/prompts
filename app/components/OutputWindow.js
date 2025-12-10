@@ -1,24 +1,42 @@
 'use client';
 import { useState } from 'react';
-import { copyToClipboard, cn } from '../lib/utils';
+import { copyToClipboard, cn, formatTitle } from '../lib/utils';
 import { Check, Copy, ClipboardList } from 'lucide-react';
 
 export default function OutputWindow({
   selectedSnippets,
-  separator = "\n\n---\n\n",
+  separator = "\n",
   includeTitle = true,
   onClear
 }) {
   const [copied, setCopied] = useState(false);
 
-  // Generate output
-  const output = selectedSnippets.map(s => {
-    let text = s.content.trim();
-    if (includeTitle) {
-      text = `## ${s.title}\n\n${text}`;
+  // Group snippets by category
+  const snippetsByCategory = {};
+  selectedSnippets.forEach(s => {
+    if (!snippetsByCategory[s.category]) {
+      snippetsByCategory[s.category] = [];
     }
-    return text;
-  }).join(separator);
+    snippetsByCategory[s.category].push(s);
+  });
+
+  // Generate output grouped by category
+  const categoryOutputs = Object.entries(snippetsByCategory).map(([category, snippets]) => {
+    // Format category name for display
+    const categoryTitle = formatTitle(category);
+
+    // Join snippets within the category with single newline
+    const snippetContents = snippets.map(s => s.content.trim()).join(separator);
+
+    // Add category header if includeTitle is true
+    if (includeTitle) {
+      return `## ${categoryTitle}\n\n${snippetContents}`;
+    }
+    return snippetContents;
+  });
+
+  // Join categories with double newline
+  const output = categoryOutputs.join('\n\n');
 
   const handleCopy = async () => {
     if (!output) return;

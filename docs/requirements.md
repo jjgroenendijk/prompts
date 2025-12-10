@@ -24,6 +24,10 @@ A static website hosted on GitHub Pages that allows users to select and combine 
 - Parse baseUrl to extract path component
 - Empty path for user/org sites
 
+Configuration Fields:
+- `rules.separator`: Character(s) used to join snippets within the same category (default: `"\n"`)
+- `rules.includeTitle`: Boolean flag to show/hide category headers in output (default: `true`)
+
 ## Content
 
 - Snippets must be stored in snippets/ directory with category subdirectories
@@ -66,10 +70,11 @@ Rule Browser:
 
 Rule Output:
 - Textarea or pre-formatted div
-- Shows concatenated selected rules
+- Shows concatenated selected rules grouped by category
 - Live updates as selections change
-- Formatted with configurable separator
-- Optional metadata headers (title, description)
+- Category headers displayed as `## Category Name` (when `includeTitle` is true)
+- Snippets within each category are joined with the configured separator (default: single newline)
+- Categories are separated by double newlines for visual distinction
 - Copy button (copies full output to clipboard)
 - **Copy button must maintain a fixed size to prevent layout shifts when the label changes.**
 - Character/word count display
@@ -102,8 +107,10 @@ Rule Output:
 Edit Snippet:
 - Each snippet has an Edit button
 - Clicking opens GitHub's web editor in new tab
-- Owner, repo, branch from config.yml
-- File path is relative path from repo root
+- URL format: `https://github.com/{owner}/{repo}/edit/{branch}/{path}`
+- Owner, repo, and defaultBranch are read from config.yml
+- File path must be cleaned to remove relative path prefixes (e.g., `../`)
+- Final URL example: `https://github.com/jjgroenendijk/prompts/edit/main/snippets/security/input-validation.md`
 - Opens in new tab (target="_blank")
 - GitHub handles authentication and permissions
 - User must have write access to edit (or fork)
@@ -150,14 +157,34 @@ Edit Configuration:
 
 ## Selection and Output
 
+Selection:
 - Checkbox per snippet for selection
 - Support keyboard navigation (arrow keys, space to toggle)
 - Visual indication of selected state
 - Select All / Clear All buttons
 - Persist selections in localStorage (optional)
-- Configurable formats via config.yml
-- Rules separator can be configured
-- includeTitle flag determines if filename is included as title in output
+
+Output Formatting:
+- Selected snippets are automatically grouped by category
+- Category order is determined by the order snippets were selected
+- When `includeTitle` is true (default), category headers are shown as `## Category Name`
+- Category names are formatted from directory names (e.g., `security` → `## Security`)
+- Each category header appears only once, even if multiple snippets from that category are selected
+- Within a category, snippets are joined with the configured `separator` (default: `"\n"` - single newline)
+- Categories are separated by double newlines (`\n\n`) for visual distinction
+- Output format example:
+  ```
+  ## Security
+
+  snippet 1 content
+  snippet 2 content
+
+  ## Performance
+
+  snippet 3 content
+  ```
+
+Clipboard:
 - Copy button copies full output text
 - Visual feedback: Copied message for 2 seconds
 - Handle copy errors gracefully

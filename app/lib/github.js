@@ -24,8 +24,12 @@ export function getEditUrl(filePath, configOverride = null) {
   const GITHUB_BASE = `https://github.com/${cfg.github.owner}/${cfg.github.repo}`;
   const BRANCH = cfg.github.defaultBranch || 'main';
 
-  // Ensure filePath doesn't start with /
-  const cleanPath = filePath.startsWith('/') ? filePath.slice(1) : filePath;
+  // Ensure filePath doesn't start with / or ../
+  let cleanPath = filePath.startsWith('/') ? filePath.slice(1) : filePath;
+  // Remove leading ../ if present (from relative paths during build)
+  if (cleanPath.startsWith('../')) {
+    cleanPath = cleanPath.slice(3);
+  }
   return `${GITHUB_BASE}/edit/${BRANCH}/${cleanPath}`;
 }
 

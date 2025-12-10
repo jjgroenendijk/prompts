@@ -16,5 +16,5 @@ ui:
   configButtonText: "Settings"
 
 rules:
-  separator: "\n\n---\n\n"
+  separator: "\n"
   includeTitle: true
