@@ -44,13 +44,12 @@ A static website hosted on GitHub Pages that allows users to select and combine 
 
 ## User Interface
 
-- Desktop (≥768px): Two-column layout
-- Mobile (<768px): Stacked layout
-
 Rule Browser:
 - Site title (from config)
 - Settings button (redirects to edit config.yml)
 - Plus button (redirects to create new snippet)
+- GitHub link with icon visible in the header (uses repo data from config)
+- Icon set: prefer Lucide (outline) for consistency; Feather or Heroicons outline are acceptable alternatives
 - Full-text search across title (filename) and content
 - Real-time filtering as user types
 - Debounced for performance (300ms)
@@ -63,6 +62,7 @@ Rule Browser:
 - Each item shows checkbox for selection, title (derived from filename), preview (limited to previewCharLimit from config), and edit button (opens GitHub edit page)
 - Preview should truncate at word boundaries, not mid-word
 - Indicate truncation with "..."
+- **Buttons must have a click animation (e.g., scale down or ripple) for better feedback.**
 
 Rule Output:
 - Textarea or pre-formatted div
@@ -71,12 +71,14 @@ Rule Output:
 - Formatted with configurable separator
 - Optional metadata headers (title, description)
 - Copy button (copies full output to clipboard)
+- **Copy button must maintain a fixed size to prevent layout shifts when the label changes.**
 - Character/word count display
 - Clear All button to deselect all
 - Format toggle (if multiple output formats supported)
 - Copied confirmation message
 - Empty state when no rules selected
 - Loading state during initialization
+- **The output window background must have a slightly different tint than the main background to distinguish it (especially in light mode).**
 
 ## Theme Support
 
@@ -84,8 +86,12 @@ Rule Output:
 - Apply dark or light theme automatically on page load by default
 - Listen for theme changes and update dynamically (unless overridden by manual toggle)
 - Use Tailwind's dark: class variants for styling
-- Light Mode: Background: White/Light Gray, Text: Dark Gray/Black, Borders: Light Gray, Accent: Blue
-- Dark Mode: Background: Dark Gray/Black, Text: White/Light Gray, Borders: Dark Gray, Accent: Light Blue
+- Theme priority is a pressroom/typewriter/newspaper feel with serif typography and monospaced labels
+- Light Mode: Background: #F7F5F0, **Output Background: #F0F4F8 (Blue tint)**, Text: #0E0D0B, Borders/Rules: #DAD3C6, Accent: **Blue (#2E7CE6)**, Rust only for warnings/badges (#D26A32)
+- Dark Mode: Background: #0D1016, Text: #EDE7DC, Borders/Rules: #1F2430, Accent: **Blue (#5A9CFF)**, Rust only for warnings/badges (#F08C4A)
+- Glass is used sparingly (header/primary panels): translucent surfaces with blur and thin borders; cards/lists are solid for clarity; no paper/noise textures
+- Use a single serif family for headings/body, monospaced font for labels/metadata
+- Only quick button press animations (120–160ms ease-out scale/lift); respect prefers-reduced-motion
 - Toggle button in header to switch between Light and Dark modes
 - Toggling overrides the system preference
 - Persist user preference in localStorage
@@ -118,6 +124,13 @@ Edit Configuration:
 - Changes trigger GitHub Actions rebuild
 - User must wait for deployment to see changes
 - Consider adding validation workflow to prevent broken configs
+
+## Gist Integration (Optional)
+
+- config.yml may include an optional `gistId` (gist code) to pull additional snippets; when provided, build should fetch that gist and treat each file as a snippet
+- Gist fetch must support multi-file gists (e.g., gist `17ede18e92b323474fece51ad33dce83` contains two snippets) and assign titles from filenames
+- The website should also allow users to supply a gist code at runtime to load public gist snippets live, with loading and error states surfaced in the UI
+- Gist-loaded snippets follow the same selection, search, and output behaviors as repo-based snippets
 
 ## Search and Filtering
 
