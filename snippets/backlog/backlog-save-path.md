@@ -1,3 +1,7 @@
-Open backlog task files have to be saved in docs/backlog/open/<index>_<task-slug>.md
-Backlog task files that have been completed, but not yet reviewed, have to be kept in docs/backlog/pending-review/
-Completed and reviewed task files have to be saved in docs/backlog/done/<index>_<task-slug>.md
+Tasks are tracked as markdown files in `docs/backlog/` with the naming convention `<index>_<task-slug>.md`:
+
+- `docs/backlog/open/` - Open tasks awaiting work
+- `docs/backlog/pending-review/` - Completed tasks awaiting review
+- `docs/backlog/done/` - Completed and reviewed tasks
+
+Move task files between directories as their status changes.
