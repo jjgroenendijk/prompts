@@ -48,13 +48,13 @@ export default function OutputWindow({
   };
 
   return (
-    <div className="flex flex-col h-full bg-transparent relative group">
+    <div className="flex flex-col h-full bg-theme-output relative group">
       {/* Action Bar - Floating on top right */}
       <div className="absolute top-4 right-4 z-10 flex gap-2 transition-opacity opacity-100">
         {selectedSnippets.length > 0 && (
           <button
             onClick={onClear}
-            className="glass-button px-3 py-1.5 rounded-lg text-xs font-medium text-theme-foreground hover:text-red-500 hover:border-red-200 transition-all shadow-sm active:scale-95"
+            className="px-3 py-1.5 rounded-lg bg-theme-surface backdrop-blur text-xs font-medium text-theme-foreground border border-theme hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all shadow-sm active:scale-95"
           >
             Clear
           </button>
@@ -63,41 +63,41 @@ export default function OutputWindow({
           onClick={handleCopy}
           disabled={!output}
           className={cn(
-            "flex items-center justify-center whitespace-nowrap gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow-sm active:scale-95 backdrop-blur border glass-button",
+            "flex items-center justify-center whitespace-nowrap gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow-sm active:scale-95 backdrop-blur border",
             copied
-              ? "bg-green-500/20 text-green-600 border-green-500/30"
-              : "text-theme-foreground hover:text-blue-500 hover:border-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              ? "bg-green-500/90 text-primary-foreground border-green-500/50 ring-2 ring-green-400/50"
+              : "bg-theme-surface text-theme-foreground border-theme hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-theme-surface disabled:hover:text-theme-foreground disabled:hover:border-theme"
           )}
         >
           {copied ? (
-            <>
+             <>
               <Check className="w-3.5 h-3.5" />
               Copied
-            </>
+             </>
           ) : (
-            <>
+             <>
               <Copy className="w-3.5 h-3.5" />
               Copy Rules
-            </>
+             </>
           )}
         </button>
       </div>
 
       {/* Header / Meta */}
-      <div className="h-14 border-b border-glass-border-subtle flex items-center px-6 bg-transparent">
+      <div className="h-14 border-b border-theme-subtle flex items-center px-6 bg-theme-card">
         <div className="flex items-center gap-2">
-          <div className={cn(
-            "w-2 h-2 rounded-full",
-            output ? "bg-green-500 animate-pulse" : "bg-theme-surface-elevated"
-          )} />
-          <span className="text-xs font-medium text-theme-muted uppercase tracking-wider">
-            {selectedSnippets.length} Active Rules
-          </span>
+            <div className={cn(
+              "w-2 h-2 rounded-full",
+              output ? "bg-green-500 animate-pulse" : "bg-theme-surface-elevated"
+            )} />
+            <span className="text-xs font-medium text-theme-muted uppercase tracking-wider">
+                {selectedSnippets.length} Active Rules
+            </span>
         </div>
       </div>
 
       {/* Editor Area */}
-      <div className="flex-1 relative bg-transparent">
+      <div className="flex-1 relative bg-theme-background">
         {output ? (
           <textarea
             readOnly
@@ -117,6 +117,6 @@ export default function OutputWindow({
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }
