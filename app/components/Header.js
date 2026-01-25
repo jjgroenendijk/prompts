@@ -12,7 +12,7 @@ export default function Header({ title, settingsUrl, addUrl, repoUrl }) {
   };
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 border-b border-glass-border-subtle bg-glass-surface backdrop-blur-xl sticky top-0 z-50 transition-all duration-200 shadow-sm">
+    <header className="flex items-center justify-between px-6 py-4 border-b border-border/40 bg-background/80 backdrop-blur-lg sticky top-0 z-20 transition-all duration-200">
       <h1 className="text-2xl font-extrabold text-foreground tracking-tight truncate font-serif">
         {title}
       </h1>
