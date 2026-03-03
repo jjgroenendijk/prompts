@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import SnippetItem from './SnippetItem';
 import { cn } from '../lib/utils';
 import { Check, ChevronDown, Search } from 'lucide-react';
@@ -20,13 +20,16 @@ export default function CategoryFilter({
 
   const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCompare(b[0]));
 
+  // Convert to Set for O(1) lookups during list rendering
+  const selectedSet = useMemo(() => new Set(selectedSnippetIds), [selectedSnippetIds]);
+
   return (
     <div className="space-y-6 p-6 pb-24">
       {sortedCategories.map(([category, snippets]) => {
         if (snippets.length === 0) return null;
         
-        const allSelected = snippets.length > 0 && snippets.every(s => selectedSnippetIds.includes(s.id));
-        const someSelected = snippets.some(s => selectedSnippetIds.includes(s.id));
+        const allSelected = snippets.length > 0 && snippets.every(s => selectedSet.has(s.id));
+        const someSelected = snippets.some(s => selectedSet.has(s.id));
         const isExpanded = expanded[category];
         
         return (
@@ -82,7 +85,7 @@ export default function CategoryFilter({
                     <SnippetItem
                       key={snippet.id}
                       snippet={snippet}
-                      isSelected={selectedSnippetIds.includes(snippet.id)}
+                      isSelected={selectedSet.has(snippet.id)}
                       onToggle={onToggleSnippet}
                     />
                   ))}

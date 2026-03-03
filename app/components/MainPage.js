@@ -56,10 +56,15 @@ export default function MainPage({ initialSnippets, config, urls }) {
   const clearAll = () => setSelectedSnippetIds([]);
 
   // Get selected snippets objects for output
-  // Use selectedSnippetIds order (insertion order)
-  const selectedSnippets = selectedSnippetIds
-    .map(id => initialSnippets.find(s => s.id === id))
-    .filter(Boolean);
+  // O(1) lookup map for initialSnippets to optimize selectedSnippets mapping
+  const snippetMap = useMemo(() => {
+    return new Map(initialSnippets.map(s => [s.id, s]));
+  }, [initialSnippets]);
+
+  // Use selectedSnippetIds order (insertion order) and O(1) lookups
+  const selectedSnippets = useMemo(() => {
+    return selectedSnippetIds.map(id => snippetMap.get(id)).filter(Boolean);
+  }, [selectedSnippetIds, snippetMap]);
 
   return (
     <div className="flex flex-col h-screen bg-theme-background text-theme-foreground overflow-hidden font-sans selection:bg-primary/20 selection:text-primary">
