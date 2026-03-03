@@ -44,11 +44,13 @@ export default function MainPage({ initialSnippets, config, urls }) {
     setSelectedSnippetIds(prev => {
       if (isSelect) {
         // Add all ids that aren't already selected
-        const toAdd = idsInCat.filter(id => !prev.includes(id));
+        const prevSet = new Set(prev);
+        const toAdd = idsInCat.filter(id => !prevSet.has(id));
         return [...prev, ...toAdd];
       } else {
         // Remove all ids in this category
-        return prev.filter(id => !idsInCat.includes(id));
+        const idsInCatSet = new Set(idsInCat);
+        return prev.filter(id => !idsInCatSet.has(id));
       }
     });
   };
