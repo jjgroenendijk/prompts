@@ -72,3 +72,4 @@ Snippets are plain Markdown files located in the `snippets/` directory.
 - Organize them into subdirectories (Categories).
 - The filename becomes the title (e.g., `input-validation.md` -> "Input Validation").
 - No frontmatter is required.
+- To group related categories, name folders with a shared prefix (e.g. `git-commits`, `git-workflow`, `writing-style`, `writing-caveman`). The category comes from the folder name only, so prefixed folders sort and read together in the UI.

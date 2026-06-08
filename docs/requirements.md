@@ -36,6 +36,7 @@ Configuration Fields:
 - Entire file content is the rule text
 - Files must have .md extension
 - Category determined by parent directory name
+- Related categories are grouped via a shared folder-name prefix (e.g. `git-commits`, `git-workflow`, `writing-style`, `writing-caveman`); only the first directory level under `snippets/` is treated as the category
 - Filename formatting: kebab-case
 - All snippets must be processed during next build
 - Recursively scan snippets/**/*.md
