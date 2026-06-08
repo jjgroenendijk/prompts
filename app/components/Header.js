@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { Sun, Moon, Plus, Settings, Github } from 'lucide-react';
+import { Sun, Moon, Plus, Settings, Code } from 'lucide-react';
 
 export default function Header({ title, settingsUrl, addUrl, repoUrl }) {
   const { resolvedTheme, setTheme } = useTheme();
@@ -25,7 +25,7 @@ export default function Header({ title, settingsUrl, addUrl, repoUrl }) {
             className="p-2 text-muted-foreground hover:text-foreground hover:bg-secondary/10 rounded-full transition-all duration-200 hover:scale-105 active:scale-95"
             title="View Source on GitHub"
           >
-            <Github className="w-6 h-6" />
+            <Code className="w-6 h-6" />
           </a>
         )}
         <button
