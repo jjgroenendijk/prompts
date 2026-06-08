@@ -1,1 +1,0 @@
-Commit in small increments, but no meaningless micro-commits. "WIP"/vague messages forbidden. Checkpoints must stay local or on scratch branch until green and reviewable. Before PR/merge: rebase/squash to atomic, green, conventional, documentation-grade commits.
