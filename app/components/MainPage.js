@@ -4,10 +4,12 @@ import Header from './Header';
 import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import OutputWindow from './OutputWindow';
+import MobilePreviewDrawer from './MobilePreviewDrawer';
 
 export default function MainPage({ initialSnippets, config, urls }) {
   const [selectedSnippetIds, setSelectedSnippetIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   // Filter snippets
   const filteredSnippets = useMemo(() => {
@@ -95,8 +97,8 @@ export default function MainPage({ initialSnippets, config, urls }) {
           </div>
         </div>
 
-        {/* Right Column: Output */}
-        <div className="w-full md:w-3/5 lg:w-2/3 xl:w-3/4 h-[40vh] md:h-auto relative z-10">
+        {/* Right Column: Output (desktop only - mobile uses the bottom-sheet drawer) */}
+        <div className="hidden md:block md:w-3/5 lg:w-2/3 xl:w-3/4 relative z-10">
           {/* Decorative gradient blob */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-50" />
 
@@ -108,6 +110,18 @@ export default function MainPage({ initialSnippets, config, urls }) {
           />
         </div>
       </div>
+
+      {/* Mobile: floating button + slide-up rules preview */}
+      <MobilePreviewDrawer
+        isOpen={isPreviewOpen}
+        onOpen={() => setIsPreviewOpen(true)}
+        onClose={() => setIsPreviewOpen(false)}
+        count={selectedSnippets.length}
+        selectedSnippets={selectedSnippets}
+        separator={config.rules.separator}
+        includeTitle={config.rules.includeTitle}
+        onClear={clearAll}
+      />
     </div>
   );
 }
