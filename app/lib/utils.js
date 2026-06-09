@@ -1,159 +1,57 @@
-/**
- * Utility Functions for Prompt Management System
- */
-
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-/**
- * Combine class names with clsx and merge Tailwind classes
- * @param {...any} inputs - Class names to combine
- * @returns {string} - Merged class names
- */
+/** Combine class names with clsx and merge conflicting Tailwind classes. */
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Truncate text at word boundaries
- * @param {string} text - The text to truncate
- * @param {number} limit - The character limit
- * @returns {string} - Truncated text with "..." if needed, or original if under limit
- */
-export function truncateText(text, limit) {
-  // Handle edge cases
-  if (!text || text === null || text === undefined) {
-    return '';
-  }
-  
-  // Convert to string if not already
-  text = String(text);
-  
-  // Handle invalid or non-positive limits
-  if (!limit || limit <= 0) {
-    return text;
-  }
-  
-  // If text is already under limit, return as-is
-  if (text.length <= limit) {
-    return text;
-  }
-  
-  // Truncate at word boundary
-  let truncated = text.substring(0, limit);
-  
-  // Find the last space to avoid cutting words
-  const lastSpace = truncated.lastIndexOf(' ');
-  
-  // If there's a space, truncate there; otherwise use the limit
-  if (lastSpace > 0) {
-    truncated = truncated.substring(0, lastSpace);
-  }
-  
-  return truncated + '...';
-}
-
-/**
- * Copy text to clipboard using modern Clipboard API with fallback
- * @param {string} text - The text to copy
- * @returns {Promise<boolean>} - Promise resolving to true on success, false on failure
- */
+/** Copy text to the clipboard, returning whether it succeeded. */
 export async function copyToClipboard(text) {
-  // Handle edge cases
-  if (text === null || text === undefined) {
-    text = '';
-  }
-
-  // Convert to string
-  text = String(text);
+  const value = String(text ?? '');
 
   try {
-    // Modern Clipboard API (preferred)
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(text);
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
       return true;
     }
 
-    // Fallback for older browsers
+    // Fallback for browsers without the Clipboard API.
     const textarea = document.createElement('textarea');
-    textarea.value = text;
+    textarea.value = value;
     textarea.style.position = 'fixed';
     textarea.style.opacity = '0';
     textarea.style.pointerEvents = 'none';
     document.body.appendChild(textarea);
     textarea.select();
-
-    try {
-      const result = document.execCommand('copy');
-      document.body.removeChild(textarea);
-      return result;
-    } catch (fallbackError) {
-      document.body.removeChild(textarea);
-      throw fallbackError;
-    }
+    const ok = document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return ok;
   } catch (error) {
     console.error('Failed to copy to clipboard:', error);
     return false;
   }
 }
 
-/**
- * Format filename to Title Case
- * @param {string} filename - The filename to format
- * @returns {string} - Formatted title
- */
+const ACRONYMS = new Set([
+  'API', 'HTTP', 'HTTPS', 'URL', 'HTML', 'CSS', 'JS', 'ID', 'UI', 'UX', 'SQL', 'JSON', 'XML',
+]);
+
+/** Format a filename (kebab/snake case, optional .md) to Title Case. */
 export function formatTitle(filename) {
-  // Handle edge cases
-  if (!filename || filename === null || filename === undefined) {
-    return '';
-  }
-  
-  // Convert to string
-  filename = String(filename);
-  
-  // Remove .md extension if present
-  filename = filename.replace(/\.md$/i, '');
-  
-  // Handle empty string after extension removal
-  if (!filename) {
-    return '';
-  }
-  
-  // Convert kebab-case and snake_case to spaces
-  let title = filename.replace(/[-_]/g, ' ');
-  
-  // Split into words
-  const words = title.split(/\s+/);
-  
-  // Capitalize each word, handling special cases
-  const formattedWords = words.map(word => {
-    // Skip empty words
-    if (!word) {
-      return '';
-    }
-    
-    // Handle words with numbers (e.g., "api2" -> "API2")
-    // Check if word is all uppercase already (acronyms)
-    if (word === word.toUpperCase() && word.length > 1) {
-      return word;
-    }
-    
-    // Check for common acronyms or special patterns
-    const upperWord = word.toUpperCase();
-    const commonAcronyms = ['API', 'HTTP', 'HTTPS', 'URL', 'HTML', 'CSS', 'JS', 'ID', 'UI', 'UX', 'SQL', 'JSON', 'XML'];
-    
-    if (commonAcronyms.includes(upperWord)) {
-      return upperWord;
-    }
-    
-    // Handle words starting with numbers
-    if (/^\d/.test(word)) {
-      return word;
-    }
-    
-    // Standard title case: capitalize first letter, lowercase rest
-    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-  });
-  
-  return formattedWords.filter(w => w).join(' ');
+  if (!filename) return '';
+
+  return String(filename)
+    .replace(/\.md$/i, '')
+    .replace(/[-_]+/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => {
+      const upper = word.toUpperCase();
+      if (ACRONYMS.has(upper)) return upper;
+      // Preserve existing acronyms and words that start with a number.
+      if ((word === upper && word.length > 1) || /^\d/.test(word)) return word;
+      return word[0].toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(' ');
 }
