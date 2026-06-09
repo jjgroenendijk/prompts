@@ -1,4 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
+import { getConfig } from './lib/config.js';
+
+// The site is served under the basePath derived from config.yml's baseUrl
+// (e.g. "/prompts"). Build the baseURL so tests can navigate with relative
+// paths (page.goto('/')) regardless of how a fork configures its baseUrl.
+const config = await getConfig();
+const basePath = config.site.basePath || '';
+const baseURL = `http://localhost:3000${basePath}/`;
 
 export default defineConfig({
   testDir: './tests',
@@ -8,7 +16,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL,
     trace: 'on-first-retry',
   },
   projects: [
@@ -19,7 +27,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'pnpm dev',
-    url: 'http://localhost:3000',
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
   },
 });
