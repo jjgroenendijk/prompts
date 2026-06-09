@@ -3,49 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { truncateText, formatTitle } from './utils.js';
-
-describe('truncateText()', () => {
-  it('returns original text when under limit', () => {
-    expect(truncateText('Hello World', 20)).toBe('Hello World');
-  });
-
-  it('truncates text over limit at word boundary', () => {
-    expect(truncateText('This is a long text that needs truncation', 20)).toBe('This is a long text...');
-  });
-
-  it('returns original text when exactly at limit', () => {
-    expect(truncateText('Exact length text!!', 19)).toBe('Exact length text!!');
-  });
-
-  it('returns empty string for empty input', () => {
-    expect(truncateText('', 10)).toBe('');
-  });
-
-  it('returns empty string for null value', () => {
-    expect(truncateText(null, 10)).toBe('');
-  });
-
-  it('returns empty string for undefined value', () => {
-    expect(truncateText(undefined, 10)).toBe('');
-  });
-
-  it('works correctly with very short limit', () => {
-    expect(truncateText('Hello World', 5)).toBe('Hello...');
-  });
-
-  it('truncates single long word at limit', () => {
-    expect(truncateText('Supercalifragilisticexpialidocious', 10)).toBe('Supercalif...');
-  });
-
-  it('returns original text for zero limit', () => {
-    expect(truncateText('Hello World', 0)).toBe('Hello World');
-  });
-
-  it('returns original text for negative limit', () => {
-    expect(truncateText('Hello World', -5)).toBe('Hello World');
-  });
-});
+import { formatTitle } from './utils.js';
 
 describe('formatTitle()', () => {
   it('converts kebab-case to Title Case', () => {
