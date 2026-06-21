@@ -1,0 +1,23 @@
+#!/bin/sh
+set -eu
+
+hook_name=$(basename "$0")
+hook_root=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
+script_dir="$hook_root/$hook_name"
+found=0
+
+if [ ! -d "$script_dir" ]; then
+  exit 0
+fi
+
+for script in "$script_dir"/*; do
+  [ -f "$script" ] || continue
+  [ -x "$script" ] || continue
+  found=1
+  printf '[INFO] running %s\n' "$script"
+  "$script" "$@"
+done
+
+if [ "$found" -eq 0 ]; then
+  printf '[INFO] no executable scripts in %s\n' "$script_dir"
+fi
