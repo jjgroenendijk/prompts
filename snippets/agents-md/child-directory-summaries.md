@@ -6,5 +6,5 @@ app/                # Next.js app
 │   ├── icons/      # svg assets
 │   └── forms/      # form widgets
 ├── lib/            # data and helpers
-└── api/            # backend routes (has its own AGENTS.md)
+└── api/            # backend routes
 ```
