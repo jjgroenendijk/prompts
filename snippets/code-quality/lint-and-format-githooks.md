@@ -1,1 +1,0 @@
-Every language in the repo — Markdown included — MUST have linting and auto-formatting enforced by a pre-commit git hook. The hook runs the SAME commands as CI so local commits and CI never diverge, catching issues before they cost a CI round-trip. Manage hooks in-repo (pre-commit, lefthook, husky, ...) so they install for every contributor.

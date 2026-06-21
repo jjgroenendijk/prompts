@@ -1,1 +1,1 @@
-Maximum line length is 100 characters for every file type. Enforce it through the formatter/linter in CI and the pre-commit hook. Wrap or refactor long lines instead of disabling the rule, except for genuinely unbreakable tokens such as URLs or hashes.
+Limit every hand-written line to 100 characters. Wrap or refactor long lines. Generated and vendored files are exempt. The only in-source exception is unbreakable tokens like URLs or hashes.

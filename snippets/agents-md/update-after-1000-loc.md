@@ -1,1 +1,1 @@
-Refresh an `AGENTS.md` whenever cumulative changes under its directory exceed ~1000 LOC since its last update. Treat the doc like code: stale guidance is a defect. Update it in the same PR that crosses the threshold, not as a deferred follow-up.
+Refresh each `AGENTS.md` once its directory changes by ~1000 LOC since the last update. Treat the doc like code. Stale guidance is a defect.

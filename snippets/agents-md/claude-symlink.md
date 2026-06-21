@@ -1,1 +1,1 @@
-Every directory that contains an `AGENTS.md` MUST also contain a `CLAUDE.md` that is a symlink to it (`ln -s AGENTS.md CLAUDE.md`). One source of truth, two entry points: Claude Code and other agents read identical guidance and it can never drift. Commit the symlink itself, never a duplicated copy.
+Each directory with an `AGENTS.md` MUST also hold a `CLAUDE.md` symlink to it. Run `ln -s AGENTS.md CLAUDE.md`. Both agents and Claude Code then read one file. Commit the link, never a copy.

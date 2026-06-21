@@ -1,4 +1,4 @@
-Every `AGENTS.md` MUST include at least one Mermaid diagram that explains what the directory layout alone cannot: control and data flow, request/build/deploy pipelines, state machines, or how modules interact at runtime. Use it to make the non-obvious legible at a glance — do not just redraw the file tree. Wrap it in a ```mermaid block so it renders on GitHub, and keep it current as the behavior it describes changes.
+Every `AGENTS.md` MUST include at least one Mermaid diagram. Show what the file tree cannot: control and data flow, build and deploy pipelines, state machines, runtime module interaction. Make the non-obvious clear at a glance. Do not redraw the folder layout. Wrap it in a ```mermaid block so it renders. Keep it current as the behavior changes.
 
 ```mermaid
 flowchart LR

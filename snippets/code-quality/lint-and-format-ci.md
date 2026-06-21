@@ -1,1 +1,0 @@
-Every language in the repo — Markdown included — MUST have linting and auto-formatting enforced in CI. CI runs the formatter in check mode plus the linter; any diff or violation fails the build. No language is exempt.
