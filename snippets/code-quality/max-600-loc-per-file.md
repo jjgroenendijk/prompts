@@ -1,0 +1,1 @@
+No hand-written file may exceed 600 lines. As a file nears the limit, split it by responsibility. Do not pack more into one file. Generated and vendored files are exempt: lock files (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`), minified bundles, snapshots, and other machine-generated output.
