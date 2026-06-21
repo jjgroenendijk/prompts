@@ -35,6 +35,7 @@ export async function copyToClipboard(text) {
 
 const ACRONYMS = new Set([
   'API', 'HTTP', 'HTTPS', 'URL', 'HTML', 'CSS', 'JS', 'ID', 'UI', 'UX', 'SQL', 'JSON', 'XML',
+  'CI', 'CD', 'LOC',
 ]);
 
 /** Format a filename (kebab/snake case, optional .md) to Title Case. */

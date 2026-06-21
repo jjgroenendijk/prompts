@@ -1,0 +1,1 @@
+Keep every `AGENTS.md` under 250 lines. When one grows past the limit, push directory-specific detail down into a nested `AGENTS.md` inside the relevant child directory and leave only a short pointer behind. Guidance depth follows the directory tree instead of collecting in one bloated file.

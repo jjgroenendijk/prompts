@@ -42,6 +42,11 @@ describe('formatTitle()', () => {
     expect(formatTitle('html-css-guide')).toBe('HTML CSS Guide');
   });
 
+  it('recognizes CI and LOC acronyms', () => {
+    expect(formatTitle('lint-and-format-ci')).toBe('Lint And Format CI');
+    expect(formatTitle('max-600-loc-per-file')).toBe('Max 600 LOC Per File');
+  });
+
   it('returns empty string for empty input', () => {
     expect(formatTitle('')).toBe('');
   });

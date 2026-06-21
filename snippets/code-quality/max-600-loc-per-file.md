@@ -1,0 +1,1 @@
+No file may exceed 600 lines. Enforce the cap in CI and in the pre-commit hook; a file over the limit fails the check. As a file nears 600 LOC, split it along responsibility boundaries rather than packing more into one file.

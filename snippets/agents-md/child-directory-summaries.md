@@ -1,0 +1,1 @@
+Every `AGENTS.md` MUST list each immediate child directory with a few-word description of what it holds, e.g. `components/ — reusable UI`, `lib/ — data + helpers`. Describe only the directories directly beside that `AGENTS.md`; deeper detail belongs in their own nested `AGENTS.md` files.
