@@ -1,8 +1,10 @@
-Every `AGENTS.md` MUST describe each immediate child directory in a few words. Show them as a tree with the description as a `#` comment on the same line. Cover only the directories next to that `AGENTS.md`. Deeper detail belongs in their own nested `AGENTS.md` files.
+Every `AGENTS.md` MUST include a tree of the directories below it, each with a short `#` comment. Annotate the root, then descend as deep as needed. Stop at any sub-directory that has its own `AGENTS.md`; that file documents its own subtree. Keep each comment to a few words.
 
 ```text
-app/
-├── components/   # reusable UI
-├── lib/          # data and helpers
-└── tests/        # e2e specs
+app/                # Next.js app
+├── components/     # reusable UI
+│   ├── icons/      # svg assets
+│   └── forms/      # form widgets
+├── lib/            # data and helpers
+└── api/            # backend routes (has its own AGENTS.md)
 ```
