@@ -5,9 +5,10 @@ import { getEditUrl } from './github.js';
 import { formatTitle } from './utils.js';
 import { parseFrontmatter, normalizeTags, trustTier, isStale } from './frontmatter.js';
 
-// OKF reserves these filenames at every level of a bundle (SPEC section 3.1).
-// They describe the bundle, so they are not concept documents.
-const RESERVED_FILENAMES = new Set(['index.md', 'log.md']);
+// OKF reserves index.md and log.md at every level of a bundle (SPEC section 3.1).
+// AGENTS.md and its CLAUDE.md symlink are this repo's own bundle documentation.
+// All four describe the bundle, so none of them is a concept document.
+export const RESERVED_FILENAMES = new Set(['index.md', 'log.md', 'AGENTS.md', 'CLAUDE.md']);
 
 const DEFAULT_TYPE = 'Rule';
 const DEFAULT_STATUS = 'stable';

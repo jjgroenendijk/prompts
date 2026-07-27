@@ -14,7 +14,7 @@ import { parseFrontmatter } from '../lib/frontmatter.js';
 import { formatTitle } from '../lib/utils.js';
 
 const OKF_VERSION = '0.2';
-const RESERVED = new Set(['index.md', 'log.md']);
+const RESERVED = new Set(['index.md', 'log.md', 'AGENTS.md', 'CLAUDE.md']);
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '../../snippets');
 
 async function readDirectory(dir) {

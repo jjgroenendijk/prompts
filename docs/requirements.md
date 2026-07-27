@@ -9,7 +9,7 @@ A static website hosted on GitHub Pages that allows users to select and combine 
 - Framework: Next.js 16 (App Router)
 - Styling: Tailwind CSS 4.1
 - Hosting: GitHub Pages (Static Export)
-- Content: Plain Markdown files (no frontmatter)
+- Content: Markdown files with OKF v0.2 YAML frontmatter
 - Build: GitHub Actions (auto-deploy on changes)
 - Domain: Custom domain (jjgroenendijk.nl/prompts)
 
@@ -27,21 +27,23 @@ A static website hosted on GitHub Pages that allows users to select and combine 
 Configuration Fields:
 - `rules.separator`: Character(s) used to join snippets within the same category (default: `"\n"`)
 - `rules.includeTitle`: Boolean flag to show/hide category headers in output (default: `true`)
+- `ui.tokenBudget`: Estimated token budget the output meter measures against (default: `2000`)
 
 ## Content
 
 - Snippets must be stored in snippets/ directory with category subdirectories
-- No frontmatter in markdown files
-- Title is derived from filename
-- Entire file content is the rule text
+- The snippets/ tree is an OKF v0.2 knowledge bundle; see snippets/AGENTS.md
+- Every snippet must carry YAML frontmatter with a non-empty `type`
+- Recommended frontmatter: `title`, `description`, `tags`, `status`, `generated`
+- The markdown body after the frontmatter is the rule text
 - Files must have .md extension
-- Category determined by parent directory name
-- Related categories are grouped via a shared folder-name prefix (e.g. `git-commits`, `git-workflow`, `writing-style`, `writing-caveman`); only the first directory level under `snippets/` is treated as the category
+- `index.md` and `log.md` are OKF reserved filenames and are never loaded as rules
+- Categories may nest arbitrarily deep; every directory segment below `snippets/` is part of the category path (e.g. `code/quality`)
 - Filename formatting: kebab-case
 - All snippets must be processed during next build
 - Recursively scan snippets/**/*.md
-- Read file content (no frontmatter parsing needed)
-- Generate title from filename (convert kebab-case to Title Case)
+- Split frontmatter from body; malformed YAML degrades to a body-only snippet rather than failing the build
+- Take the title from frontmatter, falling back to the filename (kebab-case to Title Case)
 - Generate unique IDs (use file path as ID)
 - Extract category from directory structure
 - Generate GitHub edit URLs for each snippet
@@ -59,12 +61,12 @@ Rule Browser:
 - Real-time filtering as user types
 - Debounced for performance (300ms)
 - Clear button to reset search
-- Checkbox per category (derived from subdirectories)
+- Checkbox per category node; selecting a parent selects every subcategory below it
 - Select All / Deselect All per category
 - Show count of snippets per category
-- Collapsible category sections
+- Collapsible category sections, nested to match the directory tree
 - Scrollable list of rule items
-- Each item shows checkbox for selection, title (derived from filename), preview (limited to previewCharLimit from config), and edit button (opens GitHub edit page)
+- Each item shows checkbox for selection, title, preview (frontmatter description, else body, limited to previewCharLimit from config), badges for a non-stable status or a stale concept, and edit button (opens GitHub edit page)
 - Preview should truncate at word boundaries, not mid-word
 - Indicate truncation with "..."
 - **Buttons must have a click animation (e.g., scale down or ripple) for better feedback.**
@@ -78,7 +80,7 @@ Rule Output:
 - Categories are separated by double newlines for visual distinction
 - Copy button (copies full output to clipboard)
 - **Copy button must maintain a fixed size to prevent layout shifts when the label changes.**
-- Character/word count display
+- Estimated token count with a bar against `ui.tokenBudget`, turning amber when over budget
 - Clear All button to deselect all
 - Format toggle (if multiple output formats supported)
 - Copied confirmation message
@@ -142,7 +144,7 @@ Edit Configuration:
 
 ## Search and Filtering
 
-- Search across title (filename) and full content
+- Search across title, description, tags, category path, and full body content
 - Case-insensitive matching
 - Highlight matching terms (optional)
 - Debounced input (300ms delay)
@@ -169,7 +171,7 @@ Output Formatting:
 - Selected snippets are automatically grouped by category
 - Category order is determined by the order snippets were selected
 - When `includeTitle` is true (default), category headers are shown as `## Category Name`
-- Category names are formatted from directory names (e.g., `security` → `## Security`)
+- Category names are formatted from directory names, nested paths joined with ` / ` (e.g., `code/quality` → `## Code / Quality`)
 - Each category header appears only once, even if multiple snippets from that category are selected
 - Within a category, snippets are joined with the configured `separator` (default: `"\n"` - single newline)
 - Categories are separated by double newlines (`\n\n`) for visual distinction

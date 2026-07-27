@@ -3,11 +3,23 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { toSnippet } from './snippets.js';
+import { toSnippet, RESERVED_FILENAMES } from './snippets.js';
 
 const config = {
   github: { owner: 'jjgroenendijk', repo: 'prompts', defaultBranch: 'main' },
 };
+
+describe('RESERVED_FILENAMES', () => {
+  it('excludes OKF reserved files and bundle documentation from concepts', () => {
+    ['index.md', 'log.md', 'AGENTS.md', 'CLAUDE.md'].forEach((filename) => {
+      expect(RESERVED_FILENAMES.has(filename)).toBe(true);
+    });
+  });
+
+  it('does not exclude ordinary rules', () => {
+    expect(RESERVED_FILENAMES.has('no-emojis.md')).toBe(false);
+  });
+});
 
 describe('toSnippet()', () => {
   it('reads OKF frontmatter into snippet fields', () => {

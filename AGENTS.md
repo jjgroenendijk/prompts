@@ -13,33 +13,24 @@
 ├── app/               # Next.js static site
 │   ├── app/           # route shell and global CSS
 │   ├── components/    # reusable UI
-│   ├── lib/           # config and snippet loaders
+│   ├── lib/           # config, frontmatter, snippet, tree, output helpers
 │   ├── public/        # static assets
+│   ├── scripts/       # OKF index generator and conformance check
 │   └── tests/         # Playwright specs
 ├── docs/              # requirements and work notes
 │   └── screenshots/   # visual evidence
-└── snippets/          # prompt rule source
-    ├── agent-tasks/   # task workflow rules
-    ├── agents-md/     # AGENTS.md rules
-    ├── code-powershell/ # PowerShell rules
-    ├── code-quality/  # quality rules
-    ├── code-scripts/  # script rules
-    ├── git-commits/   # commit rules
-    ├── git-workflow/  # branch and PR rules
-    ├── knowledge-okf/ # OKF knowledge base rules
-    ├── platform-intune/ # Intune rules
-    ├── project-docs/  # docs workflow rules
-    ├── writing-caveman/ # terse writing rules
-    └── writing-style/ # general prose rules
+└── snippets/          # OKF rule bundle; see snippets/AGENTS.md
 ```
 
 ## Runtime Flow
 
 ```mermaid
 flowchart LR
-  snippets[snippets/*.md] --> loader[app/lib/snippets.js]
+  snippets[snippets/*.md] --> fm[app/lib/frontmatter.js]
+  fm --> loader[app/lib/snippets.js]
+  loader --> tree[app/lib/tree.js]
   config[config.yml] --> site[app/lib/config.js]
-  loader --> ui[Next.js pages and components]
+  tree --> ui[Next.js pages and components]
   site --> ui
   ui --> build[pnpm build]
   build --> out[app/out]
@@ -137,6 +128,8 @@ flowchart LR
 ## Local Checks
 
 - Install deps: `cd app && pnpm install --frozen-lockfile`.
+- OKF conformance: `cd app && pnpm check:okf`.
+- Regenerate bundle indexes: `cd app && pnpm snippets:index`.
 - Lint: `cd app && pnpm lint`.
 - Unit tests: `cd app && pnpm test`.
 - E2E tests: `cd app && pnpm test:e2e`.

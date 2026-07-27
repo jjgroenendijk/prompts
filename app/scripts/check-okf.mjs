@@ -15,6 +15,8 @@ import fg from 'fast-glob';
 import { load } from 'js-yaml';
 
 const RESERVED = new Set(['index.md', 'log.md']);
+// Bundle documentation, not concepts. Kept out of the loader for the same reason.
+const BUNDLE_DOCS = new Set(['AGENTS.md', 'CLAUDE.md']);
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '../..');
 const FRONTMATTER = /^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?(\n|$)/;
 
@@ -24,6 +26,8 @@ const files = await fg('snippets/**/*.md', { cwd: ROOT });
 for (const file of files.sort()) {
   const filename = file.split('/').pop();
   const raw = await readFile(join(ROOT, file), 'utf8');
+
+  if (BUNDLE_DOCS.has(filename)) continue;
 
   if (RESERVED.has(filename)) {
     // Only a bundle-root index.md may carry frontmatter (SPEC section 8).
