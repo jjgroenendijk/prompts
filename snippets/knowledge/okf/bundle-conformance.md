@@ -1,3 +1,14 @@
+---
+type: Reference
+title: OKF Bundle Conformance
+description: What makes a bundle conformant, and the permissive consumption rules that go with it.
+tags: [okf, knowledge]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2026-07-14T12:19:29+02:00 }
+sources:
+  - resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+---
+
 A `docs/` knowledge bundle conforms to OKF v0.1 when:
 
 - Every non-reserved `.md` file has parseable YAML frontmatter.

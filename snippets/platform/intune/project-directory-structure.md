@@ -1,3 +1,12 @@
+---
+type: Rule
+title: Intune Project Structure
+description: Separate input, output, and information directories in an Intune Win32 app package.
+tags: [intune, structure]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2025-12-10T17:25:53+01:00 }
+---
+
 Recommended folder structure for Intune Win32 app packages. Separates input files, output packages, and documentation for easier maintenance and updates.
 
 ```

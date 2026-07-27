@@ -1,3 +1,14 @@
+---
+type: Reference
+title: OKF Index And Log Files
+description: The reserved index.md and log.md filenames and the structure each one follows.
+tags: [okf, knowledge]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2026-07-14T12:19:29+02:00 }
+sources:
+  - resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+---
+
 OKF reserves two filenames inside a knowledge bundle. Every other `.md` file is a concept
 document.
 

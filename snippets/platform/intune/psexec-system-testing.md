@@ -1,3 +1,12 @@
+---
+type: Playbook
+title: PSExec System Testing
+description: Test in 32-bit system context with PSExec, since admin context is not representative.
+tags: [intune, testing]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2025-12-10T17:25:53+01:00 }
+---
+
 Test Intune scripts in system context using PSExec. Intune executes Win32 packages in system context and 32-bit mode, so testing as admin is not representative.
 
 **Launch 32-bit PowerShell in system context:**

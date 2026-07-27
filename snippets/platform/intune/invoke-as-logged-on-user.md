@@ -1,3 +1,12 @@
+---
+type: Playbook
+title: Invoke As Logged-On User
+description: Run a script block as the logged-on user via a self-cleaning scheduled task.
+tags: [intune, powershell]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2025-12-10T17:25:53+01:00 }
+---
+
 Execute code in user context from system context. Uses scheduled task with Authenticated Users group to run script blocks as the currently logged-on user. Self-cleaning after execution.
 
 ```PowerShell

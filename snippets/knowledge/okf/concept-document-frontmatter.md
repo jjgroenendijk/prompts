@@ -1,3 +1,14 @@
+---
+type: Reference
+title: OKF Concept Frontmatter
+description: Required and recommended frontmatter fields on an OKF concept document.
+tags: [okf, knowledge]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2026-07-14T12:19:29+02:00 }
+sources:
+  - resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+---
+
 Each OKF concept is one UTF-8 markdown file with two parts: a YAML frontmatter block, then a
 markdown body. Delimit frontmatter with `---` at file start and end.
 

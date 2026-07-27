@@ -1,3 +1,12 @@
+---
+type: Playbook
+title: Intune Event Logging
+description: Write to the IME log path and a custom event log, creating folder and source first.
+tags: [intune, logging]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2025-12-10T15:28:55+01:00 }
+---
+
 Use consistent Intune logging: write to the IME log path and to a custom Windows Event Log for the app. Create the log folder and event source before writing; build the log path from variables so installs and uninstalls stay separated.
 
 ```PowerShell

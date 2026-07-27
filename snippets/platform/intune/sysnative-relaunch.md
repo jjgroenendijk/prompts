@@ -1,3 +1,12 @@
+---
+type: Playbook
+title: Sysnative Relaunch
+description: Relaunch 32-bit IME scripts through Sysnative to avoid WOW64 redirection.
+tags: [intune, powershell]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2025-12-10T15:28:55+01:00 }
+---
+
 Detect Intune’s 32-bit host on 64-bit Windows, then relaunch through Sysnative to avoid WOW64 redirection. Do this at the top of install/uninstall scripts so all file system and registry calls run in native 64-bit PowerShell.
 
 ```PowerShell

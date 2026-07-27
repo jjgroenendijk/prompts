@@ -1,3 +1,12 @@
+---
+type: Rule
+title: Shared Git Hooks
+description: Track hooks in .githooks/ with thin wrappers running numbered scripts per hook.
+tags: [git, workflow, automation]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2026-06-21T11:20:33+02:00 }
+---
+
 Store shared Git hooks in tracked `.githooks/`, not private `.git/hooks`.
 Configure each checkout with `git config core.hooksPath .githooks/hooks`.
 Hook entrypoints in `.githooks/hooks/<hook>` MUST be tiny wrappers only:

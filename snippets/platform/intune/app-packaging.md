@@ -1,3 +1,12 @@
+---
+type: Playbook
+title: Intune App Packaging
+description: Package Win32 apps into .intunewin with IntuneWinAppUtil via a package.cmd script.
+tags: [intune, packaging]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2025-12-10T15:51:59+01:00 }
+---
+
 Intune applications must be packaged using the IntuneWinAppUtil executable to create `.intunewin` files for deployment.
 
 Create a `package.cmd` script to automate the packaging process:

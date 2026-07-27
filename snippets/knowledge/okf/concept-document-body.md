@@ -1,3 +1,14 @@
+---
+type: Reference
+title: OKF Concept Body
+description: Write concept bodies in structural markdown using the conventional section headings.
+tags: [okf, knowledge]
+status: stable
+generated: { by: human:jjgroenendijk, at: 2026-07-14T12:19:29+02:00 }
+sources:
+  - resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+---
+
 Write the OKF concept body in structural markdown: headings, lists, tables, code blocks. Favor
 structure over freeform prose -> easier for humans to scan and agents to retrieve.
 
