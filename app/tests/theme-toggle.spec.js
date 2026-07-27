@@ -1,31 +1,33 @@
 import { test, expect } from '@playwright/test';
 
-// Nord color palette reference
-const NORD_COLORS = {
+// Typewriter palette, mirrored from app/globals.css
+const THEME_COLORS = {
   light: {
-    background: 'rgb(236, 239, 244)', // #ECEFF4 (nord6)
-    foreground: 'rgb(46, 52, 64)',    // #2E3440 (nord0)
+    background: 'rgb(247, 245, 240)', // #F7F5F0
+    foreground: 'rgb(14, 13, 11)',    // #0E0D0B
+    variable: '#F7F5F0',
   },
   dark: {
-    background: 'rgb(46, 52, 64)',    // #2E3440 (nord0)
-    foreground: 'rgb(236, 239, 244)', // #ECEFF4 (nord6)
+    background: 'rgb(13, 16, 22)',    // #0D1016
+    foreground: 'rgb(237, 231, 220)', // #EDE7DC
+    variable: '#0D1016',
   }
 };
 
 test.describe('Theme Toggle', () => {
   test('should start in light mode with Nord colors', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('./');
 
     // Check body background color
     const bgColor = await page.evaluate(() => {
       return window.getComputedStyle(document.body).backgroundColor;
     });
 
-    expect(bgColor).toBe(NORD_COLORS.light.background);
+    expect(bgColor).toBe(THEME_COLORS.light.background);
   });
 
   test('should switch to dark mode when toggle is clicked', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('./');
 
     // Get initial state
     const initialBg = await page.evaluate(() => {
@@ -45,11 +47,11 @@ test.describe('Theme Toggle', () => {
 
     // Colors should be different
     expect(newBg).not.toBe(initialBg);
-    expect(newBg).toBe(NORD_COLORS.dark.background);
+    expect(newBg).toBe(THEME_COLORS.dark.background);
   });
 
   test('should persist theme after page reload', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('./');
 
     // Toggle to dark
     await page.click('[title="Toggle Theme"]');
@@ -59,7 +61,7 @@ test.describe('Theme Toggle', () => {
     const darkBg = await page.evaluate(() => {
       return window.getComputedStyle(document.body).backgroundColor;
     });
-    expect(darkBg).toBe(NORD_COLORS.dark.background);
+    expect(darkBg).toBe(THEME_COLORS.dark.background);
 
     // Reload
     await page.reload();
@@ -69,11 +71,11 @@ test.describe('Theme Toggle', () => {
     const afterReloadBg = await page.evaluate(() => {
       return window.getComputedStyle(document.body).backgroundColor;
     });
-    expect(afterReloadBg).toBe(NORD_COLORS.dark.background);
+    expect(afterReloadBg).toBe(THEME_COLORS.dark.background);
   });
 
   test('should verify .dark class is applied to HTML element', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('./');
 
     // Initially should not have dark class
     const initialDarkClass = await page.evaluate(() => {
@@ -92,7 +94,7 @@ test.describe('Theme Toggle', () => {
   });
 
   test('should verify CSS variables change with theme', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('./');
 
     // Get light mode CSS variable
     const lightVar = await page.evaluate(() => {
@@ -112,7 +114,8 @@ test.describe('Theme Toggle', () => {
 
     // Variables should be different
     expect(darkVar).not.toBe(lightVar);
-    expect(darkVar).toBe('#2E3440');
-    expect(lightVar).toBe('#ECEFF4');
+    // Browsers normalize custom property values to lowercase
+    expect(darkVar.toLowerCase()).toBe(THEME_COLORS.dark.variable.toLowerCase());
+    expect(lightVar.toLowerCase()).toBe(THEME_COLORS.light.variable.toLowerCase());
   });
 });

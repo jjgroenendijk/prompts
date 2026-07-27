@@ -36,3 +36,7 @@ jobs:
       - name: Lint
         run: pnpm lint
         working-directory: app
+
+      - name: Check OKF conformance
+        run: pnpm check:okf
+        working-directory: app

@@ -10,6 +10,7 @@ github:
 
 ui:
   previewCharLimit: 400
+  tokenBudget: 2000
   searchPlaceholder: "Search rules..."
   copyButtonText: "Copy Selected Rules"
   addButtonText: "Add New Rule"

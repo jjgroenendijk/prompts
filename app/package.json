@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
+    "check:okf": "node scripts/check-okf.mjs",
+    "snippets:index": "node scripts/build-index.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",

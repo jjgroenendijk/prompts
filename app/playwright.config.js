@@ -1,4 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import { getConfig } from './lib/config.js';
+
+// The app is served under the basePath derived from config.yml, not the root.
+const config = await getConfig();
+const baseURL = `http://localhost:3000${config.site.basePath}/`;
 
 export default defineConfig({
   testDir: './tests',
@@ -8,8 +13,13 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL,
     trace: 'on-first-retry',
+    // Escape hatch for environments that ship a prebuilt Chromium instead of
+    // the exact build this Playwright version downloads.
+    launchOptions: process.env.PLAYWRIGHT_CHROMIUM_PATH
+      ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH }
+      : {},
   },
   projects: [
     {
@@ -19,7 +29,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'pnpm dev',
-    url: 'http://localhost:3000',
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
   },
 });

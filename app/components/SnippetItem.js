@@ -44,8 +44,24 @@ export default function SnippetItem({ snippet, isSelected, onToggle }) {
                   </a>
                 </div>
                 <p className="text-xs leading-relaxed text-theme-muted line-clamp-4 break-words"> {/* Increased line clamp */}
-                  {snippet.content}
+                  {snippet.description || snippet.content}
                 </p>
+
+                {/* OKF lifecycle signals: only shown when they say something */}
+                {(snippet.status !== 'stable' || snippet.stale) && (
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                    {snippet.status !== 'stable' && (
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-theme-surface-elevated text-theme-muted">
+                        {snippet.status}
+                      </span>
+                    )}
+                    {snippet.stale && (
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                        Stale
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>  );

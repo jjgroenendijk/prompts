@@ -5,31 +5,28 @@ import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import OutputWindow from './OutputWindow';
 import MobilePreviewDrawer from './MobilePreviewDrawer';
+import { buildCategoryTree, collectSnippetIds } from '../lib/tree';
 
 export default function MainPage({ initialSnippets, config, urls }) {
   const [selectedSnippetIds, setSelectedSnippetIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  // Filter snippets
+  // Filter snippets across body text and OKF frontmatter metadata
   const filteredSnippets = useMemo(() => {
     if (!searchQuery) return initialSnippets;
     const lowerQuery = searchQuery.toLowerCase();
-    return initialSnippets.filter(s => 
-      s.title.toLowerCase().includes(lowerQuery) || 
+    return initialSnippets.filter(s =>
+      s.title.toLowerCase().includes(lowerQuery) ||
+      s.description.toLowerCase().includes(lowerQuery) ||
+      s.category.toLowerCase().includes(lowerQuery) ||
+      s.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
       s.content.toLowerCase().includes(lowerQuery)
     );
   }, [initialSnippets, searchQuery]);
 
-  // Group by category
-  const snippetsByCategory = useMemo(() => {
-    const groups = {};
-    filteredSnippets.forEach(s => {
-      if (!groups[s.category]) groups[s.category] = [];
-      groups[s.category].push(s);
-    });
-    return groups;
-  }, [filteredSnippets]);
+  // Group into a nested category tree
+  const categoryTree = useMemo(() => buildCategoryTree(filteredSnippets), [filteredSnippets]);
 
   // Selection handlers
   const toggleSnippet = (id) => {
@@ -38,11 +35,10 @@ export default function MainPage({ initialSnippets, config, urls }) {
     );
   };
 
-  const selectCategory = (category, isSelect) => {
-    // Find all snippets in this category (visible ones)
-    const snippetsInCat = snippetsByCategory[category] || [];
-    const idsInCat = snippetsInCat.map(s => s.id);
-    
+  const selectCategory = (node, isSelect) => {
+    // Every visible snippet in this category and its subcategories
+    const idsInCat = collectSnippetIds(node);
+
     setSelectedSnippetIds(prev => {
       if (isSelect) {
         // Add all ids that aren't already selected
@@ -89,7 +85,7 @@ export default function MainPage({ initialSnippets, config, urls }) {
           />
           <div className="flex-1 overflow-y-auto">
             <CategoryFilter
-              categories={snippetsByCategory}
+              categoryTree={categoryTree}
               selectedSnippetIds={selectedSnippetIds}
               onToggleSnippet={toggleSnippet}
               onSelectCategory={selectCategory}
@@ -106,6 +102,7 @@ export default function MainPage({ initialSnippets, config, urls }) {
             selectedSnippets={selectedSnippets}
             separator={config.rules.separator}
             includeTitle={config.rules.includeTitle}
+            tokenBudget={config.ui.tokenBudget}
             onClear={clearAll}
           />
         </div>
@@ -120,6 +117,7 @@ export default function MainPage({ initialSnippets, config, urls }) {
         selectedSnippets={selectedSnippets}
         separator={config.rules.separator}
         includeTitle={config.rules.includeTitle}
+        tokenBudget={config.ui.tokenBudget}
         onClear={clearAll}
       />
     </div>

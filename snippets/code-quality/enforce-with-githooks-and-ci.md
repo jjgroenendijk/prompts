@@ -1,1 +1,0 @@
-Enforce rules automatically wherever possible. Use git hooks for fast checks before a commit or push. Use CI as the backstop on every pull request. If a machine can check a rule, do not rely on people remembering it.

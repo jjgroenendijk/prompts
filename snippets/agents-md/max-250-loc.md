@@ -1,1 +1,0 @@
-Keep each `AGENTS.md` under 250 lines. When it grows past 250, move directory-specific detail into a nested `AGENTS.md` in the right child directory. Leave a short pointer behind. Depth follows the tree, not one big file.

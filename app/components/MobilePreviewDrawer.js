@@ -19,6 +19,7 @@ export default function MobilePreviewDrawer({
   selectedSnippets,
   separator,
   includeTitle,
+  tokenBudget,
   onClear,
 }) {
   // Close on Escape while open
@@ -99,6 +100,7 @@ export default function MobilePreviewDrawer({
             selectedSnippets={selectedSnippets}
             separator={separator}
             includeTitle={includeTitle}
+            tokenBudget={tokenBudget}
             onClear={onClear}
           />
         </div>
