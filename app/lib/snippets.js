@@ -3,6 +3,53 @@ import { join } from 'path';
 import fg from 'fast-glob';
 import { getEditUrl } from './github.js';
 import { formatTitle } from './utils.js';
+import { parseFrontmatter, normalizeTags, trustTier, isStale } from './frontmatter.js';
+
+// OKF reserves these filenames at every level of a bundle (SPEC section 3.1).
+// They describe the bundle, so they are not concept documents.
+const RESERVED_FILENAMES = new Set(['index.md', 'log.md']);
+
+const DEFAULT_TYPE = 'Rule';
+const DEFAULT_STATUS = 'stable';
+
+/**
+ * Build a snippet object from one concept document.
+ * Exported for unit tests so the mapping can be checked without touching disk.
+ */
+export function toSnippet(filePath, raw, config) {
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  const parts = normalizedPath.split('/');
+  const filename = parts[parts.length - 1];
+
+  // Category is every directory between `snippets/` and the file, so nesting
+  // deeper than one level becomes a nested category path (e.g. `code/quality`).
+  const snippetsIndex = parts.indexOf('snippets');
+  const categorySegments =
+    snippetsIndex === -1 ? [] : parts.slice(snippetsIndex + 1, parts.length - 1);
+
+  const { data, body } = parseFrontmatter(raw);
+  const content = body.trim();
+
+  if (!content) return null;
+
+  return {
+    id: normalizedPath,
+    title: data.title ? String(data.title) : formatTitle(filename),
+    description: data.description ? String(data.description) : '',
+    type: data.type ? String(data.type) : DEFAULT_TYPE,
+    tags: normalizeTags(data.tags),
+    status: data.status ? String(data.status) : DEFAULT_STATUS,
+    staleAfter: data.stale_after ? String(data.stale_after) : null,
+    stale: isStale(data.stale_after),
+    trust: trustTier(data.verified),
+    sources: Array.isArray(data.sources) ? data.sources : [],
+    category: categorySegments.join('/') || 'uncategorized',
+    categorySegments,
+    content,
+    filePath,
+    editUrl: getEditUrl(filePath, config),
+  };
+}
 
 export async function getAllSnippets(config) {
   // Use fast-glob to find all markdown files in snippets directory
@@ -13,57 +60,26 @@ export async function getAllSnippets(config) {
     const files = await fg(pattern, { cwd: process.cwd() });
 
     const snippetPromises = files.map(async (filePath) => {
-      // filePath is relative to CWD, e.g., "../snippets/security/input-validation.md"
+      const filename = filePath.replace(/\\/g, '/').split('/').pop();
+      if (RESERVED_FILENAMES.has(filename)) return null;
 
-      // Read content
       const absolutePath = join(process.cwd(), filePath);
-      let content = '';
+      let raw = '';
       try {
-        content = await readFile(absolutePath, 'utf8');
+        raw = await readFile(absolutePath, 'utf8');
       } catch (e) {
         console.warn(`Could not read file: ${filePath}`, e);
         return null;
       }
 
       // Skip empty files
-      if (!content.trim()) {
-         return null;
-      }
+      if (!raw.trim()) return null;
 
-      // Extract category
-      // Path is snippets/category/filename.md or ../snippets/category/filename.md
-      const normalizedPath = filePath.replace(/\\/g, '/');
-      const parts = normalizedPath.split('/');
-
-      // Find where 'snippets' is in the path
-      const snippetsIndex = parts.indexOf('snippets');
-
-      let category = 'uncategorized';
-      // If 'snippets' is found and there is a segment after it, and that segment is not the filename
-      if (snippetsIndex !== -1 && snippetsIndex + 1 < parts.length - 1) {
-        category = parts[snippetsIndex + 1];
-      }
-
-      const filename = parts[parts.length - 1];
-
-      // Generate title
-      const title = formatTitle(filename);
-
-      // ID is the filePath
-      const id = filePath;
-
-      return {
-        id,
-        title,
-        category,
-        content, // Raw content, no frontmatter
-        filePath,
-        editUrl: getEditUrl(filePath, config)
-      };
+      return toSnippet(filePath, raw, config);
     });
 
     const snippets = await Promise.all(snippetPromises);
-    return snippets.filter(item => item !== null);
+    return snippets.filter((item) => item !== null);
   } catch (e) {
     console.error('Error scanning snippets:', e);
     return [];
