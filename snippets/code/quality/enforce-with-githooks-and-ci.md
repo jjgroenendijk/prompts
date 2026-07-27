@@ -1,7 +1,7 @@
 ---
 type: Rule
 title: Enforce With Git Hooks And CI
-description: Enforce rules by machine: git hooks locally, CI as the pull request backstop.
+description: "Enforce rules by machine: git hooks locally, CI as the pull request backstop."
 tags: [quality, automation]
 status: stable
 generated: { by: human:jjgroenendijk, at: 2026-06-21T10:20:32+02:00 }
