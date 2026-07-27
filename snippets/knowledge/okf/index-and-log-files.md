@@ -27,7 +27,7 @@ Exception: the root `index.md` may carry frontmatter solely to declare the targe
 
 ```markdown
 ---
-okf_version: "0.1"
+okf_version: "0.2"
 ---
 ```
 
@@ -41,4 +41,4 @@ prefixes follow convention:
 ```
 
 Add an `index.md` when a directory holds enough concepts that a listing aids navigation. Add a
-`log.md` when history and attribution matter.
+`log.md` when history and attribution matter. Generate both -> stale listings are a defect.

@@ -17,13 +17,17 @@ Required frontmatter field:
 - `type` - short string naming the concept category, e.g. `BigQuery Table`, `API Endpoint`,
   `Playbook`. Pick descriptive, self-explanatory values. Types are not registered centrally.
 
+A concept carrying only `type` is fully conformant.
+
 Recommended fields, in priority order:
 
-- `title` - human-readable display name.
-- `description` - single-sentence summary.
-- `resource` - URI uniquely identifying the underlying asset.
+- `title` - human-readable display name. Absent -> derive from filename.
+- `description` - single-sentence summary. Feeds index entries, search, previews.
+- `resource` - URI uniquely identifying the underlying asset. Absent for abstract concepts.
 - `tags` - YAML list of cross-cutting categorization strings.
-- `timestamp` - ISO 8601 last-modified datetime.
+
+Optional provenance, trust, and lifecycle families layer on top: `sources`, `generated`,
+`verified`, `status`, `stale_after`.
 
 Extra keys are allowed. When editing a doc, preserve unknown keys -> do not drop fields you do
 not recognize.
@@ -37,6 +41,10 @@ title: Customers
 description: One row per customer account with billing status.
 resource: bigquery://project/dataset/customers
 tags: [billing, pii]
-timestamp: 2026-07-14T09:00:00Z
+status: stable
+generated: { by: human:ahormati, at: 2026-07-14T09:00:00Z }
 ---
 ```
+
+`timestamp` is a v0.1 field superseded by `generated.at`. Read it as a fallback when
+`generated` is absent; do not write it in new docs.
