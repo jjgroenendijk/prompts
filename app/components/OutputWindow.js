@@ -1,42 +1,27 @@
 'use client';
-import { useState } from 'react';
-import { copyToClipboard, cn, formatTitle } from '../lib/utils';
+import { useMemo, useState } from 'react';
+import { copyToClipboard, cn } from '../lib/utils';
+import { buildOutput, estimateTokens, formatTokenCount } from '../lib/output';
 import { Check, Copy, ClipboardList } from 'lucide-react';
 
 export default function OutputWindow({
   selectedSnippets,
   separator = "\n",
   includeTitle = true,
+  tokenBudget = 2000,
   onClear
 }) {
   const [copied, setCopied] = useState(false);
 
-  // Group snippets by category
-  const snippetsByCategory = {};
-  selectedSnippets.forEach(s => {
-    if (!snippetsByCategory[s.category]) {
-      snippetsByCategory[s.category] = [];
-    }
-    snippetsByCategory[s.category].push(s);
-  });
+  const output = useMemo(
+    () => buildOutput(selectedSnippets, { separator, includeTitle }),
+    [selectedSnippets, separator, includeTitle]
+  );
 
-  // Generate output grouped by category
-  const categoryOutputs = Object.entries(snippetsByCategory).map(([category, snippets]) => {
-    // Format category name for display
-    const categoryTitle = formatTitle(category);
-
-    // Join snippets within the category with single newline
-    const snippetContents = snippets.map(s => s.content.trim()).join(separator);
-
-    // Add category header if includeTitle is true
-    if (includeTitle) {
-      return `## ${categoryTitle}\n\n${snippetContents}`;
-    }
-    return snippetContents;
-  });
-
-  // Join categories with double newline
-  const output = categoryOutputs.join('\n\n');
+  const tokens = useMemo(() => estimateTokens(output), [output]);
+  const budget = tokenBudget > 0 ? tokenBudget : 0;
+  const overBudget = budget > 0 && tokens > budget;
+  const budgetUsed = budget > 0 ? Math.min(100, Math.round((tokens / budget) * 100)) : 0;
 
   const handleCopy = async () => {
     if (!output) return;
@@ -84,7 +69,7 @@ export default function OutputWindow({
       </div>
 
       {/* Header / Meta */}
-      <div className="h-14 border-b border-theme-subtle flex items-center px-6 bg-theme-card">
+      <div className="h-14 border-b border-theme-subtle flex items-center gap-4 px-6 bg-theme-card">
         <div className="flex items-center gap-2">
             <div className={cn(
               "w-2 h-2 rounded-full",
@@ -93,6 +78,31 @@ export default function OutputWindow({
             <span className="text-xs font-medium text-theme-muted uppercase tracking-wider">
                 {selectedSnippets.length} Active Rules
             </span>
+        </div>
+
+        {/* Context budget meter - token count is an estimate, see lib/output.js */}
+        <div
+          className="flex items-center gap-2 min-w-0"
+          data-testid="token-meter"
+          title={`Estimated ${tokens} tokens of a ${budget} token budget`}
+        >
+          <div className="hidden sm:block w-20 h-1.5 rounded-full bg-theme-surface-elevated overflow-hidden">
+            <div
+              className={cn(
+                "h-full rounded-full transition-all duration-300",
+                overBudget ? "bg-amber-500" : "bg-primary"
+              )}
+              style={{ width: `${budgetUsed}%` }}
+            />
+          </div>
+          <span
+            className={cn(
+              "text-xs font-medium uppercase tracking-wider whitespace-nowrap",
+              overBudget ? "text-amber-600 dark:text-amber-400" : "text-theme-muted"
+            )}
+          >
+            {formatTokenCount(tokens)} / {formatTokenCount(budget)} Tokens
+          </span>
         </div>
       </div>
 

@@ -102,6 +102,7 @@ export default function MainPage({ initialSnippets, config, urls }) {
             selectedSnippets={selectedSnippets}
             separator={config.rules.separator}
             includeTitle={config.rules.includeTitle}
+            tokenBudget={config.ui.tokenBudget}
             onClear={clearAll}
           />
         </div>
@@ -116,6 +117,7 @@ export default function MainPage({ initialSnippets, config, urls }) {
         selectedSnippets={selectedSnippets}
         separator={config.rules.separator}
         includeTitle={config.rules.includeTitle}
+        tokenBudget={config.ui.tokenBudget}
         onClear={clearAll}
       />
     </div>
