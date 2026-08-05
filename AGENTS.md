@@ -120,7 +120,6 @@ flowchart LR
 - Use tags such as `[ERROR]`, `[WARNING]`, or `[INFO]` when markers help.
 - Abbreviate common prose words when clarity holds: DB, auth, config, req, res,
   fn, impl.
-- Use arrows for causality, like `X -> Y`.
 - Drop articles, filler, pleasantries, and hedging.
 - Keep code symbols, function names, API names, and error strings verbatim.
 - Prefer short words. Sentence fragments are fine.

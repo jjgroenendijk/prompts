@@ -1,7 +1,6 @@
 # Writing
 
 * [Abbreviate Prose](abbreviate-prose.md) - Abbreviate common prose words and strip conjunctions.
-* [Arrows For Causality](arrows-for-causality.md) - Write causality as X -> Y instead of spelling out the connective.
 * [Bracket Labels](bracket-labels.md) - Mark status and severity with bracket tags such as [ERROR], [WARNING], or [INFO].
 * [Drop Filler](drop-filler.md) - Drop articles, filler, pleasantries, and hedging.
 * [Information Density](information-density.md) - Maximize information density while keeping text effortless to read.
