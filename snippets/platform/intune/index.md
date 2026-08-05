@@ -9,7 +9,6 @@
 * [Intune Project Structure](project-directory-structure.md) - Separate input, output, and information directories in an Intune Win32 app package.
 * [PSExec System Testing](psexec-system-testing.md) - Test in 32-bit system context with PSExec, since admin context is not representative.
 * [PSExec Tool Source](psexec-tool-source.md) - PSExec ships in the Sysinternals PSTools suite.
-* [Registry Detection Key](reg-detection.md) - Make an install detectable by writing a registry key only on a zero setup exit code.
 * [Silent Install](silent-install.md) - Installs run silently and unattended; nobody sees a prompt in SYSTEM context.
 * [Sysnative Relaunch](sysnative-relaunch.md) - Relaunch 32-bit IME scripts through Sysnative to avoid WOW64 redirection.
 * [Wait And Propagate Exit Code](wait-and-propagate-exit.md) - The 32-bit parent waits for the 64-bit child and returns its exit code to Intune.
