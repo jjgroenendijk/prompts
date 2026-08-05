@@ -6,6 +6,7 @@
 * [Evidence Based Detection](evidence-based-detection.md) - Detect on evidence the application itself leaves, not on a marker the install script wrote.
 * [Intune Command Format](intune-command-format.md) - Run install and uninstall commands with ExecutionPolicy Bypass and NoProfile.
 * [Invoke As Logged-On User](invoke-as-logged-on-user.md) - Run a script block as the logged-on user via a self-cleaning scheduled task.
+* [Ask For Organisation Name](organisation-name.md) - Ask the user for the organisation name instead of guessing or inventing one.
 * [Intune Project Structure](project-directory-structure.md) - Separate input, output, and information directories in an Intune Win32 app package.
 * [PSExec System Testing](psexec-system-testing.md) - Test in 32-bit system context with PSExec, since admin context is not representative.
 * [PSExec Tool Source](psexec-tool-source.md) - PSExec ships in the Sysinternals PSTools suite.
