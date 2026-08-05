@@ -1,10 +1,11 @@
 ---
 type: Rule
 title: No Emojis
-description: Use bracket tags such as [ERROR] or [INFO] instead of emojis.
+description: Never use emojis in prose, code, output, or commit messages.
 tags: [writing, formatting]
 status: stable
 generated: { by: human:jjgroenendijk, at: 2025-12-10T12:45:59+01:00 }
 ---
 
-NEVER use emojis anywhere, but rather use [ERROR], [WARNING], [INFO] or something else in brackets
+NEVER use emojis anywhere. This covers prose, headings, code, log output, file trees, and commit
+messages.
