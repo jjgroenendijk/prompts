@@ -36,11 +36,4 @@ REM Package the in/ folder into an .intunewin file in out/ folder
 "%UTIL%" -c in -s install.ps1 -o out -q
 ```
 
-This script:
-- Reuses `IntuneWinAppUtil` when it is already on PATH
-- Downloads the executable next to `package.cmd` when it is missing, then keeps using it
-- Fails with `[ERROR]` and a non-zero exit code when the download fails
-- Packages the `in/` folder contents with `install.ps1` as the setup file
-- Outputs the `.intunewin` file to the `out/` folder
-
 Add `IntuneWinAppUtil.exe` to `.gitignore`; it is a fetched tool, not a source file.
