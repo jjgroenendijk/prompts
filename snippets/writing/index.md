@@ -6,6 +6,7 @@
 * [Information Density](information-density.md) - Maximize information density while keeping text effortless to read.
 * [No ASCII Decoration](no-ascii-decoration.md) - Forbid ASCII art, banner boxes, separator bars, and drawn frames.
 * [No Bold Text](no-bold.md) - Avoid bold formatting unless the information is critical.
+* [No Em Dash](no-em-dash.md) - Never use em dashes; split the sentence or use a comma, colon, or parentheses.
 * [No Emojis](no-emojis.md) - Never use emojis in prose, code, output, or commit messages.
 * [Unnumbered Headings](no-header-numbering.md) - Keep markdown and text headings unnumbered.
 * [Preserve Code Identifiers](preserve-code-identifiers.md) - Never abbreviate code symbols, function names, API names, or error strings.
