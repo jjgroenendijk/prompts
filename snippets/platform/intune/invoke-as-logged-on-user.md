@@ -4,57 +4,15 @@ title: Invoke As Logged-On User
 description: Run a script block as the logged-on user via a self-cleaning scheduled task.
 tags: [intune, powershell]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2025-12-10T17:25:53+01:00 }
+generated: { by: human:jjgroenendijk, at: 2026-08-14T00:00:00+02:00 }
 ---
 
 Execute code in user context from system context. Uses scheduled task with Authenticated Users group to run script blocks as the currently logged-on user. Self-cleaning after execution.
 
-```PowerShell
-function Invoke-AsCurrentLoggedOnUser {
-    param (
-        [Parameter(Mandatory = $true)]
-        [scriptblock]$ScriptBlock,
-        [string]$taskName = "RunOnce_$(Get-Random)"
-    )
+Wrap this in a function taking the caller's script block and an optional task name that defaults to a randomised value, so concurrent runs cannot collide.
 
-    try {
-        # Create script content with self-cleanup
-        $scriptContent = "$($ScriptBlock.ToString()); Unregister-ScheduledTask -TaskName '$taskName' -Confirm:`$false"
+Build the task body by appending an unregister call for the task's own name to the caller's script block, so the task deletes itself once the work finishes and nothing is left behind on the device. Register the task to run `powershell.exe` with no profile in a hidden window against that body, triggered once a second from now. Set the principal to the `Authenticated Users` group at the highest run level so it lands in the session of whoever is signed in, and allow it to start on battery, when available, and without stopping on a power change, with a short execution time limit and new instances ignored.
 
-        # Create and register scheduled task
-        $registerTaskParams = @{
-            TaskName  = $taskName
-            Action    = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -WindowStyle Hidden -Command `"$scriptContent`""
-            Trigger   = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(1)
-            Settings  = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
-                        -RunOnlyIfNetworkAvailable -StartWhenAvailable `
-                        -ExecutionTimeLimit (New-TimeSpan -Minutes 5) `
-                        -MultipleInstances IgnoreNew
-            Principal = New-ScheduledTaskPrincipal -GroupId "Authenticated Users" -RunLevel Highest
-            Force     = $true
-        }
-        Register-ScheduledTask @registerTaskParams
+Registering alone is not enough: the task is created by SYSTEM, so connect to the task scheduler through its COM service, read the registered task's security descriptor, append full access for authenticated users, and write it back. Without that the logged-on user can neither run nor delete the task.
 
-        # Modify task permissions to allow Authenticated Users to run and delete it
-        $Scheduler = New-Object -ComObject "Schedule.Service"
-        $Scheduler.Connect()
-        $Task = $Scheduler.GetFolder('\').GetTask($taskName)
-        $SecurityDescriptor = $Task.GetSecurityDescriptor(0xF) + '(A;;FA;;;AU)'
-        $Task.SetSecurityDescriptor($SecurityDescriptor, 0)
-        Write-Output "Task created and permissions updated successfully"
-    }
-    catch {
-        Write-Error "Failed to run as logged on user: $_"
-        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
-    }
-    finally {
-        if ($Scheduler) { [void][Runtime.InteropServices.Marshal]::ReleaseComObject($Scheduler) }
-    }
-}
-
-# Usage example:
-Invoke-AsCurrentLoggedOnUser -ScriptBlock {
-    Write-Output "Running as: $(whoami)"
-    # Your user-context code here
-}
-```
+Catch failures, unregister the task on the way out so a partial registration does not linger, and release the COM object in a finally block.
