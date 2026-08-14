@@ -4,7 +4,7 @@ title: OKF Attested Computations
 description: Carry a sanctioned computation as its own concept so a run can be checked.
 tags: [okf, knowledge, attestation]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-07-27T00:00:00Z }
+generated: { by: human:jjgroenendijk, at: 2026-08-14T00:00:00+02:00 }
 sources:
   - resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
 ---
@@ -30,17 +30,10 @@ Contract fields, alongside the usual trust families:
 - `attester` - `resource` names deterministic, no-LLM code that reads a receipt and returns a
   verdict, meant to run consumer-side.
 
-```yaml
-type: Attested Computation
-runtime: bigquery
-parameters:
-  - { name: year, type: integer, required: true }
-executor:
-  resource: references/skills/run-on-bq.md
-  receipt: [job_id, executed_sql, result]
-attester:
-  resource: references/attesters/revenue.py
-```
+Nest these in frontmatter as written above: `parameters` is a list whose entries each carry
+`name`, `type`, and `required`; `executor` is a mapping of `resource` and `receipt`, where
+`receipt` is a list of the field names a run must return; `attester` is a mapping carrying
+`resource`. Point every `resource` at a bundle-relative path.
 
 An agent may supply values for declared `parameters` only. It MUST NOT author or edit the
 computation. The attester re-derives the binding and compares against the expanded artifact the

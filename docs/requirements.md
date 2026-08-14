@@ -27,7 +27,6 @@ A static website hosted on GitHub Pages that allows users to select and combine 
 Configuration Fields:
 - `rules.separator`: Character(s) used to join snippets within the same category (default: `"\n"`)
 - `rules.includeTitle`: Boolean flag to show/hide category headers in output (default: `true`)
-- `ui.tokenBudget`: Estimated token budget the output meter measures against (default: `2000`)
 
 ## Content
 
@@ -80,7 +79,6 @@ Rule Output:
 - Categories are separated by double newlines for visual distinction
 - Copy button (copies full output to clipboard)
 - **Copy button must maintain a fixed size to prevent layout shifts when the label changes.**
-- Estimated token count with a bar against `ui.tokenBudget`, turning amber when over budget
 - Clear All button to deselect all
 - Format toggle (if multiple output formats supported)
 - Copied confirmation message

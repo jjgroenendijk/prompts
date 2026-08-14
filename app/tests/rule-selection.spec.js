@@ -11,15 +11,6 @@ test.describe('Rule selection', () => {
     await expect(page.getByRole('button', { name: /^Quality\b/ })).toBeVisible();
   });
 
-  test('token meter tracks the selection', async ({ page }) => {
-    const meter = page.getByTestId('token-meter').first();
-    await expect(meter).toContainText('~0');
-
-    await page.getByRole('heading', { name: 'No Emojis' }).click();
-
-    await expect(meter).not.toContainText('~0 /');
-  });
-
   test('copied output carries rule text without frontmatter', async ({ page }) => {
     await page.getByRole('heading', { name: 'No Emojis' }).click();
 

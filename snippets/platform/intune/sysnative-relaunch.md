@@ -4,22 +4,9 @@ title: Sysnative Relaunch
 description: Relaunch 32-bit IME scripts through Sysnative to avoid WOW64 redirection.
 tags: [intune, powershell]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2025-12-10T15:28:55+01:00 }
+generated: { by: human:jjgroenendijk, at: 2026-08-14T00:00:00+02:00 }
 ---
 
-Detect Intune’s 32-bit host on 64-bit Windows, then relaunch through Sysnative to avoid WOW64 redirection. Do this at the top of install/uninstall scripts so all file system and registry calls run in native 64-bit PowerShell.
+Detect the 32-bit Intune host on 64-bit Windows, then relaunch through Sysnative to avoid WOW64 redirection. Do this at the top of install/uninstall scripts so all file system and registry calls run in native 64-bit PowerShell.
 
-```PowerShell
-# Only relaunch if we are a 32-bit process on a 64-bit OS (IME default)
-if ([Environment]::Is64BitOperatingSystem -and -not [Environment]::Is64BitProcess) {
-    $nativePwsh = Join-Path $env:WINDIR 'Sysnative\WindowsPowerShell\v1.0\powershell.exe'
-    if (-not (Test-Path $nativePwsh)) { Throw "Sysnative PowerShell not found at $nativePwsh" }
-
-    # Re-run the current script with original args inside 64-bit PowerShell
-    $argsList = @('-File', "`"$PSCommandPath`"") + $args
-    $proc = Start-Process -FilePath $nativePwsh -ArgumentList $argsList -Wait -PassThru -NoNewWindow
-    exit $proc.ExitCode
-}
-
-# Already running in 64-bit — continue script here
-```
+Guard the relaunch on both conditions: the OS is 64-bit and the current process is not. Inside the guard, build the native `powershell.exe` path under the `Sysnative` alias in the Windows directory, and throw when it is absent rather than continuing under redirection. Re-run the current script file with its original arguments through that native host, without a new window, waiting for it and exiting with its exit code. Everything after the guard runs only in the 64-bit pass, so put the real work there.
