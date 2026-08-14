@@ -4,7 +4,7 @@ title: OKF Concept Frontmatter
 description: Required and recommended frontmatter fields on an OKF concept document.
 tags: [okf, knowledge]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-07-14T12:19:29+02:00 }
+generated: { by: human:jjgroenendijk, at: 2026-08-14T00:00:00+02:00 }
 sources:
   - resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
 ---
@@ -29,22 +29,12 @@ Recommended fields, in priority order:
 Optional provenance, trust, and lifecycle families layer on top: `sources`, `generated`,
 `verified`, `status`, `stale_after`.
 
+Write the keys in priority order: `type`, `title`, `description`, `resource`, `tags`, `status`,
+then the provenance fields. Keep `tags` an inline flow list and `generated` an inline flow mapping
+of `by` and `at`, so the block stays scannable.
+
 Extra keys are allowed. When editing a doc, preserve unknown keys -> do not drop fields you do
 not recognize.
-
-Example:
-
-```markdown
----
-type: BigQuery Table
-title: Customers
-description: One row per customer account with billing status.
-resource: bigquery://project/dataset/customers
-tags: [billing, pii]
-status: stable
-generated: { by: human:ahormati, at: 2026-07-14T09:00:00Z }
----
-```
 
 `timestamp` is a v0.1 field superseded by `generated.at`. Read it as a fallback when
 `generated` is absent; do not write it in new docs.
