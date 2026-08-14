@@ -1,9 +1,9 @@
 /**
- * Unit Tests for output assembly and the token estimate
+ * Unit Tests for output assembly
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildOutput, formatCategoryTitle, estimateTokens, formatTokenCount } from './output.js';
+import { buildOutput, formatCategoryTitle } from './output.js';
 
 const snippet = (id, category, content) => ({ id, category, content });
 
@@ -67,31 +67,5 @@ describe('formatCategoryTitle()', () => {
 
   it('returns an empty string for empty input', () => {
     expect(formatCategoryTitle('')).toBe('');
-  });
-});
-
-describe('estimateTokens()', () => {
-  it('approximates four characters per token', () => {
-    expect(estimateTokens('12345678')).toBe(2);
-  });
-
-  it('rounds partial tokens up', () => {
-    expect(estimateTokens('123')).toBe(1);
-  });
-
-  it('is zero for empty or whitespace input', () => {
-    expect(estimateTokens('')).toBe(0);
-    expect(estimateTokens('   ')).toBe(0);
-    expect(estimateTokens(null)).toBe(0);
-  });
-});
-
-describe('formatTokenCount()', () => {
-  it('shows exact counts below 1000', () => {
-    expect(formatTokenCount(840)).toBe('~840');
-  });
-
-  it('abbreviates thousands', () => {
-    expect(formatTokenCount(1234)).toBe('~1.2k');
   });
 });

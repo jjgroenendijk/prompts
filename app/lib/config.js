@@ -20,7 +20,6 @@ const configSchema = z.object({
   }),
   ui: z.object({
     previewCharLimit: z.number().default(400),
-    tokenBudget: z.number().default(2000),
     searchPlaceholder: z.string().default('Search rules...'),
     copyButtonText: z.string().default('Copy Selected Rules'),
     addButtonText: z.string().default('Add New Rule'),
