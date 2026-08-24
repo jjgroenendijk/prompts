@@ -32,6 +32,11 @@ export function parseFrontmatter(raw) {
   const newlineAfterClose = rest.indexOf('\n', closingIndex);
   const body = newlineAfterClose === -1 ? '' : rest.slice(newlineAfterClose + 1);
 
+  // js-yaml 5 throws on an empty document; an empty block is valid OKF frontmatter.
+  if (block.trim() === '') {
+    return { data: {}, body };
+  }
+
   let data;
   try {
     data = load(block);
