@@ -16,7 +16,8 @@ whether it is still true, and whether it is current. All fields optional. Absenc
 `sources` records materials a concept derives from. Each entry needs `resource`, either a
 followable artifact (URL, bundle-relative path) or a scope descriptor it cannot follow. Add `id`
 when the body cites the source, `title` for a label, and the credibility signals `author`,
-`usage_count`, and `last_modified`. Write `sources` as a list of mappings, one per material, each carrying those
+`usage_count`, and `last_modified`. Write `sources` as a list of mappings, one per material,
+each carrying those
 keys. Frame every `usage_count` with a `usage_window` sibling of `sources` itself, a mapping of
 `from` and `to` dates bounding the window the count was measured over.
 

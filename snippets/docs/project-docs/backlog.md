@@ -7,7 +7,8 @@ status: stable
 generated: { by: human:jjgroenendijk, at: 2026-01-22T15:35:31+01:00 }
 ---
 
-Tasks are tracked as markdown files in `docs/backlog/` with the naming convention `<index>_<task-slug>.md`:
+Tasks are tracked as markdown files in `docs/backlog/` with the naming convention
+`<index>_<task-slug>.md`:
 
 - `docs/backlog/open/` - Open tasks awaiting work
 - `docs/backlog/pending-review/` - Completed tasks awaiting review

@@ -3,7 +3,7 @@
 * [Intune App Packaging](app-packaging.md) - Package Win32 apps into .intunewin with IntuneWinAppUtil via a package.cmd script.
 * [Detection Runs 64-Bit](detection-64bit-context.md) - Detection scripts already run 64-bit, so they need no Sysnative relaunch.
 * [Intune Event Logging](event-logging.md) - Write to the IME log path and a custom event log, creating folder and source first.
-* [Evidence Based Detection](evidence-based-detection.md) - Detect on evidence the application itself leaves, not on a marker the install script wrote.
+* [Evidence Based Detection](evidence-based-detection.md) - Detect on evidence the app itself leaves, not a marker the install script wrote.
 * [Intune Command Format](intune-command-format.md) - Run install and uninstall commands with ExecutionPolicy Bypass and NoProfile.
 * [Invoke As Logged-On User](invoke-as-logged-on-user.md) - Run a script block as the logged-on user via a self-cleaning scheduled task.
 * [Ask For Organisation Name](organisation-name.md) - Ask the user for the organisation name instead of guessing or inventing one.

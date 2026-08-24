@@ -2,7 +2,9 @@
 
 ## Project Overview
 
-A static website hosted on GitHub Pages that allows users to select and combine AI coding rules and prompt snippets from a repository. Users can browse, search, select, and copy concatenated rules with integrated GitHub editing capabilities.
+A static website hosted on GitHub Pages that allows users to select and combine AI coding rules
+and prompt snippets from a repository. Users can browse, search, select, and copy concatenated
+rules with integrated GitHub editing capabilities.
 
 ## Technical Stack
 
@@ -37,11 +39,13 @@ Configuration Fields:
 - The markdown body after the frontmatter is the rule text
 - Files must have .md extension
 - `index.md` and `log.md` are OKF reserved filenames and are never loaded as rules
-- Categories may nest arbitrarily deep; every directory segment below `snippets/` is part of the category path (e.g. `code/quality`)
+- Categories may nest arbitrarily deep; every directory segment below `snippets/` is part of the
+  category path (e.g. `code/quality`)
 - Filename formatting: kebab-case
 - All snippets must be processed during next build
 - Recursively scan snippets/**/*.md
-- Split frontmatter from body; malformed YAML degrades to a body-only snippet rather than failing the build
+- Split frontmatter from body; malformed YAML degrades to a body-only snippet rather than
+  failing the build
 - Take the title from frontmatter, falling back to the filename (kebab-case to Title Case)
 - Generate unique IDs (use file path as ID)
 - Extract category from directory structure
@@ -55,7 +59,8 @@ Rule Browser:
 - Settings button (redirects to edit config.yml)
 - Plus button (redirects to create new snippet)
 - GitHub link with icon visible in the header (uses repo data from config)
-- Icon set: prefer Lucide (outline) for consistency; Feather or Heroicons outline are acceptable alternatives
+- Icon set: prefer Lucide (outline) for consistency; Feather or Heroicons outline are acceptable
+  alternatives
 - Full-text search across title (filename) and content
 - Real-time filtering as user types
 - Debounced for performance (300ms)
@@ -65,7 +70,9 @@ Rule Browser:
 - Show count of snippets per category
 - Collapsible category sections, nested to match the directory tree
 - Scrollable list of rule items
-- Each item shows checkbox for selection, title, preview (frontmatter description, else body, limited to previewCharLimit from config), badges for a non-stable status or a stale concept, and edit button (opens GitHub edit page)
+- Each item shows checkbox for selection, title, preview (frontmatter description, else body,
+  limited to previewCharLimit from config), badges for a non-stable status or a stale concept,
+  and edit button (opens GitHub edit page)
 - Preview should truncate at word boundaries, not mid-word
 - Indicate truncation with "..."
 - **Buttons must have a click animation (e.g., scale down or ripple) for better feedback.**
@@ -84,7 +91,8 @@ Rule Output:
 - Copied confirmation message
 - Empty state when no rules selected
 - Loading state during initialization
-- **The output window background must have a slightly different tint than the main background to distinguish it (especially in light mode).**
+- **The output window background must have a slightly different tint than the main background to
+  distinguish it (especially in light mode).**
 
 ## Theme Support
 
@@ -92,16 +100,21 @@ Rule Output:
 - Apply dark or light theme automatically on page load by default
 - Listen for theme changes and update dynamically (unless overridden by manual toggle)
 - Use Tailwind's dark: class variants for styling
-- Theme priority is a pressroom/typewriter/newspaper feel with serif typography and monospaced labels
-- Light Mode: Background: #F7F5F0, **Output Background: #F0F4F8 (Blue tint)**, Text: #0E0D0B, Borders/Rules: #DAD3C6, Accent: **Blue (#2E7CE6)**, Rust only for warnings/badges (#D26A32)
-- Dark Mode: Background: #0D1016, Text: #EDE7DC, Borders/Rules: #1F2430, Accent: **Blue (#5A9CFF)**, Rust only for warnings/badges (#F08C4A)
-- Glass is used sparingly (header/primary panels): translucent surfaces with blur and thin borders; cards/lists are solid for clarity; no paper/noise textures
+- Theme priority is a pressroom/typewriter/newspaper feel with serif typography and monospaced
+  labels
+- Light Mode: Background: #F7F5F0, **Output Background: #F0F4F8 (Blue tint)**, Text: #0E0D0B,
+  Borders/Rules: #DAD3C6, Accent: **Blue (#2E7CE6)**, Rust only for warnings/badges (#D26A32)
+- Dark Mode: Background: #0D1016, Text: #EDE7DC, Borders/Rules: #1F2430, Accent: **Blue
+  (#5A9CFF)**, Rust only for warnings/badges (#F08C4A)
+- Glass is used sparingly (header/primary panels): translucent surfaces with blur and thin
+  borders; cards/lists are solid for clarity; no paper/noise textures
 - Use a single serif family for headings/body, monospaced font for labels/metadata
 - Only quick button press animations (120–160ms ease-out scale/lift); respect prefers-reduced-motion
 - Toggle button in header to switch between Light and Dark modes
 - Toggling overrides the system preference
 - Persist user preference in localStorage
-- The toggle button must correctly reflect the active theme, even if that state was reached via system preference
+- The toggle button must correctly reflect the active theme, even if that state was reached via
+  system preference
 
 ## GitHub Integration
 
@@ -111,7 +124,8 @@ Edit Snippet:
 - URL format: `https://github.com/{owner}/{repo}/edit/{branch}/{path}`
 - Owner, repo, and defaultBranch are read from config.yml
 - File path must be cleaned to remove relative path prefixes (e.g., `../`)
-- Final URL example: `https://github.com/jjgroenendijk/prompts/edit/main/snippets/security/input-validation.md`
+- Final URL example:
+  `https://github.com/jjgroenendijk/prompts/edit/main/snippets/security/input-validation.md`
 - Opens in new tab (target="_blank")
 - GitHub handles authentication and permissions
 - User must have write access to edit (or fork)
@@ -135,10 +149,14 @@ Edit Configuration:
 
 ## Gist Integration (Optional)
 
-- config.yml may include an optional `gistId` (gist code) to pull additional snippets; when provided, build should fetch that gist and treat each file as a snippet
-- Gist fetch must support multi-file gists (e.g., gist `17ede18e92b323474fece51ad33dce83` contains two snippets) and assign titles from filenames
-- The website should also allow users to supply a gist code at runtime to load public gist snippets live, with loading and error states surfaced in the UI
-- Gist-loaded snippets follow the same selection, search, and output behaviors as repo-based snippets
+- config.yml may include an optional `gistId` (gist code) to pull additional snippets; when
+  provided, build should fetch that gist and treat each file as a snippet
+- Gist fetch must support multi-file gists (e.g., gist `17ede18e92b323474fece51ad33dce83`
+  contains two snippets) and assign titles from filenames
+- The website should also allow users to supply a gist code at runtime to load public gist
+  snippets live, with loading and error states surfaced in the UI
+- Gist-loaded snippets follow the same selection, search, and output behaviors as repo-based
+  snippets
 
 ## Search and Filtering
 
@@ -169,9 +187,11 @@ Output Formatting:
 - Selected snippets are automatically grouped by category
 - Category order is determined by the order snippets were selected
 - When `includeTitle` is true (default), category headers are shown as `## Category Name`
-- Category names are formatted from directory names, nested paths joined with ` / ` (e.g., `code/quality` → `## Code / Quality`)
+- Category names are formatted from directory names, nested paths joined with ` / ` (e.g.,
+  `code/quality` → `## Code / Quality`)
 - Each category header appears only once, even if multiple snippets from that category are selected
-- Within a category, snippets are joined with the configured `separator` (default: `"\n"` - single newline)
+- Within a category, snippets are joined with the configured `separator` (default: `"\n"` -
+  single newline)
 - Categories are separated by double newlines (`\n\n`) for visual distinction
 - Output format example:
   ```
@@ -194,10 +214,12 @@ Clipboard:
 
 ## Documentation
 
-The main README.md must clearly explain how other users can use this project as a template to set up their own personal prompts website:
+The main README.md must clearly explain how other users can use this project as a template to
+set up their own personal prompts website:
 
 - Steps to fork the repo to their own GitHub account
-- Instructions on how to update config.yml (specifically changing baseUrl, github.owner, and github.repo to match their fork)
+- Instructions on how to update config.yml (specifically changing baseUrl, github.owner, and
+  github.repo to match their fork)
 - Navigate to Repository Settings > Pages
 - Source: GitHub Actions
 - Verification that the deployment workflow exists (.github/workflows/deploy.yml)
