@@ -10,4 +10,4 @@ okf_version: "0.2"
 * [Knowledge](knowledge/) - 1 entry
 * [Platform](platform/) - 1 entry
 * [Standards](standards/) - 3 entries
-* [Writing](writing/) - 12 entries
+* [Writing](writing/) - 13 entries
