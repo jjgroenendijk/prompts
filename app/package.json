@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
-    "eslint": "^10",
+    "eslint": "^9",
     "eslint-config-next": "16.3.2",
     "markdownlint-cli2": "^0.23.2",
     "vitest": "^4.1.11"
