@@ -9,4 +9,5 @@ okf_version: "0.2"
 * [Git](git/) - 2 entries
 * [Knowledge](knowledge/) - 1 entry
 * [Platform](platform/) - 1 entry
+* [Standards](standards/) - 3 entries
 * [Writing](writing/) - 12 entries
