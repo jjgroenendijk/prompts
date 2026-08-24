@@ -1,7 +1,7 @@
 ---
 type: Rule
 title: Evidence Based Detection
-description: Detect on evidence the application itself leaves, not on a marker the install script wrote.
+description: Detect on evidence the app itself leaves, not a marker the install script wrote.
 tags: [intune, detection]
 status: stable
 generated: { by: human:jjgroenendijk, at: 2026-08-05T00:00:00+02:00 }

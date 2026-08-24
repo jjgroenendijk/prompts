@@ -7,4 +7,5 @@ status: stable
 generated: { by: human:jjgroenendijk, at: 2026-01-25T22:24:37+00:00 }
 ---
 
-Link issues via footer: `Fixes #123` or `Refs #123`. If no issue exists, body must clearly state the why.
+Link issues via footer: `Fixes #123` or `Refs #123`. If no issue exists, body must clearly state
+the why.

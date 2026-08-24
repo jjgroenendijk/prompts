@@ -12,3 +12,4 @@
 * [Unnumbered Headings](no-header-numbering.md) - Keep markdown and text headings unnumbered.
 * [Preserve Code Identifiers](preserve-code-identifiers.md) - Never abbreviate code symbols, function names, API names, or error strings.
 * [Short Synonyms](short-synonyms.md) - Prefer short words; sentence fragments are fine.
+* [Simplified Technical English](simplified-technical-english.md) - Write documentation in ASD-STE100 Simplified Technical English.

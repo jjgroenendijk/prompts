@@ -8,6 +8,7 @@ generated: { by: human:jjgroenendijk, at: 2026-01-25T22:24:37+00:00 }
 ---
 
 Required Commit Body Sections for non-trivial commits:
+
 - Context: What problem/need triggered this
 - Change: High-level summary of what changed
 - Rationale: Why this approach, trade-offs, alternatives rejected
