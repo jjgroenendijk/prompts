@@ -60,6 +60,8 @@ flowchart LR
 - Repo tooling config belongs in `tools/<name>/`.
 - Keep root free of package manager, compiler, test, and lint config when feasible.
 - Every language must have linter and auto-formatter coverage, including Markdown.
+- Run the formatter over every file; a formatter nobody runs is not coverage.
+- Keep nesting shallow; use early exits and guard clauses over nested blocks.
 - No hand-written file may exceed 600 lines.
 - Generated and vendored files are exempt from file length limits.
 - Keep hand-written lines to 100 chars.
@@ -113,6 +115,7 @@ flowchart LR
 
 ## Writing
 
+- Write documentation in ASD-STE100 Simplified Technical English.
 - Maximize info density while keeping text easy to read.
 - Use headings without numbering.
 - Avoid bold text unless info is critical.
@@ -124,12 +127,22 @@ flowchart LR
 - Keep code symbols, function names, API names, and error strings verbatim.
 - Prefer short words. Sentence fragments are fine.
 
+## Standards
+
+- Write every date and time in ISO 8601.
+- Record log entries and stored timestamps in UTC.
+- Replace each `:` with `-` when a timestamp goes into a filename.
+- Abbreviate places with UN/LOCODE and countries with ISO 3166-1 alpha-2.
+- Write language tags in BCP 47 and GUIDs in RFC 4122 form, lowercase, no braces.
+- Version packaged applications and modules with Semantic Versioning 2.0.0.
+
 ## Local Checks
 
 - Install deps: `cd app && pnpm install --frozen-lockfile`.
 - OKF conformance: `cd app && pnpm check:okf`.
 - Regenerate bundle indexes: `cd app && pnpm snippets:index`.
-- Lint: `cd app && pnpm lint`.
+- Lint: `cd app && pnpm lint` (ESLint and markdownlint).
+- Markdown only: `cd app && pnpm lint:md`; auto-fix with `pnpm lint:md:fix`.
 - Unit tests: `cd app && pnpm test`.
 - E2E tests: `cd app && pnpm test:e2e`.
 - Build: `cd app && pnpm build`.

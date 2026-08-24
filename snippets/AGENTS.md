@@ -23,6 +23,10 @@ snippets/              # OKF bundle root, declares okf_version in index.md
 │   └── okf/           # the OKF format itself
 ├── platform/          # platform specific rules
 │   └── intune/        # Intune Win32 packaging
+├── standards/         # cross-cutting conventions
+│   ├── datetime/      # date, time, and timestamp format
+│   ├── identifiers/   # code lists for places, languages, ids
+│   └── versioning/    # release version numbering
 └── writing/           # prose style and density rules
 ```
 
