@@ -3,7 +3,7 @@
 This tree is an OKF v0.2 knowledge bundle. Each concept document is one reusable rule that
 users select and copy into an `AGENTS.md` or `CLAUDE.md`.
 
-Spec: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+Spec: <https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md>
 
 ## Directory Tree
 

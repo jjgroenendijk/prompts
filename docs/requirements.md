@@ -27,6 +27,7 @@ rules with integrated GitHub editing capabilities.
 - Empty path for user/org sites
 
 Configuration Fields:
+
 - `rules.separator`: Character(s) used to join snippets within the same category (default: `"\n"`)
 - `rules.includeTitle`: Boolean flag to show/hide category headers in output (default: `true`)
 
@@ -55,6 +56,7 @@ Configuration Fields:
 ## User Interface
 
 Rule Browser:
+
 - Site title (from config)
 - Settings button (redirects to edit config.yml)
 - Plus button (redirects to create new snippet)
@@ -78,6 +80,7 @@ Rule Browser:
 - **Buttons must have a click animation (e.g., scale down or ripple) for better feedback.**
 
 Rule Output:
+
 - Textarea or pre-formatted div
 - Shows concatenated selected rules grouped by category
 - Live updates as selections change
@@ -119,6 +122,7 @@ Rule Output:
 ## GitHub Integration
 
 Edit Snippet:
+
 - Each snippet has an Edit button
 - Clicking opens GitHub's web editor in new tab
 - URL format: `https://github.com/{owner}/{repo}/edit/{branch}/{path}`
@@ -131,6 +135,7 @@ Edit Snippet:
 - User must have write access to edit (or fork)
 
 Add New Snippet:
+
 - Plus button in header
 - Optionally allow category selection before redirect
 - Redirect to GitHub's "create new file" interface
@@ -140,6 +145,7 @@ Add New Snippet:
 - GitHub handles authentication and permissions
 
 Edit Configuration:
+
 - Settings/gear button in header
 - Redirects to edit config.yml in GitHub
 - Opens in new tab
@@ -177,6 +183,7 @@ Edit Configuration:
 ## Selection and Output
 
 Selection:
+
 - Checkbox per snippet for selection
 - Support keyboard navigation (arrow keys, space to toggle)
 - Visual indication of selected state
@@ -184,6 +191,7 @@ Selection:
 - Persist selections in localStorage (optional)
 
 Output Formatting:
+
 - Selected snippets are automatically grouped by category
 - Category order is determined by the order snippets were selected
 - When `includeTitle` is true (default), category headers are shown as `## Category Name`
@@ -194,7 +202,8 @@ Output Formatting:
   single newline)
 - Categories are separated by double newlines (`\n\n`) for visual distinction
 - Output format example:
-  ```
+
+  ```text
   ## Security
 
   snippet 1 content
@@ -206,6 +215,7 @@ Output Formatting:
   ```
 
 Clipboard:
+
 - Copy button copies full output text
 - Visual feedback: Copied message for 2 seconds
 - Handle copy errors gracefully

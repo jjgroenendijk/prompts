@@ -7,7 +7,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --max-warnings 0",
+    "lint": "eslint --max-warnings 0 && markdownlint-cli2",
+    "lint:js": "eslint --max-warnings 0",
+    "lint:md": "markdownlint-cli2",
+    "lint:md:fix": "markdownlint-cli2 --fix",
     "check:okf": "node scripts/check-okf.mjs",
     "snippets:index": "node scripts/build-index.mjs",
     "test": "vitest run",
@@ -37,6 +40,7 @@
     "@playwright/test": "^1.61.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "markdownlint-cli2": "^0.23.2",
     "vitest": "^4.1.9"
   }
 }

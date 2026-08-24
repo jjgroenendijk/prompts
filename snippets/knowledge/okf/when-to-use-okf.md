@@ -26,4 +26,4 @@ not knowledge concepts.
 OKF is deliberately minimal: standardize only structure, not taxonomy. Do not invent fixed
 concept types, storage rules, or schemas the spec does not require.
 
-Spec: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+Spec: <https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md>
