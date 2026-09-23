@@ -1,6 +1,6 @@
 # Intune
 
-* [Intune App Packaging](app-packaging.md) - Package Win32 apps into .intunewin with IntuneWinAppUtil via a package.cmd script.
+* [Intune App Packaging](app-packaging.md) - Build the .intunewin with IntuneWinAppUtil from package.cmd.
 * [Intune App README](app-readme.md) - info/README.md tells Intune admins how to configure the app, incl. portal text.
 * [Detection Runs 64-Bit](detection-64bit-context.md) - Detection scripts run 64-bit by default, so they need no Sysnative relaunch.
 * [Detection Output Contract](detection-output-contract.md) - A detection script reports installed by exiting 0 with STDOUT, and prints nothing else.
