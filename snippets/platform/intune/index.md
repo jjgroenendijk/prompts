@@ -11,6 +11,7 @@
 * [Ask For Organisation Name](organisation-name.md) - Ask for the organisation name; never guess it.
 * [Intune Project Structure](project-directory-structure.md) - Each Intune package has input/, output/, a logo, a README.md, and package.cmd.
 * [PsExec System Testing](psexec-system-testing.md) - Test scripts as SYSTEM in 32-bit PowerShell with PsExec.
+* [Requirement Rules](requirement-rules.md) - Use requirement rules to keep a Win32 app off devices it does not fit.
 * [Return Installer Exit Codes](return-codes.md) - Exit with the installer's exit code so Intune can retry or reboot.
 * [Silent Install](silent-install.md) - Installs run silent and unattended; nobody sees a prompt.
 * [Sysnative Relaunch](sysnative-relaunch.md) - Relaunch install scripts in 64-bit PowerShell and return its exit code.

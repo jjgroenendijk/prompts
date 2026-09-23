@@ -1,3 +1,3 @@
 # Platform
 
-* [Intune](intune/) - 17 entries
+* [Intune](intune/) - 18 entries
