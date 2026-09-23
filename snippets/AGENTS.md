@@ -14,8 +14,9 @@ snippets/              # OKF bundle root, declares okf_version in index.md
 │   ├── quality/       # lint, size, config placement
 │   └── scripts/       # script logging and reliability
 ├── docs/              # documentation workflow rules
-│   ├── agents-md/     # AGENTS.md structure
-│   └── project-docs/  # backlog, todo, troubleshooting
+│   ├── agents-md/     # AGENTS.md structure and content
+│   ├── project-docs/  # backlog, todo, troubleshooting
+│   └── skills/        # agent skill authoring and upkeep
 ├── git/               # version control rules
 │   ├── commits/       # message format and atomicity
 │   └── workflow/      # branching, hooks, quality gates
