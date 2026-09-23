@@ -1,24 +1,22 @@
 ---
 type: Rule
 title: Silent Install
-description: Installs run silently and unattended; nobody sees a prompt in SYSTEM context.
+description: Installs run silent and unattended; nobody sees a prompt.
 tags: [intune, packaging]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:08:56Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
 sources:
   - resource: https://learn.microsoft.com/intune/app-management/deployment/win32
 ---
 
-Intune installs run as SYSTEM by default, in a session no user sees. A prompt there blocks until
-the install timeout, 60 minutes by default. Pass the vendor's silent and no-restart switches, and
-stop with an error when a setup has none. Microsoft does not support interactive installs or
-workarounds such as ServiceUI that push UI into the user session. The User install behaviour
-runs with the user's rights, so it fails when setup needs admin.
+Intune installs run as SYSTEM by default.
+Nobody sees a prompt.
+A prompt blocks the install until it times out.
+Use the installer's silent and no-restart switches.
+When the installer has no silent mode, stop with an error.
 
-Example silent switches:
+Example:
 
 ```text
-msiexec.exe /i "7z2408-x64.msi" /qn /norestart    MSI
-7z2408-x64.exe /S                                  7-Zip EXE installer
-setup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART Inno Setup
+msiexec.exe /i "7z2408-x64.msi" /qn /norestart
 ```

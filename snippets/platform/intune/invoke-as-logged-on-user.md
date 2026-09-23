@@ -1,49 +1,28 @@
 ---
 type: Playbook
 title: Invoke As Logged-On User
-description: Run a script block as the logged-on user via a self-cleaning scheduled task.
+description: Run user-context code from SYSTEM with a self-removing scheduled task.
 tags: [intune, powershell]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:08:56Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
 ---
 
-Execute code in user context from system context. Uses scheduled task with Authenticated Users
-group to run script blocks as the currently logged-on user. Self-cleaning after execution.
+Run user-context code from SYSTEM with a scheduled task.
+Use it only for per-user setup, such as `HKCU` values.
+Never use it to show installer UI.
+Register the task for the `Authenticated Users` group at the highest run level.
+Start it once, one second from now.
+Add an `Unregister-ScheduledTask` call for the task to the end of the script block.
+Then the task removes itself.
+Give authenticated users access to the task through the `Schedule.Service` COM object.
+Without it, the user cannot run or remove the task.
+[WARNING] The task runs elevated for admin users. Pass it no untrusted input.
 
-Use it for per-user setup only, such as `HKCU` values or profile files. Never use it to show
-installer UI; Intune does not support interactive installs. [WARNING] The highest run level runs
-the block elevated when the signed-in user is an admin, so pass it no untrusted input.
-
-Wrap this in a function taking the caller's script block and an optional task name that defaults
-to a randomised value, so concurrent runs cannot collide.
-
-Build the task body by appending an unregister call for the task's own name to the caller's
-script block, so the task deletes itself once the work finishes and nothing is left behind on
-the device. Register the task to run `powershell.exe` with no profile in a hidden window against
-that body, triggered once a second from now. Set the principal to the `Authenticated Users`
-group at the highest run level so it lands in the session of whoever is signed in, and allow it
-to start on battery, when available, and without stopping on a power change, with a short
-execution time limit and new instances ignored.
-
-Registering alone is not enough: the task is created by SYSTEM, so connect to the task scheduler
-through its COM service, read the registered task's security descriptor, append full access for
-authenticated users, and write it back. Without that the logged-on user can neither run nor
-delete the task.
-
-Catch failures, unregister the task on the way out so a partial registration does not linger,
-and release the COM object in a finally block.
-
-Example of the permission step and a call:
+Example of the access step:
 
 ```powershell
 $scheduler = New-Object -ComObject 'Schedule.Service'
 $scheduler.Connect()
 $task = $scheduler.GetFolder('\').GetTask($TaskName)
 $task.SetSecurityDescriptor($task.GetSecurityDescriptor(0xF) + '(A;;FA;;;AU)', 0)
-
-Invoke-AsLoggedOnUser -ScriptBlock {
-    $key = 'HKCU:\Software\7-Zip\Options'
-    if (-not (Test-Path $key)) { New-Item -Path $key | Out-Null }
-    Set-ItemProperty -Path $key -Name 'CascadedMenu' -Value 0
-}
 ```

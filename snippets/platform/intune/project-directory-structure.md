@@ -1,22 +1,19 @@
 ---
 type: Rule
 title: Intune Project Structure
-description: Every Intune Win32 app package has input/, output/, and info/ directories.
+description: Each Intune package has input/, output/, info/, and package.cmd.
 tags: [intune, structure]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:15:39Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
 ---
 
-Every packaged application gets the same layout, so any admin finds the same files in the same
-place. Name the package root after the application. Give it three directories and one script:
+Name the package folder after the app.
+It holds three folders and one script:
 
-- `input/` holds everything that gets packaged: the install, uninstall, and detection scripts
-  plus any bundled setup binary, each named after the application and its role.
-- `output/` holds the generated `.intunewin` file and nothing hand-written.
-- `info/` holds what Intune admins need but the package does not: the application logo, which
-  admins upload as the Company Portal icon, and a `README.md` for the Intune side. Keep both out
-  of `input/`, so they never ship inside the `.intunewin`.
-- `package.cmd` sits at the root and builds the `.intunewin` from `input/` into `output/`.
+- `input/`: install, uninstall, and detection scripts, and the setup file.
+- `output/`: the generated `.intunewin` file only.
+- `info/`: the app logo for the Company Portal and a `README.md` for the admins.
+- `package.cmd`: builds `output/` from `input/`.
 
 Example:
 

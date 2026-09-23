@@ -1,25 +1,23 @@
 ---
 type: Rule
 title: Evidence Based Detection
-description: Detect on evidence the app itself leaves, not a marker the install script wrote.
+description: Detect what the app leaves behind, not a marker the script wrote.
 tags: [intune, detection]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:08:56Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
 ---
 
-Never detect a Win32 app by a registry key the install script wrote; that only proves the script
-ran. Install the application once, find the evidence it leaves behind, such as its uninstall entry,
-product code, installed file path, file version, or service, and detect on that. Include the version
-so an outdated install fails detection.
+Detect the app by what it leaves behind.
+Use its uninstall entry, file version, or service.
+Do not detect a registry key that the install script wrote.
+That key only proves that the script ran.
+Include the version, so an old install fails detection.
 
 Example:
 
 ```powershell
-# Wrong: proves only that the install script ran
-$found = Test-Path 'HKLM:\SOFTWARE\Contoso\Packages\7-Zip'
-
-# Right: evidence 7-Zip itself leaves, version included
-$exe = "$env:ProgramFiles\7-Zip\7z.exe"
-$found = (Test-Path $exe) -and
-    ([version](Get-Item $exe).VersionInfo.ProductVersion -ge [version]'24.8')
+# Wrong: marker written by the install script
+Test-Path 'HKLM:\SOFTWARE\Contoso\7-Zip'
+# Right: file and version of the app
+(Get-Item "$env:ProgramFiles\7-Zip\7z.exe").VersionInfo.ProductVersion
 ```
