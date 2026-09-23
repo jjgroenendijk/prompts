@@ -1,13 +1,25 @@
 ---
 type: Rule
-title: Detection Runs 64-Bit
-description: Detection scripts already run 64-bit, so they need no Sysnative relaunch.
+title: Detection Bitness
+description: Check OS and process bitness with .NET in detection scripts.
 tags: [intune, detection]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-06-28T08:06:36+02:00 }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
+sources:
+  - resource: https://learn.microsoft.com/intune/app-management/deployment/add-win32
 ---
 
-Intune detection scripts always run in 64-bit context, unlike install and
-uninstall scripts which run in the 32-bit IME host. Detection scripts therefore
-do not need a Sysnative relaunch to reach native 64-bit file system and registry
-locations.
+Intune runs detection scripts as 64-bit by default.
+An admin setting can make them 32-bit.
+Do not assume the bitness.
+Check it with .NET and pick the paths from the result.
+
+Example:
+
+```powershell
+$programFiles = $env:ProgramFiles
+if ([Environment]::Is64BitOperatingSystem -and -not [Environment]::Is64BitProcess) {
+    $programFiles = $env:ProgramW6432
+}
+$exe = Join-Path $programFiles '7-Zip\7z.exe'
+```

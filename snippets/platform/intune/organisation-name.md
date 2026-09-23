@@ -1,12 +1,13 @@
 ---
 type: Rule
 title: Ask For Organisation Name
-description: Ask the user for the organisation name instead of guessing or inventing one.
+description: Ask for the organisation name; never guess it.
 tags: [intune, naming]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-08-05T00:00:00+02:00 }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
 ---
 
-The organisation name appears in registry paths, event log sources, and package names. When it is
-not clear from the request or the repo, ask the user for it. Never guess, invent, or leave a
-placeholder.
+The organisation name goes in event logs, registry paths, and package names.
+When the request and the repo do not give it, ask the user.
+Do not guess it.
+Do not use a placeholder such as `Contoso` or `<Organisation>`.

@@ -1,19 +1,25 @@
 ---
 type: Playbook
 title: Sysnative Relaunch
-description: Relaunch 32-bit IME scripts through Sysnative to avoid WOW64 redirection.
+description: Relaunch install scripts in 64-bit PowerShell and return its exit code.
 tags: [intune, powershell]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-08-14T00:00:00+02:00 }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
 ---
 
-Detect the 32-bit Intune host on 64-bit Windows, then relaunch through Sysnative to avoid WOW64
-redirection. Do this at the top of install/uninstall scripts so all file system and registry
-calls run in native 64-bit PowerShell.
+Intune starts install and uninstall scripts in 32-bit PowerShell.
+On 64-bit Windows, relaunch the script in 64-bit PowerShell through `Sysnative`.
+Do it at the top of the script.
+Pass on the script parameters, if any.
+Wait for the child and exit with its exit code.
 
-Guard the relaunch on both conditions: the OS is 64-bit and the current process is not. Inside
-the guard, build the native `powershell.exe` path under the `Sysnative` alias in the Windows
-directory, and throw when it is absent rather than continuing under redirection. Re-run the
-current script file with its original arguments through that native host, without a new window,
-waiting for it and exiting with its exit code. Everything after the guard runs only in the
-64-bit pass, so put the real work there.
+Example:
+
+```powershell
+if ([Environment]::Is64BitOperatingSystem -and -not [Environment]::Is64BitProcess) {
+    $ps = "$env:WINDIR\Sysnative\WindowsPowerShell\v1.0\powershell.exe"
+    $arguments = "-ExecutionPolicy Bypass -NoProfile -File `"$PSCommandPath`""
+    $child = Start-Process $ps -ArgumentList $arguments -Wait -PassThru -NoNewWindow
+    exit $child.ExitCode
+}
+```

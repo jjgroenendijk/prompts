@@ -1,13 +1,14 @@
 ---
 type: Rule
 title: Evidence Based Detection
-description: Detect on evidence the app itself leaves, not a marker the install script wrote.
+description: Detect what the app leaves behind, not a marker the script wrote.
 tags: [intune, detection]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-08-05T00:00:00+02:00 }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:36:14Z }
 ---
 
-Never detect a Win32 app by a registry key the install script wrote; that only proves the script
-ran. Install the application once, find the evidence it leaves behind, such as its uninstall entry,
-product code, installed file path, file version, or service, and detect on that. Include the version
-so an outdated install fails detection.
+Detect the app by what it leaves behind.
+Use its uninstall entry, file version, or service.
+Do not detect a registry key that the install script wrote.
+That key only proves that the script ran.
+Include the version, so an old install fails detection.

@@ -1,12 +1,16 @@
 ---
 type: Rule
 title: Silent Install
-description: Installs run silently and unattended; nobody sees a prompt in SYSTEM context.
+description: Installs run silent and unattended; nobody sees a prompt.
 tags: [intune, packaging]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2025-12-10T13:12:14+01:00 }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:36:14Z }
+sources:
+  - resource: https://learn.microsoft.com/intune/app-management/deployment/win32
 ---
 
-Intune installations have to be done silently, and unattended. Users will not be able to see any
-popups if a setup is running in SYSTEM context.
-By default, setups are installed using SYSTEM context.
+Intune installs run as SYSTEM by default.
+Nobody sees a prompt.
+A prompt blocks the install until it times out.
+Use the installer's silent and no-restart switches.
+When the installer has no silent mode, stop with an error.
