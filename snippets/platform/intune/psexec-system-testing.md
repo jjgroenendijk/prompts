@@ -4,7 +4,7 @@ title: PsExec System Testing
 description: Test scripts as SYSTEM in 32-bit PowerShell with PsExec.
 tags: [intune, testing]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:36:14Z }
 sources:
   - resource: https://download.sysinternals.com/files/PSTools.zip
 ---
@@ -20,6 +20,4 @@ Example:
 
 ```powershell
 psexec.exe -s -i C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
-whoami
-.\7-Zip-install.ps1; $LASTEXITCODE
 ```

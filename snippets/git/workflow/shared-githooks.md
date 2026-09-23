@@ -4,7 +4,7 @@ title: Shared Git Hooks
 description: Track hooks in .githooks/ with a thin wrapper per hook and scripts in <hook>.d/.
 tags: [git, workflow, automation]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:25:12Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:36:14Z }
 ---
 
 Store shared Git hooks in the tracked `.githooks/` folder, not in `.git/hooks`.
@@ -22,17 +22,3 @@ Keep the scripts executable and in POSIX `sh`, unless the project needs another 
 Use pre-commit for fast checks on staged files.
 Use pre-push for slower full checks, such as tests and build.
 CI stays the final check.
-
-Example:
-
-```text
-.githooks/
-├── pre-commit
-├── pre-commit.d/
-│   ├── 10-format.sh
-│   └── 20-lint.sh
-├── pre-push
-└── pre-push.d/
-    ├── 10-test.sh
-    └── 20-build.sh
-```
