@@ -1,21 +1,22 @@
 ---
 type: Rule
 title: Intune Project Structure
-description: Separate input, output, and information directories in an Intune Win32 app package.
+description: Every Intune Win32 app package has input/, output/, and info/ directories.
 tags: [intune, structure]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:08:56Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:15:39Z }
 ---
 
-Recommended folder structure for Intune Win32 app packages. Separates input files, output
-packages, and documentation for easier maintenance and updates.
+Every packaged application gets the same layout, so any admin finds the same files in the same
+place. Name the package root after the application. Give it three directories and one script:
 
-Name the package root after the application. Give it three directories and one script. `input/`
-holds everything that gets packaged: the install, uninstall, and detection scripts plus any
-bundled setup binary, each named after the application and its role. `output/` holds the
-generated `.intunewin` file and nothing hand-written. `information/` holds the assets Intune and
-reviewers need but the package does not, such as the app logo and vendor documentation.
-`package.cmd` sits at the root and builds the `.intunewin` from `input/` into `output/`.
+- `input/` holds everything that gets packaged: the install, uninstall, and detection scripts
+  plus any bundled setup binary, each named after the application and its role.
+- `output/` holds the generated `.intunewin` file and nothing hand-written.
+- `info/` holds what Intune admins need but the package does not: the application logo, which
+  admins upload as the Company Portal icon, and a `README.md` for the Intune side. Keep both out
+  of `input/`, so they never ship inside the `.intunewin`.
+- `package.cmd` sits at the root and builds the `.intunewin` from `input/` into `output/`.
 
 Example:
 
@@ -28,8 +29,8 @@ Example:
 │   └── 7z2408-x64.msi
 ├── output/
 │   └── 7-Zip-install.intunewin
-├── information/
+├── info/
 │   ├── 7-Zip-logo.png
-│   └── 7-Zip-readme.pdf
+│   └── README.md
 └── package.cmd
 ```
