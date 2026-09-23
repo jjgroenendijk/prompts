@@ -5,9 +5,12 @@ description: Test in 32-bit system context with PsExec, since admin context is n
 tags: [intune, testing]
 status: stable
 generated: { by: human:jjgroenendijk, at: 2026-09-23T06:08:56Z }
+sources:
+  - resource: https://download.sysinternals.com/files/PSTools.zip
 ---
 
-Test Intune scripts in system context using PsExec. Intune executes Win32 packages in system
+Test Intune scripts in system context using PsExec from the Sysinternals PSTools suite,
+<https://download.sysinternals.com/files/PSTools.zip>. Intune executes Win32 packages in system
 context and 32-bit mode, so testing as admin is not representative.
 
 Launch the 32-bit host by running `psexec.exe` with its system and interactive switches against
