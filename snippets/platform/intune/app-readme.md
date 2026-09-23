@@ -1,15 +1,15 @@
 ---
 type: Rule
 title: Intune App README
-description: info/README.md gives Intune admins the portal text and app config.
+description: The package README.md gives Intune admins the portal text and app config.
 tags: [intune, docs]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:35:23Z }
 sources:
   - resource: https://learn.microsoft.com/intune/app-management/deployment/add-win32
 ---
 
-Each package has an `info/README.md` for the Intune admins.
+Each package has a `README.md` in the package folder, for the Intune admins.
 It has three sections:
 
 - Overview: app, version, vendor, and source.
@@ -39,5 +39,5 @@ Open and create ZIP, 7z, and RAR files.
 - Detection: script `7-Zip-detect.ps1`, run as 32-bit: No
 - Requirements: x64, Windows 11 23H2
 - Assignment: Available, All users
-- Logo: `info/7-Zip-logo.png`
+- Logo: `7-Zip-logo.png`
 ```
