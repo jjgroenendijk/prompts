@@ -29,3 +29,28 @@ destinations, so no call site can log to only one of them.
 
 In a detection script, drop the standard output destination from that function. Intune treats a
 detection script that exits 0 with any STDOUT as installed, so log lines there fake a detection.
+
+Example:
+
+```powershell
+$Organisation = 'Contoso'   # from the user, never invented
+$Application = '7-Zip'
+$Action = 'install'
+$LogPath = "$env:ProgramData\Microsoft\IntuneManagementExtension\Logs\" +
+    "$Application-$Action-$(Get-Date -Format 'yyyy-MM-dd').log"
+
+New-Item -Path (Split-Path $LogPath) -ItemType Directory -Force | Out-Null
+if (-not [System.Diagnostics.EventLog]::SourceExists($Application)) {
+    New-EventLog -LogName $Organisation -Source $Application
+}
+
+function Write-Log {
+    param([string]$Message, [string]$Level = 'Information')
+    $stamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    $line = "$stamp [$Level] $Message"
+    Write-Host $line
+    Add-Content -Path $LogPath -Value $line
+    $target = @{ LogName = $Organisation; Source = $Application; EventId = 1000 }
+    Write-EventLog @target -EntryType $Level -Message $Message
+}
+```

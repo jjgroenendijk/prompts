@@ -32,3 +32,18 @@ delete the task.
 
 Catch failures, unregister the task on the way out so a partial registration does not linger,
 and release the COM object in a finally block.
+
+Example of the permission step and a call:
+
+```powershell
+$scheduler = New-Object -ComObject 'Schedule.Service'
+$scheduler.Connect()
+$task = $scheduler.GetFolder('\').GetTask($TaskName)
+$task.SetSecurityDescriptor($task.GetSecurityDescriptor(0xF) + '(A;;FA;;;AU)', 0)
+
+Invoke-AsLoggedOnUser -ScriptBlock {
+    $key = 'HKCU:\Software\7-Zip\Options'
+    if (-not (Test-Path $key)) { New-Item -Path $key | Out-Null }
+    Set-ItemProperty -Path $key -Name 'CascadedMenu' -Value 0
+}
+```

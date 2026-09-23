@@ -23,3 +23,12 @@ PowerShell.
 
 Logs will be written to `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs` when using
 standard logging patterns.
+
+Example session:
+
+```powershell
+psexec.exe -s -i C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
+whoami                         # nt authority\system
+Set-Location C:\Packages\7-Zip\input
+.\7-Zip-install.ps1; $LASTEXITCODE
+```

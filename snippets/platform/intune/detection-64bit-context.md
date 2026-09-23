@@ -14,3 +14,12 @@ and uninstall commands, which the 32-bit IME host starts. A detection script the
 Sysnative relaunch. Keep "Run script as 32-bit process on 64-bit clients" at No, and read 32-bit
 locations such as `WOW6432Node` or `Program Files (x86)` by explicit path instead of flipping
 the toggle, so one script sees both views.
+
+Example, one 64-bit detection script that sees both builds:
+
+```powershell
+$exe = @(
+    "$env:ProgramFiles\7-Zip\7z.exe"
+    "${env:ProgramFiles(x86)}\7-Zip\7z.exe"
+) | Where-Object { Test-Path $_ } | Select-Object -First 1
+```

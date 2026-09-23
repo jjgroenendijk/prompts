@@ -21,3 +21,20 @@ Start the child without a new window, with both the wait and pass-through switch
 blocks until the child finishes and returns its process object. Exit the parent with the child's
 exit code. Never exit before the child returns and never exit 0 over a failed child; Intune maps
 that code to success, retry, or reboot. Everything after the guard runs only in the 64-bit pass.
+
+Example:
+
+```powershell
+if ([Environment]::Is64BitOperatingSystem -and -not [Environment]::Is64BitProcess) {
+    $native = Join-Path $env:WINDIR 'Sysnative\WindowsPowerShell\v1.0\powershell.exe'
+    if (-not (Test-Path $native)) { throw "Native PowerShell not found at $native" }
+
+    $arguments = @('-ExecutionPolicy', 'Bypass', '-NoProfile', '-File', "`"$PSCommandPath`"")
+    foreach ($p in $PSBoundParameters.GetEnumerator()) {
+        if ($p.Value -is [switch]) { $arguments += "-$($p.Key):`$$($p.Value.IsPresent)" }
+        else { $arguments += "-$($p.Key)", "`"$($p.Value)`"" }
+    }
+    $child = Start-Process $native -ArgumentList $arguments -Wait -PassThru -NoNewWindow
+    exit $child.ExitCode
+}
+```

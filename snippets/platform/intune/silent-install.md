@@ -14,3 +14,11 @@ the install timeout, 60 minutes by default. Pass the vendor's silent and no-rest
 stop with an error when a setup has none. Microsoft does not support interactive installs or
 workarounds such as ServiceUI that push UI into the user session. The User install behaviour
 runs with the user's rights, so it fails when setup needs admin.
+
+Example silent switches:
+
+```text
+msiexec.exe /i "7z2408-x64.msi" /qn /norestart    MSI
+7z2408-x64.exe /S                                  7-Zip EXE installer
+setup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART Inno Setup
+```

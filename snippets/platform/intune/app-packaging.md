@@ -26,3 +26,21 @@ Then run the tool quietly, giving it the input folder as the content source, the
 as the setup file, and the output folder as the destination.
 
 Add `IntuneWinAppUtil.exe` to `.gitignore`; it is a fetched tool, not a source file.
+
+Example `package.cmd`, with Intune install command
+`powershell.exe -ExecutionPolicy Bypass -NoProfile -File "7-Zip-install.ps1"`:
+
+```batch
+@echo off
+setlocal
+set "UTIL=%~dp0IntuneWinAppUtil.exe"
+set "URL=https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/raw/master/IntuneWinAppUtil.exe"
+
+where IntuneWinAppUtil >nul 2>&1 && set "UTIL=IntuneWinAppUtil"
+if not exist "%UTIL%" if not "%UTIL%"=="IntuneWinAppUtil" (
+    curl.exe -sSfL "%URL%" -o "%UTIL%" || (echo [ERROR] Download failed & exit /b 1)
+)
+
+"%UTIL%" -c "%~dp0input" -s "%~dp0input\7-Zip-install.ps1" -o "%~dp0output" -q
+exit /b %ERRORLEVEL%
+```
