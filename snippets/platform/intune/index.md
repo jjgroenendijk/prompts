@@ -7,6 +7,7 @@
 * [Detection Output Contract](detection-output-contract.md) - Detection exits 0 and writes STDOUT only when the app is found.
 * [Intune Event Logging](event-logging.md) - Log install and uninstall runs to a file and a Windows event log.
 * [Evidence Based Detection](evidence-based-detection.md) - Detect what the app leaves behind, not a marker the script wrote.
+* [Intune Management Extension Logs](ime-logs.md) - Where the IME logs and caches Win32 app data, and what diagnostics collect.
 * [Invoke As Logged-On User](invoke-as-logged-on-user.md) - Run user-context code from SYSTEM with a self-removing scheduled task.
 * [Ask For Organisation Name](organisation-name.md) - Ask for the organisation name; never guess it.
 * [Intune Project Structure](project-directory-structure.md) - Each Intune package has input/, output/, a logo, a README.md, and package.cmd.
