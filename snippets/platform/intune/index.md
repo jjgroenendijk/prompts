@@ -1,17 +1,21 @@
 # Intune
 
-* [Intune App Packaging](app-packaging.md) - Package Win32 apps into .intunewin with IntuneWinAppUtil via a package.cmd script.
-* [Detection Runs 64-Bit](detection-64bit-context.md) - Detection scripts already run 64-bit, so they need no Sysnative relaunch.
-* [Intune Event Logging](event-logging.md) - Write to the IME log path and a custom event log, creating folder and source first.
-* [Evidence Based Detection](evidence-based-detection.md) - Detect on evidence the app itself leaves, not a marker the install script wrote.
-* [Intune Command Format](intune-command-format.md) - Run install and uninstall commands with ExecutionPolicy Bypass and NoProfile.
-* [Invoke As Logged-On User](invoke-as-logged-on-user.md) - Run a script block as the logged-on user via a self-cleaning scheduled task.
-* [Ask For Organisation Name](organisation-name.md) - Ask the user for the organisation name instead of guessing or inventing one.
-* [Intune Project Structure](project-directory-structure.md) - Separate input, output, and information directories in an Intune Win32 app package.
-* [PSExec System Testing](psexec-system-testing.md) - Test in 32-bit system context with PSExec, since admin context is not representative.
-* [PSExec Tool Source](psexec-tool-source.md) - PSExec ships in the Sysinternals PSTools suite.
-* [Silent Install](silent-install.md) - Installs run silently and unattended; nobody sees a prompt in SYSTEM context.
-* [Sysnative Relaunch](sysnative-relaunch.md) - Relaunch 32-bit IME scripts through Sysnative to avoid WOW64 redirection.
-* [Wait And Propagate Exit Code](wait-and-propagate-exit.md) - The 32-bit parent waits for the 64-bit child and returns its exit code to Intune.
-* [Win32 Prep Tool Source](win32-prep-tool-source.md) - IntuneWinAppUtil comes from the official Microsoft Win32 Content Prep Tool repo.
-* [Winget Binary Locator](winget-binary-locator.md) - Locate the newest winget.exe explicitly, since system context has no winget in PATH.
+* [Intune App Packaging](app-packaging.md) - Build the .intunewin with IntuneWinAppUtil from package.cmd.
+* [Intune App README](app-readme.md) - The package README.md gives Intune admins the portal text and app config.
+* [Built-In Rule Bitness](built-in-rule-bitness.md) - Set the 32-bit toggle on file and registry rules to match the app's bitness.
+* [Detection Bitness](detection-64bit-context.md) - Check OS and process bitness with .NET in detection scripts.
+* [Detection Output Contract](detection-output-contract.md) - Detection exits 0 and writes STDOUT only when the app is found.
+* [Intune Event Logging](event-logging.md) - Log install and uninstall runs to a file and a Windows event log.
+* [Evidence Based Detection](evidence-based-detection.md) - Detect what the app leaves behind, not a marker the script wrote.
+* [Intune Management Extension Logs](ime-logs.md) - Where the IME logs and caches Win32 app data, and what diagnostics collect.
+* [Invoke As Logged-On User](invoke-as-logged-on-user.md) - Run user-context code from SYSTEM with a self-removing scheduled task.
+* [Ask For Organisation Name](organisation-name.md) - Ask for the organisation name; never guess it.
+* [Intune Project Structure](project-directory-structure.md) - Each Intune package has input/, output/, a logo, a README.md, and package.cmd.
+* [PsExec System Testing](psexec-system-testing.md) - Test scripts as SYSTEM in 32-bit PowerShell with PsExec.
+* [Requirement Rules](requirement-rules.md) - Use requirement rules to keep a Win32 app off devices it does not fit.
+* [Return Installer Exit Codes](return-codes.md) - Exit with the installer's exit code so Intune can retry or reboot.
+* [Silent Install](silent-install.md) - Installs run silent and unattended; nobody sees a prompt.
+* [Sysnative Relaunch](sysnative-relaunch.md) - Relaunch install scripts in 64-bit PowerShell and return its exit code.
+* [Uninstall Parity](uninstall-parity.md) - Each install script has an uninstall script that removes what it added.
+* [Hide User Context Window](user-context-window.md) - In user context the script window shows to the user; hide it where possible.
+* [Winget Binary Locator](winget-binary-locator.md) - Find winget.exe by path, since SYSTEM has no winget on PATH.

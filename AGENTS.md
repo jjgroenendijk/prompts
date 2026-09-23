@@ -7,9 +7,8 @@
 ├── .github/           # GitHub automation
 │   └── workflows/     # CI and Pages deploy
 ├── .githooks/         # shared git hooks
-│   ├── hooks/         # Git hook wrappers
-│   ├── pre-commit/    # commit checks
-│   └── pre-push/      # push checks
+│   ├── pre-commit.d/  # commit checks
+│   └── pre-push.d/    # push checks
 ├── app/               # Next.js static site
 │   ├── app/           # route shell and global CSS
 │   ├── components/    # reusable UI
@@ -95,8 +94,9 @@ flowchart LR
 - Do not push vague or `WIP` commits.
 - Keep scratch checkpoints local until green and reviewable.
 - Rebase or squash local noise before PR or merge.
-- Use shared hooks with `git config core.hooksPath .githooks/hooks`.
-- Hook wrappers execute executable scripts in matching `.githooks/<hook>/` dirs.
+- Use shared hooks with `git config core.hooksPath .githooks`.
+- Hook wrappers `.githooks/<hook>` execute executable scripts in matching
+  `.githooks/<hook>.d/` dirs.
 - Run relevant tests before each commit.
 - Minimum check is fast suite or targeted tests for changed area.
 - Shared branches must not contain failing commits.
