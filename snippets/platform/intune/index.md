@@ -2,6 +2,7 @@
 
 * [Intune App Packaging](app-packaging.md) - Build the .intunewin with IntuneWinAppUtil from package.cmd.
 * [Intune App README](app-readme.md) - The package README.md gives Intune admins the portal text and app config.
+* [Built-In Rule Bitness](built-in-rule-bitness.md) - Set the 32-bit toggle on file and registry rules to match the app's bitness.
 * [Detection Bitness](detection-64bit-context.md) - Check OS and process bitness with .NET in detection scripts.
 * [Detection Output Contract](detection-output-contract.md) - Detection exits 0 and writes STDOUT only when the app is found.
 * [Intune Event Logging](event-logging.md) - Log install and uninstall runs to a file and a Windows event log.
