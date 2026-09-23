@@ -2,7 +2,7 @@
 
 * [Intune App Packaging](app-packaging.md) - Build the .intunewin with IntuneWinAppUtil from package.cmd.
 * [Intune App README](app-readme.md) - info/README.md gives Intune admins the portal text and app config.
-* [Detection Runs 64-Bit](detection-64bit-context.md) - Detection scripts run 64-bit by default, so they need no Sysnative relaunch.
+* [Detection Bitness](detection-64bit-context.md) - Check OS and process bitness with .NET in detection scripts.
 * [Detection Output Contract](detection-output-contract.md) - A detection script reports installed by exiting 0 with STDOUT, and prints nothing else.
 * [Intune Event Logging](event-logging.md) - Write to the IME log path and a custom event log, creating folder and source first.
 * [Evidence Based Detection](evidence-based-detection.md) - Detect on evidence the app itself leaves, not a marker the install script wrote.
