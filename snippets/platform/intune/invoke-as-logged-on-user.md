@@ -4,11 +4,15 @@ title: Invoke As Logged-On User
 description: Run a script block as the logged-on user via a self-cleaning scheduled task.
 tags: [intune, powershell]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-08-14T00:00:00+02:00 }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:08:56Z }
 ---
 
 Execute code in user context from system context. Uses scheduled task with Authenticated Users
 group to run script blocks as the currently logged-on user. Self-cleaning after execution.
+
+Use it for per-user setup only, such as `HKCU` values or profile files. Never use it to show
+installer UI; Intune does not support interactive installs. [WARNING] The highest run level runs
+the block elevated when the signed-in user is an admin, so pass it no untrusted input.
 
 Wrap this in a function taking the caller's script block and an optional task name that defaults
 to a randomised value, so concurrent runs cannot collide.
