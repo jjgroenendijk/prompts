@@ -14,4 +14,5 @@
 * [Silent Install](silent-install.md) - Installs run silent and unattended; nobody sees a prompt.
 * [Sysnative Relaunch](sysnative-relaunch.md) - Relaunch install scripts in 64-bit PowerShell and return its exit code.
 * [Uninstall Parity](uninstall-parity.md) - Each install script has an uninstall script that removes what it added.
+* [Hide User Context Window](user-context-window.md) - In user context the script window shows to the user; hide it where possible.
 * [Winget Binary Locator](winget-binary-locator.md) - Find winget.exe by path, since SYSTEM has no winget on PATH.

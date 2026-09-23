@@ -4,7 +4,7 @@ title: Invoke As Logged-On User
 description: Run user-context code from SYSTEM with a self-removing scheduled task.
 tags: [intune, powershell]
 status: stable
-generated: { by: human:jjgroenendijk, at: 2026-09-23T06:22:13Z }
+generated: { by: human:jjgroenendijk, at: 2026-09-23T06:50:27Z }
 ---
 
 Run user-context code from SYSTEM with a scheduled task.
@@ -12,6 +12,7 @@ Use it only for per-user setup, such as `HKCU` values.
 Never use it to show installer UI.
 Register the task for the `Authenticated Users` group at the highest run level.
 Start it once, one second from now.
+Run `powershell.exe` with `-WindowStyle Hidden`, or the user sees the window.
 Add an `Unregister-ScheduledTask` call for the task to the end of the script block.
 Then the task removes itself.
 Give authenticated users access to the task through the `Schedule.Service` COM object.
