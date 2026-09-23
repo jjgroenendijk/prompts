@@ -2,8 +2,8 @@
 set -eu
 
 hook_name=$(basename "$0")
-hook_root=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
-script_dir="$hook_root/$hook_name"
+hook_root=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
+script_dir="$hook_root/$hook_name.d"
 found=0
 
 if [ ! -d "$script_dir" ]; then
